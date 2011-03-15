@@ -1,0 +1,59 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MIProgram.Core", "MIProgram.Core\MIProgram.Core.csproj", "{3A4D0883-4252-4F77-87D9-75838295557D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MIProgram.DataAccess", "MIProgram.DataAccess\MIProgram.DataAccess.csproj", "{744DB880-E5F5-47CC-BA9E-04D20CFB0A32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetalImpactApp", "MetalImpactApp\MetalImpactApp.csproj", "{7E60AE88-FB2E-45CB-B19E-B500CC9F2242}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MIProgram.WorkingModel", "MIProgram.WorkingModel\MIProgram.WorkingModel.csproj", "{E613DA01-28A4-4FCF-B055-0F1D6512BD3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MIProgram.Model", "MIProgram.Model\MIProgram.Model.csproj", "{608B8F22-FD50-448F-B366-805C05744CC5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dictionnaries", "Dictionnaries", "{298BC1CE-B788-4B35-8AAF-D78D9F8EA73F}"
+	ProjectSection(SolutionItems) = preProject
+		..\Dictionnaires\albumTypes.txt = ..\Dictionnaires\albumTypes.txt
+		..\Dictionnaires\albumTypesReplacements.csv = ..\Dictionnaires\albumTypesReplacements.csv
+		..\Dictionnaires\countriesLabelsReplacements.csv = ..\Dictionnaires\countriesLabelsReplacements.csv
+		..\Dictionnaires\coutriesList.csv = ..\Dictionnaires\coutriesList.csv
+		..\Dictionnaires\mainStyles.txt = ..\Dictionnaires\mainStyles.txt
+		..\Dictionnaires\mainStylesReplacements.csv = ..\Dictionnaires\mainStylesReplacements.csv
+		..\Dictionnaires\musicGenres.txt = ..\Dictionnaires\musicGenres.txt
+		..\Dictionnaires\musicGenresReplacements.csv = ..\Dictionnaires\musicGenresReplacements.csv
+		..\Dictionnaires\splittingStrings.txt = ..\Dictionnaires\splittingStrings.txt
+		..\Dictionnaires\styleAlterations.txt = ..\Dictionnaires\styleAlterations.txt
+		..\Dictionnaires\styleAlterationsReplacements.csv = ..\Dictionnaires\styleAlterationsReplacements.csv
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3A4D0883-4252-4F77-87D9-75838295557D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A4D0883-4252-4F77-87D9-75838295557D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A4D0883-4252-4F77-87D9-75838295557D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A4D0883-4252-4F77-87D9-75838295557D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{744DB880-E5F5-47CC-BA9E-04D20CFB0A32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{744DB880-E5F5-47CC-BA9E-04D20CFB0A32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{744DB880-E5F5-47CC-BA9E-04D20CFB0A32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{744DB880-E5F5-47CC-BA9E-04D20CFB0A32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E60AE88-FB2E-45CB-B19E-B500CC9F2242}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E60AE88-FB2E-45CB-B19E-B500CC9F2242}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E60AE88-FB2E-45CB-B19E-B500CC9F2242}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E60AE88-FB2E-45CB-B19E-B500CC9F2242}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E613DA01-28A4-4FCF-B055-0F1D6512BD3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E613DA01-28A4-4FCF-B055-0F1D6512BD3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E613DA01-28A4-4FCF-B055-0F1D6512BD3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E613DA01-28A4-4FCF-B055-0F1D6512BD3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{608B8F22-FD50-448F-B366-805C05744CC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{608B8F22-FD50-448F-B366-805C05744CC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{608B8F22-FD50-448F-B366-805C05744CC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{608B8F22-FD50-448F-B366-805C05744CC5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

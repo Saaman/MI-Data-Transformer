@@ -22,22 +22,22 @@ namespace MetalImpactApp
             Mapper.CreateMap<MIProgram.WorkingModel.Reviewer, Reviewer>()
                 .ForMember(dest => dest.Id, x => x.MapFrom(src => src.UserId))
                 .ForMember(dest => dest.CreationDate, x => x.MapFrom(src => src.CreateDate))
-                .ForMember(dest => dest.Mail, x => x.MapFrom(src => src.MailAddress))
+                .ForMember(dest => dest.MailAddress, x => x.MapFrom(src => src.MailAddress))
                 .ForMember(dest => dest.Password, x => x.MapFrom(src => src.Name + src.UserId));
 
             Mapper.CreateMap<Artist, MIProgram.Model.Artist>()
                 .ForMember(dest => dest.Id, x => x.MapFrom(src => src.Id))
-                .ForMember(dest => dest.ArtistName, x => x.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Name, x => x.MapFrom(src => src.Name))
                 .ForMember(dest => dest.ArtistBiography, x => x.Ignore())
-                .ForMember(dest => dest.ArtistCountries, x => x.Ignore())
+                .ForMember(dest => dest.Countries, x => x.Ignore())
                 .ForMember(dest => dest.ArtistParsedCountries, x => x.Ignore())
                 .ForMember(dest => dest.ArtistActivity, x => x.Ignore())
                 .ForMember(dest => dest.ArtistLineUpMember, x => x.Ignore())
-                .ForMember(dest => dest.ArtistSimilarArtists, x => x.Ignore())
+                .ForMember(dest => dest.SimilarArtists, x => x.Ignore())
                 .ForMember(dest => dest.ArtistSimilarArtistsNames, x => x.MapFrom(src => src.SimilarArtists))
-                .ForMember(dest => dest.ArtistLink, x => x.MapFrom(src => new Uri(src.OfficialUrl)))
+                .ForMember(dest => dest.OfficialUrl, x => x.MapFrom(src => new Uri(src.OfficialUrl)))
                 .ForMember(dest => dest.ArtistUnparsedCountries, x => x.MapFrom(src => src.OriginCountry))
-                .ForMember(dest => dest.ArtistCreationDate, x => x.MapFrom(src => src.CreationDate))
+                .ForMember(dest => dest.CreationDate, x => x.MapFrom(src => src.CreationDate))
                 .ForMember(dest => dest.Reviewer, x => x.MapFrom(src => Mapper.Map<MIProgram.WorkingModel.Reviewer, Reviewer>(src.Reviewer)));
 
             Mapper.CreateMap<Album, MIProgram.Model.Album>()

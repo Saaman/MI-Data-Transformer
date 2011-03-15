@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7E60AE88-FB2E-45CB-B19E-B500CC9F2242}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MetalImpactApp</RootNamespace>
+    <AssemblyName>MetalImpactApp</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=1.1.0.188, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Lib\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MappingConfigurations.cs" />
+    <Compile Include="mi_reviews.Designer.cs">
+      <DependentUpon>mi_reviews.xsd</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Operation.cs" />
+    <Compile Include="Operations\IOperationProcessor.cs" />
+    <Compile Include="Operations\ParseReviewsProcessor.cs" />
+    <Compile Include="Operations\PublishAlbumCountriesProcessor.cs" />
+    <Compile Include="Operations\PublishDiffDeezerListingProcessor.cs" />
+    <Compile Include="Operations\PublishFullDeezerListingProcessor.cs" />
+    <Compile Include="Operations\PublishMusicStylesProcessor.cs" />
+    <Compile Include="Operations\PublishAlbumTypesProcessor.cs" />
+    <Compile Include="Operations\PublishReviewsWithNewModelProcessor.cs" />
+    <Compile Include="Operations\PublishReviewsXMLsForDeezerProcessor.cs" />
+    <Compile Include="Operations\PublishSiteMapProcessor.cs" />
+    <Compile Include="ReviewCleaningForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReviewCleaningForm.Designer.cs">
+      <DependentUpon>ReviewCleaningForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OperationsManager_Deprecated.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReviewCleaningForm.resx">
+      <DependentUpon>ReviewCleaningForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Content Include="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="mi_reviews.xsc">
+      <DependentUpon>mi_reviews.xsd</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="mi_reviews.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>mi_reviews.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="mi_reviews.xss">
+      <DependentUpon>mi_reviews.xsd</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MIProgram.Core\MIProgram.Core.csproj">
+      <Project>{3A4D0883-4252-4F77-87D9-75838295557D}</Project>
+      <Name>MIProgram.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MIProgram.DataAccess\MIProgram.DataAccess.csproj">
+      <Project>{744DB880-E5F5-47CC-BA9E-04D20CFB0A32}</Project>
+      <Name>MIProgram.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MIProgram.Model\MIProgram.Model.csproj">
+      <Project>{608B8F22-FD50-448F-B366-805C05744CC5}</Project>
+      <Name>MIProgram.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MIProgram.WorkingModel\MIProgram.WorkingModel.csproj">
+      <Project>{E613DA01-28A4-4FCF-B055-0F1D6512BD3D}</Project>
+      <Name>MIProgram.WorkingModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
