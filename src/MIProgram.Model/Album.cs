@@ -6,29 +6,39 @@ namespace MIProgram.Model
     public class Album : Product
     {
         //Existing
-        public string AlbumTitle { get; set; }
-        public DateTime AlbumReleaseDate { get; set; }
-        public int SharedScore { get; set; }
-        public string AlbumLabel { get; set; }
-        public string AlbumParsedType { get; set; }
-        public string AlbumUnParsedType { get; set; }
-        public Image AlbumCover { get; set; }
+        public string Title { get; private set; }
+        public DateTime ReleaseDate { get; private set; }
+        public int Score { get; private set; }
+        public string Label { get; private set; }
+        public string ParsedType { get; private set; }
+        public string UnParsedType { get; private set; }
+        public string CoverPath { get; private set; }
 
         //New
-        public DateTime AlbumOriginalReleaseDate { get; set; }
-        public int AlbumNumberOfDiscs { get; set; }
-        public string AlbumCommercialCode { get; set; }
-        public int SharedVisitorsScore { get; set; }
-
+        /*public DateTime OriginalReleaseDate { get; private set; }
+        public int NumberOfDiscs { get; private set; }
+        public string CommercialCode { get; private set; }
+        public int VisitorsScore { get; private set; }
+        */
         //Taxo
-        public IList<string> AlbumMainStyles { get; set; }
-        public string AlbumMainStyle2 { get; set; }
-        public IList<string> AlbumStyleAlterations { get; set; }
-        public string AlbumParsedStyle { get; set; }
-        public string AlbumUnparsedStyle { get; set; }
+        public IList<string> MainStyles { get; private set; }
+        public string MainStyle2 { get; private set; }
+        public IList<string> StyleAlterations { get; private set; }
+        public string ParsedStyle { get; private set; }
+        public string UnparsedStyle { get; private set; }
 
         //Relations
-        public Artist SharedArtist { get; set; }
-        public IList<Disc> AlbumDiscs { get; set; }
+        public Artist Artist { get; private set; }
+        public IList<Disc> Discs { get; private set; }
+
+        public Album(string title, DateTime releaseDate, int score, string label, string coverPath, Artist artist)
+        {
+            Title = title;
+            ReleaseDate = releaseDate;
+            Score = score;
+            Label = label;
+            CoverPath = coverPath;
+            Artist = artist;
+        }
     }
 }

@@ -59,6 +59,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="IOperationManager.cs" />
     <Compile Include="MappingConfigurations.cs" />
     <Compile Include="mi_reviews.Designer.cs">
       <DependentUpon>mi_reviews.xsd</DependentUpon>
@@ -67,7 +68,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Operation.cs" />
-    <Compile Include="Operations\IOperationProcessor.cs" />
     <Compile Include="Operations\ParseReviewsProcessor.cs" />
     <Compile Include="Operations\PublishAlbumCountriesProcessor.cs" />
     <Compile Include="Operations\PublishDiffDeezerListingProcessor.cs" />
@@ -77,6 +77,7 @@
     <Compile Include="Operations\PublishReviewsWithNewModelProcessor.cs" />
     <Compile Include="Operations\PublishReviewsXMLsForDeezerProcessor.cs" />
     <Compile Include="Operations\PublishSiteMapProcessor.cs" />
+    <Compile Include="OperationType.cs" />
     <Compile Include="ReviewCleaningForm.cs">
       <SubType>Form</SubType>
     </Compile>

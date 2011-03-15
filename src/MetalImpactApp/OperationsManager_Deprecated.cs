@@ -8,6 +8,7 @@ using MIProgram.Core.Cleaners;
 using MIProgram.Core.MIRecordsProviders;
 using MIProgram.Core.Writers;
 using MIProgram.DataAccess;
+using MIProgram.Model;
 
 namespace MetalImpactApp
 {
@@ -31,7 +32,7 @@ namespace MetalImpactApp
             _operationsToPerform = operationsToPerform;
 
             var mainCleaner = RemovalManager.GetReviewCleanerFromFile(Constants.MIRemovalsFilePath);
-            var reviewBuilder = new ReviewBuilder_Deprecated(mainCleaner, new InMemoryReplacementsManager(), this);
+            var reviewBuilder = new AlbumReviewBodyCleaner(mainCleaner, new InMemoryReplacementsManager(), this);
             _reviewsManager = new ReviewsManager(reviewBuilder);
 
             _operationsProcessorsDic = new Dictionary<OperationType, IOperationProcessor>

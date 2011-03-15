@@ -2,7 +2,7 @@ using System;
 using MIProgram.DataAccess;
 using MIProgram.Model;
 
-namespace MIProgram.Core
+namespace MIProgram.Core.AlbumImpl
 {
     public class AlbumReviewExploder : IReviewExploder<Album>
     {
@@ -10,7 +10,7 @@ namespace MIProgram.Core
 
         public IExplodedReview<Album> ExplodeReviewFrom(MIDBRecord record)
         {
-            var recordTitle = _parsingMethods.ExtractTitle(record.Title.Replace((char)8211, '-'), record.Id);
+            var recordTitleParts = _parsingMethods.ExtractTitle(record.Title.Replace((char)8211, '-'), record.Id);
             var recordOriginCountry = _parsingMethods.ExtractCountry(record.Text, record.Id);
 
             //var reviewer = reviewsManager.GetOrBuildReviewer(record.ReviewerName, record.ReviewerMail, record.CreationDate);
@@ -66,12 +66,12 @@ namespace MIProgram.Core
 
             return new Review(record.Id, album, reviewer, record.Score, record.Hits, reviewBody, record.LastUpdateDate ?? record.CreationDate, record.DeezerAlbum, record.DeezerArtist);*/
 
-            return new AlbumExplodedReview(record.ReviewerName, record.ReviewerMail, record.CreationDate, recordTitle[0],
-                                           recordOriginCountry, officialUrl, similarArtists, recordTitle[1], releaseDate,
+            return new AlbumExplodedReview(record.ReviewerName, record.ReviewerMail, record.CreationDate, recordTitleParts[0],
+                                           recordOriginCountry, officialUrl, similarArtists, recordTitleParts[1], releaseDate,
                                            label, distributor, musicType, recordType, playTime, record.CoverFileName,
                                            songsCount, similarAlbums, record.Id, record.Score, record.Hits, reviewBody,
                                            record.LastUpdateDate ?? record.CreationDate, record.DeezerAlbum,
-                                           record.DeezerArtist);
+                                           record.DeezerArtist, record.Title);
 
         }
     }

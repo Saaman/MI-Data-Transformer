@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MIProgram.Core.AlbumImpl;
 using MIProgram.Model;
 
 namespace MIProgram.Core.ProductStores
@@ -17,7 +18,7 @@ namespace MIProgram.Core.ProductStores
 
         #region IProductRepository Implementation
 
-        public Artist GetOrBuildArtist(string artistName, IList<Country> countries, string officialUrl, DateTime lastUpdate, Reviewer reviewer, IList<Artist> similarArtists)
+        private Artist GetOrBuildArtist(string artistName, IList<Country> countries, string officialUrl, DateTime lastUpdate, Reviewer reviewer, IList<Artist> similarArtists)
         {
             var selectedArtist = (from artist in Artists where artist.Name == artistName.ToUpperInvariant() select artist).SingleOrDefault();
 
@@ -33,7 +34,7 @@ namespace MIProgram.Core.ProductStores
             return selectedArtist;
         }
 
-        public Reviewer GetOrBuildReviewer(string name, string mailAddress, DateTime lastUpdate)
+        private Reviewer GetOrBuildReviewer(string name, string mailAddress, DateTime lastUpdate)
         {
             var selectedReviewer = (from reviewer in Reviewers where reviewer.Name == name select reviewer).SingleOrDefault();
 
@@ -66,6 +67,24 @@ namespace MIProgram.Core.ProductStores
         public IList<Album> Products
         {
             get { return _albums; }
+        }
+
+        public void Add(IExplodedReview<Album> explodedReview)
+        {
+            var review = explodedReview as AlbumExplodedReview;
+            if(review == null)
+            {
+                throw new InvalidCastException("Cannot cast review as 'AlbumExplodedReview'");
+            }
+
+            var reviewer = GetOrBuildReviewer(review.ReviewerName, review.ReviewerMail, review.RecordLastUpdateDate);
+
+            var artist = GetOrBuildArtist(review.ArtistName, review.ArtistParsedCountries, review.ArtistOfficialUrl,
+                                          review.RecordLastUpdateDate, reviewer, review.ArtistParsedSimilarArtists);
+
+            var album = new Album(review.AlbumName, DateTime.Parse(review.AlbumReleaseDate), review.ReviewScore, review.AlbumLabel, review.AlbumCoverFileName, artist);
+            _albums.Add(album);
+
         }
 
         #endregion

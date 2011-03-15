@@ -1,17 +1,5 @@
 ﻿namespace MetalImpactApp
 {
-    public enum OperationType
-    {
-        PublishFullDeezerListing,
-        PublishDiffDeezerListing,
-        PublishMusicStyles,
-        PublishSiteMap,
-        PublishReviewsXMLsForDeezer,
-        PublishReviewsWithNewModel,
-        PublishAlbumCountries,
-        PublishAlbumTypes
-    }
-
     public class Operation
     {
         public OperationType OperationType { get; private set; }

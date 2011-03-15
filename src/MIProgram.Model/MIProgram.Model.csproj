@@ -54,7 +54,6 @@
     <Compile Include="Disc.cs" />
     <Compile Include="DVD.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Image.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

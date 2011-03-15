@@ -1,32 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using MIProgram.DataAccess;
 using MIProgram.Core.Cleaners;
+using MIProgram.Model;
 
 namespace MIProgram.Core
 {
-    partial class ReviewBuilder_Deprecated
+    public abstract class ProductReviewBodyCleaner<T> where T: Product
     {
-        private readonly IList<string> _textCleaningPatterns = new List<string> {
-                                                                @"(<\s*a\s+[^>]+>([^<>]+)<\s*/a\s*>)",
-                                                                @"(<\s*u\s*>([^<>]+)<\s*/u\s*>)",
-                                                                @"(<\s*img\s*>([^<>]+)<\s*/img\s*>)",
-                                                                @"(<\s*[^<>]\s*>\s*(discographie|tracklisting|distribution)[^<>]+<\s*/[^<>]\s*>)" };
-        
-        private string ExtractText(MIDBRecord record)
-        {
-            //var result = ExtractInfo(_textRegex, record.Text, record.Id, "Text");
-            
-            //clean préalable
-            /*result = _reviewTextCleaner.CleanText(record.Id, result);
-            result = _temporaryReplacementsManager.ApplyReplacementsOn(record.Id, result, _reviewTextCleaner);
-            */
-            result = _reviewTextCleaner.CleanText(record.Id, result);
+        private readonly ICanShowReviewCleaningForm _form;
+        protected ReviewTextCleaner _reviewTextCleaner = new ReviewTextCleaner();
+        protected abstract IList<string> TextCleaningPatterns { get; }
 
-            var removalsPresenter = new RemovalsPresenter(record.Id, record.Title, record.ReviewerName, record.CreationDate, result);
+        protected ProductReviewBodyCleaner(ICanShowReviewCleaningForm form)
+        {
+            _form = form;
+        }
+
+        public string CleanReviewBody(IExplodedReview<T> explodedReview)
+        {
+            var result = _reviewTextCleaner.CleanText(explodedReview.RecordId, explodedReview.ReviewBody);
+
+            var removalsPresenter = new RemovalsPresenter(explodedReview.RecordId, explodedReview.RecordTitle, explodedReview.ReviewerName, explodedReview.RecordCreationDate, result);
 
             // Rechercher les patterns
-            foreach (var pattern in _textCleaningPatterns)
+            foreach (var pattern in TextCleaningPatterns)
             {
                 var regex = new Regex(pattern, RegexOptions.IgnoreCase);
                 MatchCollection matches = regex.Matches(result);
@@ -50,7 +47,7 @@ namespace MIProgram.Core
                 return result;
             }
 
-            var newRemovals = _mainForm.ShowReviewCleaningForm(removalsPresenter);
+            var newRemovals = _form.ShowReviewCleaningForm(removalsPresenter);
             foreach (KeyValuePair<Removal, bool> newR in newRemovals.Removals)
             {
                 result = _reviewTextCleaner.AddAndApplyRemoval(newR.Key, newR.Value, result);

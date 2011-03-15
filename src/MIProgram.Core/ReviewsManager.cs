@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using MIProgram.Core.Cleaners;
 using MIProgram.Core.ProductStores;
 using MIProgram.Model;
 
@@ -10,22 +8,17 @@ namespace MIProgram.Core
     {
         public IProductRepository<T> ProductRepository { get; private set; }
 
-        public IList<Review> Reviews { get; private set; }
-        public IList<Artist> Artists { get; private set; }
-        public IList<Reviewer> Reviewers { get; private set; }
+        //private readonly IDGenerator _reviewerIdGenerator = new IDGenerator();
+        //private readonly IDGenerator _artistIdGenerator = new IDGenerator();
 
-        private readonly IDGenerator _reviewerIdGenerator = new IDGenerator();
-        private readonly IDGenerator _artistIdGenerator = new IDGenerator();
+        //public AlbumReviewBodyCleaner ReviewsBuilderDeprecated { get; private set; }
+        private readonly ReviewTextCleaner _reviewTextCleaner = new ReviewTextCleaner();
+        private readonly IReviewExploder<T> _reviewExploder;
 
-        public ReviewBuilder_Deprecated ReviewsBuilderDeprecated { get; private set; }
-
-        public ReviewsManager(ReviewBuilder_Deprecated builderDeprecated, IProductRepository<T> productRepository)
+        public ReviewsManager(IProductRepository<T> productRepository, IReviewExploder<T> reviewExploder)
         {
-            Reviews = new List<Review>();
-            Artists = new List<Artist>();
-            Reviewers = new List<Reviewer>();
-            ReviewsBuilderDeprecated = builderDeprecated;
             ProductRepository = productRepository;
+            _reviewExploder = reviewExploder;
         }
 
         /*public void AddReviewFrom(MIDBRecord record)
@@ -33,11 +26,11 @@ namespace MIProgram.Core
             Reviews.Add(ReviewsBuilderDeprecated.BuildReviewFrom(record, this));
         }*/
 
-        #region GetOrBuildMethod
+        /*#region GetOrBuildMethod
 
         public Artist GetOrBuildArtist(string artistName, IList<Country> originCountry, string officialUrl, DateTime lastUpdate, Reviewer reviewer, IList<Artist> similarArtists)
         {
-            var selectedArtist = (from artist in Artists where artist.Name.ToUpperInvariant() == artistName.ToUpperInvariant() select artist).FirstOrDefault();
+            var selectedArtist = (from artist in ProductRepository.Artists where artist.Name.ToUpperInvariant() == artistName.ToUpperInvariant() select artist).FirstOrDefault();
 
             if (selectedArtist == null)
             {
@@ -72,12 +65,13 @@ namespace MIProgram.Core
 
             return selectedReviewer;
         }
+        
+        #endregion*/
 
         public void FinalizeWork()
         {
-            ReviewsBuilderDeprecated.FinalizeWork();
+            if (_reviewTextCleaner != null)
+                _reviewTextCleaner.FinalizeWork();
         }
-
-        #endregion
     }
 }

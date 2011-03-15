@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using MIProgram.Core.Logging;
+using MIProgram.Model;
 using MIProgram.WorkingModel;
 
 namespace MetalImpactApp.Operations

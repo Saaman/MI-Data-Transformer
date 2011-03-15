@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using MIProgram.Core.Logging;
 
-namespace MIProgram.Core
+namespace MIProgram.Core.AlbumImpl
 {
     public class AlbumReviewParsingMethods
     {
