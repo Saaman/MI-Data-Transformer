@@ -4,6 +4,7 @@ using System.Linq;
 using System.ComponentModel;
 using MetalImpactApp.Operations;
 using MIProgram.Core;
+using MIProgram.Core.AlbumImpl;
 using MIProgram.Core.Cleaners;
 using MIProgram.Core.MIRecordsProviders;
 using MIProgram.Core.Writers;

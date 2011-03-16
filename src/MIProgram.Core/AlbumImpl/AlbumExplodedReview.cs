@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MIProgram.Core.DataParsers;
 using MIProgram.Model;
 
 namespace MIProgram.Core.AlbumImpl
@@ -45,8 +46,11 @@ namespace MIProgram.Core.AlbumImpl
 
         #region post processed fields
 
-        public IList<Country> ArtistParsedCountries { get; set; }
+        /*public IList<Country> ArtistParsedCountries { get; set; }
         public IList<Artist> ArtistParsedSimilarArtists { get; set; }
+        */
+
+        public CountryDefinition ProcessedArtistCountry { get; set; }
 
         #endregion
         

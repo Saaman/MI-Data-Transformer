@@ -6,7 +6,7 @@ using MIProgram.Model;
 
 namespace MIProgram.Core
 {
-    public abstract class ReviewProcessor<T> : IOperationProcessor<T> where T: Product
+    public abstract class ReviewProcessor<T> where T: Product
     {
         private readonly IMIRecordsProvider _miRecordsProvider;
         protected readonly IReviewExploder<T> _reviewExploder;
@@ -39,6 +39,9 @@ namespace MIProgram.Core
 
                 //Integrate review
                 explodedReviews.Add(explodedReview);
+
+                //Perform additional unit work
+                SpecificProcess(explodedReview);
             }
 
             // post process
@@ -61,5 +64,6 @@ namespace MIProgram.Core
         }
 
         protected abstract void PostProcess();
+        protected abstract void SpecificProcess(IExplodedReview<T> explodedReview);
     }
 }

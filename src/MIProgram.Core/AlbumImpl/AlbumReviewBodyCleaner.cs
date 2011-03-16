@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using MIProgram.Model;
 
-namespace MIProgram.Core
+namespace MIProgram.Core.AlbumImpl
 {
     public class AlbumReviewBodyCleaner : ProductReviewBodyCleaner<Album>
     {

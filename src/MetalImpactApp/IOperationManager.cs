@@ -8,11 +8,9 @@ namespace MetalImpactApp
 {
     public abstract class IOperationManager<T> where T:Product
     {
-        public bool IsWorking { get; set; }
-        public string Infos { get; set; }
-
         protected readonly ReviewProcessor<T> _reviewsProcessor;
         private readonly IList<Operation> _operationsToProcess;
+        private AsyncWorkerWrapper _asyncWorkerWrapper;
         protected abstract IDictionary<OperationType, IOperationProcessor<T>> OperationsDefinition { get; }
         public abstract IProductRepository<T> ProductRepository { get; }
 
@@ -24,22 +22,27 @@ namespace MetalImpactApp
 
         public void EndWork()
         {
-            IsWorking = false;
+            _asyncWorkerWrapper.IsWorking = false;
             _reviewsProcessor.FinalizeWork();
         }
 
         public long Process(BackgroundWorker worker, DoWorkEventArgs e)
         {
-            var asyncWorkerWrapper = new AsyncWorkerWrapper(worker, e);
+            _asyncWorkerWrapper = new AsyncWorkerWrapper(worker, e);
 
             //Explode, process & post process reviews
-            _reviewsProcessor.Process(asyncWorkerWrapper, ProductRepository);
+            _reviewsProcessor.Process(_asyncWorkerWrapper, ProductRepository);
             /*
             _reviewsExtractorProcessor.Process(worker, e, this);
             */
+
+            _asyncWorkerWrapper.BackgroudWorker.ReportProgress(0);
             foreach (var operation in _operationsToProcess)
             {
-                OperationsDefinition[operation.OperationType].Process(asyncWorkerWrapper, ProductRepository);
+                var operationToPerform = OperationsDefinition[operation.OperationType];
+                _asyncWorkerWrapper.Infos = operationToPerform.ProcessDescription;
+                operationToPerform.Process(ProductRepository);
+                _asyncWorkerWrapper.BackgroudWorker.ReportProgress((_operationsToProcess.IndexOf(operation) + 1) * 100 / _operationsToProcess.Count);
             }
 
             return ProductRepository.Products.Count;

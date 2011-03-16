@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MIProgram.Core.AlbumImpl;
+using MIProgram.Core.DataParsers;
 using MIProgram.Model;
 
 namespace MIProgram.Core.ProductStores
@@ -10,11 +11,14 @@ namespace MIProgram.Core.ProductStores
     {
         private readonly IList<Artist> _artists = new List<Artist>();
         private readonly IList<Reviewer> _reviewers = new List<Reviewer>();
-        private readonly IList<Album> _albums = new List<Album>();
+        private readonly IList<Album> _albums = new List<Album>();       
 
         /*Id generators*/
         private readonly IDGenerator _artistIdGenerator = new IDGenerator();
         private readonly IDGenerator _reviewerIdGenerator = new IDGenerator();
+
+        /*specific album stuff*/
+        private readonly IDictionary<string, CountryDefinition> _countryCodesDefinitions = new Dictionary<string, CountryDefinition>();
 
         #region IProductRepository Implementation
 
@@ -88,5 +92,10 @@ namespace MIProgram.Core.ProductStores
         }
 
         #endregion
+
+        public IDictionary<string, CountryDefinition> CountryCodesDefinitions
+        {
+            get { return _countryCodesDefinitions; }
+        }
     }
 }
