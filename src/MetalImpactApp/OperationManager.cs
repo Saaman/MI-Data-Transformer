@@ -6,7 +6,7 @@ using MIProgram.Model;
 
 namespace MetalImpactApp
 {
-    public abstract class IOperationManager<T> where T:Product
+    public abstract class OperationManager<T> : IOperationsLauncher where T : Product
     {
         protected readonly ReviewProcessor<T> _reviewsProcessor;
         private readonly IList<Operation> _operationsToProcess;
@@ -14,7 +14,7 @@ namespace MetalImpactApp
         protected abstract IDictionary<OperationType, IOperationProcessor<T>> OperationsDefinition { get; }
         public abstract IProductRepository<T> ProductRepository { get; }
 
-        protected IOperationManager(ReviewProcessor<T> reviewsProcessor, IList<Operation> operationsToProcess)
+        protected OperationManager(ReviewProcessor<T> reviewsProcessor, IList<Operation> operationsToProcess)
         {
             _reviewsProcessor = reviewsProcessor;
             _operationsToProcess = operationsToProcess;
@@ -24,6 +24,16 @@ namespace MetalImpactApp
         {
             _asyncWorkerWrapper.IsWorking = false;
             _reviewsProcessor.FinalizeWork();
+        }
+
+        public bool IsWorking
+        {
+            get { return (_asyncWorkerWrapper == null) ? false : _asyncWorkerWrapper.IsWorking; }
+        }
+
+        public string Infos
+        {
+            get { return (_asyncWorkerWrapper == null) ? string.Empty : _asyncWorkerWrapper.Infos; }
         }
 
         public long Process(BackgroundWorker worker, DoWorkEventArgs e)

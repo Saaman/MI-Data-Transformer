@@ -6,7 +6,7 @@ using MIProgram.Model;
 
 namespace MetalImpactApp
 {
-    public class AlbumOperationManager : IOperationManager<Album>
+    public class AlbumOperationManager : OperationManager<Album>
     {
         private readonly AlbumRepository _albumRepository = new AlbumRepository();
         private readonly IDictionary<OperationType, IOperationProcessor<Album>> _operationsDefinitions;

@@ -60,7 +60,8 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="IOperationManager.cs" />
+    <Compile Include="IOperationsLauncher.cs" />
+    <Compile Include="OperationManager.cs" />
     <Compile Include="MappingConfigurations.cs" />
     <Compile Include="mi_reviews.Designer.cs">
       <DependentUpon>mi_reviews.xsd</DependentUpon>
@@ -131,6 +132,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ReviewProcessorBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MIProgram.Core\MIProgram.Core.csproj">

@@ -10,12 +10,14 @@ using MIProgram.Core.MIRecordsProviders;
 using MIProgram.Core.Writers;
 using System.Globalization;
 using System.Collections.Generic;
+using MIProgram.Model;
 
 namespace MetalImpactApp
 {
     public partial class Form1 : Form
     {
-        private OperationsManager_Deprecated _operationsManagerDeprecated;
+        //private OperationsManager_Deprecated _operationsManagerDeprecated;
+        private IOperationsLauncher _operationLauncher;
         private readonly IFormatProvider _culture = new CultureInfo("fr-FR", true);
         public static IList<Operation> MainOperations = new List<Operation>
         {
@@ -175,7 +177,7 @@ namespace MetalImpactApp
         {
             LockApp(true);
 
-            if (_operationsManagerDeprecated != null && _operationsManagerDeprecated.IsWorking)
+            if (_operationLauncher != null && _operationLauncher.IsWorking)
             {
                 ReviewsBackgroundWorker.CancelAsync();
                 ReviewsWorkerInfos.Text = Resources.StopInProgress;
@@ -212,7 +214,11 @@ namespace MetalImpactApp
                 else
                     throw new InvalidOperationException("Impossible de créer le Writer de sortie. vous n'êtes pas supposés passer dans ce code");
                 
-                _operationsManagerDeprecated = new OperationsManager_Deprecated(provider, writer, LastUpdateDateDTP.Value, OperationsListBox.CheckedItems.Cast<Operation>().ToList());
+                //_operationsManagerDeprecated = new OperationsManager_Deprecated(provider, writer, LastUpdateDateDTP.Value, OperationsListBox.CheckedItems.Cast<Operation>().ToList());
+                var reviewProcessorBuilder = new ReviewProcessorBuilder();
+                ReviewProcessor<Album> reviewProcessor = reviewProcessorBuilder.BuildFor<Album>(SourceFileTB.Text);
+                _operationLauncher = new AlbumOperationManager(reviewProcessor, OperationsListBox.CheckedItems.Cast<Operation>().ToList(), writer);
+
                 ReviewsBackgroundWorker.RunWorkerAsync();
                 StartStopButton.Text = Resources.CancelLabel;
                 StartStopButton.Enabled = true;
@@ -224,18 +230,18 @@ namespace MetalImpactApp
         private void ReviewsBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             var worker = sender as BackgroundWorker;
-            e.Result = _operationsManagerDeprecated.Process(worker, e);
+            e.Result = _operationLauncher.Process(worker, e);
         }
 
         private void ReviewsBackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressBar1.Value = e.ProgressPercentage;
-            ReviewsWorkerInfos.Text = _operationsManagerDeprecated.Infos;
+            ReviewsWorkerInfos.Text = _operationLauncher.Infos;
         }
 
         private void ReviewsBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            _operationsManagerDeprecated.EndWork();
+            _operationLauncher.EndWork();
 
             if (e.Error != null)
             {

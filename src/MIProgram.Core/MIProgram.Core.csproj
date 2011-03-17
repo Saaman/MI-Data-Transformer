@@ -61,6 +61,7 @@
     <Compile Include="IExplodedReview.cs" />
     <Compile Include="IOperationProcessor.cs" />
     <Compile Include="IReviewExploder.cs" />
+    <Compile Include="MIRecordsProviders\MIRecordsProvider.cs" />
     <Compile Include="ProductStores\AlbumRepository.cs" />
     <Compile Include="Cleaners\InMemoryReplacementsManager.cs" />
     <Compile Include="Cleaners\Removal.cs" />
