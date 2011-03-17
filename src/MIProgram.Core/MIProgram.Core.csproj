@@ -56,6 +56,8 @@
     <Compile Include="AlbumReviewProcessor.cs" />
     <Compile Include="AsyncWorkerWrapper.cs" />
     <Compile Include="Cleaners\ReviewTextCleaner.cs" />
+    <Compile Include="DataParsers\CountriesRepository.cs" />
+    <Compile Include="DataParsers\IToDomainObject.cs" />
     <Compile Include="IExplodedReview.cs" />
     <Compile Include="IOperationProcessor.cs" />
     <Compile Include="IReviewExploder.cs" />
@@ -68,7 +70,6 @@
     <Compile Include="DataParsers\AlbumTypesParser.cs" />
     <Compile Include="DataParsers\CountryCodesParser.cs" />
     <Compile Include="DataParsers\CountryDefinition.cs" />
-    <Compile Include="DataParsers\IFieldDefinition.cs" />
     <Compile Include="DataParsers\IFieldParser.cs" />
     <Compile Include="DataParsers\ParsedValueRepository.cs" />
     <Compile Include="DataParsers\StyleDefinition.cs" />

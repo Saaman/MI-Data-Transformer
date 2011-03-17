@@ -18,7 +18,7 @@ namespace MIProgram.Core
 
         protected override void PostProcess()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         protected override void SpecificProcess(IExplodedReview<Album> explodedReview)
@@ -39,7 +39,6 @@ namespace MIProgram.Core
             CountryDefinition countryDefinition = null;
             if (_countryCodesParser.TryParse(review.ArtistCountry, review.RecordId, ref countryDefinition))
             {
-                //TODO : maybe good, see how to convert to a real Domain entity after in the AsDomainEntity
                 review.ProcessedArtistCountry = countryDefinition;
             }
         }

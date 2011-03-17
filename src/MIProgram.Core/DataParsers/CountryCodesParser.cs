@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using MIProgram.Core.Logging;
+using MIProgram.Model;
 
 namespace MIProgram.Core.DataParsers
 {
-    public class CountryCodesParser : IFieldParser<CountryDefinition, CountryDefinition>
+    public class CountryCodesParser : IFieldParser<CountryDefinition, Country>
     {
         public bool TryParse(string originCountry, int reviewId, ref CountryDefinition fieldDefinition)
         {
@@ -21,7 +22,7 @@ namespace MIProgram.Core.DataParsers
 
                 foreach (var rawCountry in rawCountries)
                 {
-                    var countryIdx = CountryDefinition.CountryLabelsRepository.RetrieveValueIndex(rawCountry);
+                    var countryIdx = CountriesRepository.Repo.RetrieveValueIndex(rawCountry);
                     if (countryIdx.HasValue)
                     {
                         countriesIdxs.Add(countryIdx.Value);
@@ -43,11 +44,6 @@ namespace MIProgram.Core.DataParsers
                 Logging.Logging.Instance.LogError(string.Format("Une erreur est survenue lors de l'extraction du pays de l'artiste de la review  {0} : {1}", reviewId, message), ErrorLevel.Warning);
                 return false;
             }
-        }
-
-        public CountryDefinition ConvertToDestFieldDefinition(CountryDefinition fieldDefinition)
-        {
-            return fieldDefinition;
         }
     }
 }
