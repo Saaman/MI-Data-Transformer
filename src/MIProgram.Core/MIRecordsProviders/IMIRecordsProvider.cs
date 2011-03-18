@@ -7,7 +7,7 @@ namespace MIProgram.Core.MIRecordsProviders
     {
         IList<MIDBRecord> GetRecords();
         IList<MIDBRecord> GetAllRecords();
-        void AddFilterOnIds(string pipedIds);
-        void AddFilterOnReviewers(string pipedReviewers);
+        /*void AddFilterOnIds(string pipedIds);
+        void AddFilterOnReviewers(string pipedReviewers);*/
     }
 }

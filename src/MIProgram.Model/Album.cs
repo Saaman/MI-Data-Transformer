@@ -28,7 +28,6 @@ namespace MIProgram.Model
         public string UnparsedStyle { get; private set; }
 
         //Relations
-        public Artist Artist { get; private set; }
         public IList<Disc> Discs { get; private set; }
 
         public Album(string title, DateTime releaseDate, int score, string label, string coverPath, Artist artist)

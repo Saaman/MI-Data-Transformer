@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MIProgram.Core;
 using MIProgram.Core.ProductStores;
@@ -8,12 +9,15 @@ namespace MetalImpactApp
 {
     public class AlbumOperationManager : OperationManager<Album>
     {
-        private readonly AlbumRepository _albumRepository = new AlbumRepository();
+        private readonly AlbumRepository _albumRepository;
         private readonly IDictionary<OperationType, IOperationProcessor<Album>> _operationsDefinitions;
 
-        public AlbumOperationManager(ReviewProcessor<Album> reviewsProcessor, IList<Operation> operationsToProcess, IWriter writer) : base(reviewsProcessor, operationsToProcess)
+        public AlbumOperationManager(ReviewProcessor<Album> reviewsProcessor, IList<Operation> operationsToProcess, IWriter writer, List<Func<Product, bool>> filtersDefinitions)
+            : base(reviewsProcessor, operationsToProcess)
         {
             _operationsDefinitions = new Dictionary<OperationType, IOperationProcessor<Album>> { { OperationType.PublishAlbumCountries, new PublishArtistCountriesOperation(writer) } };
+
+            _albumRepository = new AlbumRepository(filtersDefinitions);
         }
 
         protected override IDictionary<OperationType, IOperationProcessor<Album>> OperationsDefinition

@@ -29,7 +29,7 @@ namespace MIProgram.Core.MIRecordsProviders
             throw new InvalidOperationException("La methode TryBuildProvider doit systématiquement être overridée. Vous n'êtes pas supposés passer dans ce code");
         }
 
-        public void AddFilterOnIds(string pipedIds)
+        /*public void AddFilterOnIds(string pipedIds)
         {
             var ids = ExtractPipedValues(pipedIds);
             foreach (var id in ids)
@@ -59,6 +59,6 @@ namespace MIProgram.Core.MIRecordsProviders
             var results = values.Select(value => value.ToUpperInvariant()).ToList();
             results = results.Where(x => !string.IsNullOrEmpty(x)).ToList();
             return results;
-        }
+        }*/
     }
 }

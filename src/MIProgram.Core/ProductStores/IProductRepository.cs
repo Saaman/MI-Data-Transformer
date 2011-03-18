@@ -8,6 +8,7 @@ namespace MIProgram.Core.ProductStores
         IList<Artist> Artists { get; }
         IList<Reviewer> Reviewers { get; }
         IList<T> Products { get; }
+        IList<T> FilteredProducts { get; }
         void Add(IExplodedReview<T> review);
     }
 }

@@ -9,6 +9,7 @@ namespace MIProgram.Core.ProductStores
 {
     public class AlbumRepository : IProductRepository<Album>
     {
+        private readonly List<Func<Product, bool>> _filtersDefinitions;
         private readonly IList<Artist> _artists = new List<Artist>();
         private readonly IList<Reviewer> _reviewers = new List<Reviewer>();
         private readonly IList<Album> _albums = new List<Album>();       
@@ -19,6 +20,11 @@ namespace MIProgram.Core.ProductStores
 
         /*specific album stuff*/
         private readonly IDictionary<string, CountryDefinition> _countryCodesDefinitions = new Dictionary<string, CountryDefinition>();
+
+        public AlbumRepository(List<Func<Product, bool>> filtersDefinitions)
+        {
+            _filtersDefinitions = filtersDefinitions;
+        }
 
         #region IProductRepository Implementation
 
@@ -71,6 +77,27 @@ namespace MIProgram.Core.ProductStores
         public IList<Album> Products
         {
             get { return _albums; }
+        }
+
+        public IList<Album> FilteredProducts
+        {
+            get
+            {
+                if(_filtersDefinitions == null || _filtersDefinitions.Count == 0)
+                {
+                    return Products;
+                }
+
+                var results = Products.AsEnumerable();
+
+                foreach (var filterDefinition in _filtersDefinitions)
+                {
+                    var filter = filterDefinition;
+                    results = results.Where(x => filter((Product)x));
+                }
+
+                return results.ToList();
+            }
         }
 
         public void Add(IExplodedReview<Album> explodedReview)

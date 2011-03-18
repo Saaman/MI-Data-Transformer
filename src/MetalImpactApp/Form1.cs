@@ -99,7 +99,7 @@ namespace MetalImpactApp
                 LastUpdateDateDTP.Value = DateTime.Now;
             else
                 LastUpdateDateDTP.Value = DateTime.Parse(ConfigurationManager.AppSettings["LastUpdateDate"], _culture);
-            
+
             //Operations
             OperationsListBox.Items.Clear();
             foreach (var op in MainOperations)
@@ -107,8 +107,8 @@ namespace MetalImpactApp
                 OperationsListBox.Items.Add(op);
             }
 
-            IList<char> checks  = new List<char>(ConfigurationManager.AppSettings["DefaultOperations"].ToCharArray());
-            for(int i = 0; i < checks.Count && i < OperationsListBox.Items.Count; i++)
+            IList<char> checks = new List<char>(ConfigurationManager.AppSettings["DefaultOperations"].ToCharArray());
+            for (int i = 0; i < checks.Count && i < OperationsListBox.Items.Count; i++)
             {
                 OperationsListBox.SetItemChecked(i, checks[i] == '1');
             }
@@ -139,7 +139,7 @@ namespace MetalImpactApp
 
             ConfigurationManager.AppSettings["LastUpdateDate"] = LastUpdateDateDTP.Value.ToString(_culture);
             var defaultOperations = string.Empty;
-            for(int i = 0; i < OperationsListBox.Items.Count; i++)
+            for (int i = 0; i < OperationsListBox.Items.Count; i++)
             {
                 defaultOperations += OperationsListBox.GetItemChecked(i) ? "1" : "0";
             }
@@ -162,7 +162,7 @@ namespace MetalImpactApp
                 return false;
             }
 
-            if(OperationsListBox.CheckedItems.Count == 0)
+            if (OperationsListBox.CheckedItems.Count == 0)
             {
                 MessageBox.Show(Resources.SelectAtLeastOneOperation, Resources.ErrorLabel, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
@@ -186,38 +186,41 @@ namespace MetalImpactApp
             }
             else
             {
-                if(!CheckForm())
+                if (!CheckForm())
                     return;
-                IMIRecordsProvider provider;
-                CSVFileProvider.TryBuildProvider(SourceFileTB.Text, out provider);
-                                
+                //IMIRecordsProvider provider;
+                //CSVFileProvider.TryBuildProvider(SourceFileTB.Text, out provider);
+
+                var filters = new List<Func<Product, bool>>();
+
                 if (FilterOnReviewsIdsCB.Checked)
                 {
-                    provider.AddFilterOnIds(IdsToFilterTB.Text);
+                    filters.Add(ProductFiltersBuilder.NewFilterOnIds(IdsToFilterTB.Text));
                 }
                 else
                 {
                     var reviewers = ConfigurationManager.AppSettings["Reviewers"];
-                    provider.AddFilterOnReviewers(reviewers);
+                    filters.Add(ProductFiltersBuilder.NewFilterOnReviewers(reviewers));
                     if (FilterOnReviewersCB.Checked)
                     {
-                        provider.AddFilterOnReviewers(NewReviewersTB.Text);
+                        filters.Add(ProductFiltersBuilder.NewFilterOnReviewers(NewReviewersTB.Text));
                     }
                 }
 
                 //Output
-                IWriter  writer;
+                IWriter writer;
                 if (DestFileRB.Checked)
                     writer = new LocalFileWriter(DestFileTB.Text);
                 else if (DestFtpRB.Checked)
                     writer = new FTPFileWriter(DestFTPDirTB.Text, DestFTPUserTB.Text, DestFTPPasswordTB.Text);
                 else
                     throw new InvalidOperationException("Impossible de créer le Writer de sortie. vous n'êtes pas supposés passer dans ce code");
-                
+
                 //_operationsManagerDeprecated = new OperationsManager_Deprecated(provider, writer, LastUpdateDateDTP.Value, OperationsListBox.CheckedItems.Cast<Operation>().ToList());
                 var reviewProcessorBuilder = new ReviewProcessorBuilder();
-                ReviewProcessor<Album> reviewProcessor = reviewProcessorBuilder.BuildFor<Album>(SourceFileTB.Text);
-                _operationLauncher = new AlbumOperationManager(reviewProcessor, OperationsListBox.CheckedItems.Cast<Operation>().ToList(), writer);
+                var operations = OperationsListBox.CheckedItems.Cast<Operation>().ToList();
+                ReviewProcessor<Album> reviewProcessor = reviewProcessorBuilder.BuildFor<Album>(SourceFileTB.Text, writer, filters, operations);
+                _operationLauncher = new AlbumOperationManager(reviewProcessor, OperationsListBox.CheckedItems.Cast<Operation>().ToList(), writer, filtersDefinitions);
 
                 ReviewsBackgroundWorker.RunWorkerAsync();
                 StartStopButton.Text = Resources.CancelLabel;
