@@ -5,15 +5,16 @@ using MIProgram.Model;
 
 namespace MIProgram.Core.DataParsers
 {
-    public class CountryCodesParser : IFieldParser<CountryDefinition, Country>
+    public class CountryCodesParser : IFieldParser<IList<Country>>
     {
-        public bool TryParse(string originCountry, int reviewId, ref CountryDefinition fieldDefinition)
+        public bool TryParse(string originCountry, int reviewId, ref IList<Country> fieldDefinition)
         {
             try
             {
                 if (string.IsNullOrEmpty(originCountry.Trim(new[] {' ', '-'})))
                 {
-                    fieldDefinition = new CountryDefinition(new List<int>());
+                    fieldDefinition = new List<Country>();
+                    //fieldDefinition = new CountryDefinition(new List<int>());
                     return true;
                 }
 
@@ -31,7 +32,8 @@ namespace MIProgram.Core.DataParsers
 
                 if (countriesIdxs.Count > 0)
                 {
-                    fieldDefinition = new CountryDefinition(countriesIdxs);
+                    fieldDefinition = CountriesRepository.ToDomainObject(countriesIdxs);
+                    //fieldDefinition = new CountryDefinition(countriesIdxs);
                     return true;
                 }
                 var message = string.Format("'{0}' is not recognize as a valid country code", originCountry);

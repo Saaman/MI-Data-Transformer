@@ -71,7 +71,6 @@
     </Compile>
     <Compile Include="Operation.cs" />
     <Compile Include="Operations\ParseReviewsProcessor.cs" />
-    <Compile Include="Operations\PublishAlbumCountriesProcessor.cs" />
     <Compile Include="Operations\PublishDiffDeezerListingProcessor.cs" />
     <Compile Include="Operations\PublishFullDeezerListingProcessor.cs" />
     <Compile Include="Operations\PublishMusicStylesProcessor.cs" />
@@ -80,7 +79,7 @@
     <Compile Include="Operations\PublishReviewsXMLsForDeezerProcessor.cs" />
     <Compile Include="Operations\PublishSiteMapProcessor.cs" />
     <Compile Include="OperationType.cs" />
-    <Compile Include="PublishArtistCountriesOperation.cs" />
+    <Compile Include="Operations\PublishArtistCountriesOperation.cs" />
     <Compile Include="ReviewCleaningForm.cs">
       <SubType>Form</SubType>
     </Compile>

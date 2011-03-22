@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using MIProgram.Core.Logging;
 using MIProgram.DataAccess;
+using MIProgram.Model;
 
 namespace MIProgram.Core.DataParsers
 {
@@ -38,6 +39,19 @@ namespace MIProgram.Core.DataParsers
             }
             return repository.GetData().ToDictionary(countryEntity => countryEntity.CountryName,
                                                      countryEntity => countryEntity.CountryCode);
+        }
+
+        public static IList<Country> ToDomainObject(IList<int> countriesIdxs)
+        {
+            var result = new List<Country>();
+
+            foreach (var countryIdx in countriesIdxs)
+            {
+                var countryName = Repo.Values[countryIdx];
+                result.Add(new Country(CountriesLabelsAndCodesDictionnary[countryName], countryName));
+            }
+
+            return result;
         }
     }
 }

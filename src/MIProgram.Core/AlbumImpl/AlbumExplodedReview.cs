@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using MIProgram.Core.DataParsers;
 using MIProgram.Model;
 
 namespace MIProgram.Core.AlbumImpl
@@ -44,16 +43,19 @@ namespace MIProgram.Core.AlbumImpl
             get { throw new NotImplementedException(); }
         }
 
-        #region post processed fields
-
-        /*public IList<Country> ArtistParsedCountries { get; set; }
-        public IList<Artist> ArtistParsedSimilarArtists { get; set; }
-        */
-
-        public CountryDefinition ProcessedArtistCountry { get; set; }
+        #region processed fields
+        
+        public IList<Country> ProcessedArtistCountries { get; set; }
+        public string ProcessedAlbumType { get; set; }
 
         #endregion
-        
+
+        #region Post processed fields
+
+        public IList<Artist> ProcessedSimilarArtists { get; set; }
+
+        #endregion
+
         public void CleanTextUsing(Func<int, string, string> cleanTextMethod)
         {
             ReviewBody = cleanTextMethod(RecordId, ReviewBody);

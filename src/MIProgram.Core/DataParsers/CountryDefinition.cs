@@ -1,21 +1,20 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using MIProgram.Model;
 
 namespace MIProgram.Core.DataParsers
 {
-    public class CountryDefinition : IToDomainObject<Country>
+    public class CountryDefinition : IToDomainObject<IList<Country>>
     {
-        public IList<string> CountryLabels
+        /*public IList<string> CountryLabels
         {
-            get { return _countryLabelsIdxs.Select(x => CountriesRepository.Repo.Values[x]).ToList(); }
-        }
+            get { return _countryIdxs.Select(x => CountriesRepository.Repo.Values[x]).ToList(); }
+        }*/
 
-        private readonly IList<int> _countryLabelsIdxs;
+        private readonly IList<int> _countryIdxs;
 
-        public CountryDefinition(IList<int> countryLabelsIdxs)
+        public CountryDefinition(IList<int> countryIdxs)
         {
-            _countryLabelsIdxs = countryLabelsIdxs;
+            _countryIdxs = countryIdxs;
         }
 
         /*public string RebuildFromParsedValuesRepository()
@@ -35,9 +34,13 @@ namespace MIProgram.Core.DataParsers
             }
             return result.Trim('-');
         }*/
-        public Country ToDomainObject()
+        public IList<Country> ToDomainObject()
         {
-            throw new System.NotImplementedException();
+            var result = new List<Country>();
+            foreach (var _countryIdx in _countryIdxs)
+            {
+                result.Add(new Country());
+            }
         }
     }
 }

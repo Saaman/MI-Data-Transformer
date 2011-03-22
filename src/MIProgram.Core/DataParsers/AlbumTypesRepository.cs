@@ -1,33 +1,37 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Configuration;
 using System.IO;
 using MIProgram.Model.Extensions;
 
 namespace MIProgram.Core.DataParsers
 {
-    public class AlbumTypeDefinition : IFieldDefinition
+    public static class AlbumTypesRepository
     {
         private static readonly string AlbumTypesFileName = Path.Combine(ConfigurationManager.AppSettings["DictionnariesPath"], "albumTypes.txt");
         private static readonly string AlbumTypesReplacementsFileName = Path.Combine(ConfigurationManager.AppSettings["DictionnariesPath"], "albumTypesReplacements.csv");
 
-        private readonly int _albumTypeIdx;
+        /*private readonly int _albumTypeIdx;
         public string AlbumType {get { return AlbumTypes.Values[_albumTypeIdx];}}
-
+        
         public static IList<string> AlbumTypesValues
         {
             get { return AlbumTypes.Values; }
+        }*/
+
+        private static readonly ParsedValueRepository _albumTypes;
+
+        static AlbumTypesRepository()
+        {
+            _albumTypes = new ParsedValueRepository(AlbumTypesFileName, AlbumTypesReplacementsFileName, true);
         }
 
-        internal static readonly ParsedValueRepository AlbumTypes = new ParsedValueRepository(AlbumTypesFileName, AlbumTypesReplacementsFileName, true);
-        
-        public AlbumTypeDefinition(int albumTypeIdx)
+        public static ParsedValueRepository Repo
         {
-            _albumTypeIdx = albumTypeIdx;
+            get { return _albumTypes; }
         }
 
-        public string RebuildFromParsedValuesRepository()
+        public static string ToDomainObject(int albumTypeIdx)
         {
-            return AlbumTypes.Values[_albumTypeIdx].ToCamelCase();
+            return _albumTypes.Values[albumTypeIdx].ToCamelCase();
         }
     }
 }

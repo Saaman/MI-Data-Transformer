@@ -3,9 +3,9 @@ using MIProgram.Core.Logging;
 
 namespace MIProgram.Core.DataParsers
 {
-    public class AlbumTypesParser : IFieldParser<AlbumTypeDefinition, AlbumTypeDefinition>
+    public class AlbumTypesParser : IFieldParser<string>
     {
-        public bool TryParse(string recordType, int reviewId, ref AlbumTypeDefinition fieldDefinition)
+        public bool TryParse(string recordType, int reviewId, ref string fieldDefinition)
         {
             try
             {
@@ -14,7 +14,7 @@ namespace MIProgram.Core.DataParsers
                     throw new ArgumentNullException("recordType");
                 }
 
-                var albumTypeIdx = AlbumTypeDefinition.AlbumTypes.AddOrRetrieveValueIndex(recordType);
+                var albumTypeIdx = AlbumTypesRepository.Repo.AddOrRetrieveValueIndex(recordType);
 
                 if (!albumTypeIdx.HasValue)
                 {
@@ -23,7 +23,7 @@ namespace MIProgram.Core.DataParsers
                     return false;
                 }
 
-                fieldDefinition = new AlbumTypeDefinition(albumTypeIdx.Value);
+                fieldDefinition = AlbumTypesRepository.ToDomainObject(albumTypeIdx.Value);
                 return true;
             }
             catch (Exception e)
@@ -32,11 +32,6 @@ namespace MIProgram.Core.DataParsers
                 Logging.Logging.Instance.LogError(string.Format("Une erreur est survenue lors de l'extraction du style de la review  {0} : {1}", reviewId, message), ErrorLevel.Info);
                 return false;
             }
-        }
-
-        public AlbumTypeDefinition ConvertToDestFieldDefinition(AlbumTypeDefinition fieldDefinition)
-        {
-            return fieldDefinition;
         }
     }
 }

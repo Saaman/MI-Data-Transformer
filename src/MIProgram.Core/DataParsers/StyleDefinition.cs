@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MIProgram.Core.TreeBuilder;
 using MIProgram.Model.Extensions;
 
 namespace MIProgram.Core.DataParsers
 {
-    public class StyleDefinition : IFieldDefinition
+    public class StyleDefinition : IToDomainObject<IList<StylesTreeItem>>
     {
         private const int MaxNumberOfMusicTypes = 2;
         private const int MaxNumberOfMainStyles = 2;
@@ -157,6 +158,11 @@ namespace MIProgram.Core.DataParsers
         }
 
         #endregion
+
+        public IList<StylesTreeItem> ToDomainObject()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
 

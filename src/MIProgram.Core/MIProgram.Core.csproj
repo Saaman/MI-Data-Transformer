@@ -62,16 +62,15 @@
     <Compile Include="IOperationProcessor.cs" />
     <Compile Include="IReviewExploder.cs" />
     <Compile Include="MIRecordsProviders\MIRecordsProvider.cs" />
-    <Compile Include="ProductFilter.cs" />
+    <Compile Include="ProductStores\ProductFilter.cs" />
     <Compile Include="ProductStores\AlbumRepository.cs" />
     <Compile Include="Cleaners\InMemoryReplacementsManager.cs" />
     <Compile Include="Cleaners\Removal.cs" />
     <Compile Include="Cleaners\ReviewCleaningFormResult.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="DataParsers\AlbumTypeDefinition.cs" />
+    <Compile Include="DataParsers\AlbumTypesRepository.cs" />
     <Compile Include="DataParsers\AlbumTypesParser.cs" />
     <Compile Include="DataParsers\CountryCodesParser.cs" />
-    <Compile Include="DataParsers\CountryDefinition.cs" />
     <Compile Include="DataParsers\IFieldParser.cs" />
     <Compile Include="DataParsers\ParsedValueRepository.cs" />
     <Compile Include="DataParsers\StyleDefinition.cs" />
@@ -79,6 +78,7 @@
     <Compile Include="DataParsers\StylesParserHelpers.cs" />
     <Compile Include="ProductStores\IProductRepository.cs" />
     <Compile Include="MIRecordsProviders\CSVFileProvider.cs" />
+    <Compile Include="ProductStores\ProductRepository.cs" />
     <Compile Include="RemovalPresenter.cs" />
     <Compile Include="Creators\CSVCreator.cs" />
     <Compile Include="Creators\CSVRecord.cs" />

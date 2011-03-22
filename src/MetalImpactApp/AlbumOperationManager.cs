@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MetalImpactApp.Operations;
 using MIProgram.Core;
 using MIProgram.Core.ProductStores;
 using MIProgram.Core.Writers;
@@ -27,7 +28,7 @@ namespace MetalImpactApp
 
         public override IProductRepository<Album> ProductRepository
         {
-            get { return _albumRepository; }
+            get { return _albumRepository as IProductRepository<Album>; }
         }
     }
 }

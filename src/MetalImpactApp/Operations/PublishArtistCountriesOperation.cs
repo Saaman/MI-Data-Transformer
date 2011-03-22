@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using MIProgram.Core;
 using MIProgram.Core.DataParsers;
@@ -6,7 +7,7 @@ using MIProgram.Core.ProductStores;
 using MIProgram.Core.Writers;
 using MIProgram.Model;
 
-namespace MetalImpactApp
+namespace MetalImpactApp.Operations
 {
     public class PublishArtistCountriesOperation : IOperationProcessor<Album>
     {
@@ -27,16 +28,21 @@ namespace MetalImpactApp
                 throw new InvalidCastException("ProductRepository cannot be cast to AlbumRepository");
             }
 
-
-            var countryCodesDefinitions = albumRepository.CountryCodesDefinitions;
             _writer.WriteTextCollection(
-                CountryDefinition.CountriesLabelsAndCodesDictionnary.Select(
+                CountriesRepository.CountriesLabelsAndCodesDictionnary.Select(
                     x => string.Format("{0}({1}) : {2} occurences", x.Key, x.Value
-                                       , countryCodesDefinitions.Values.Where(y => y.CountryLabels.Contains(x.Key)).Count()))
+                                       , productRepository.Artists.Where(y => y.Countries.Select(co => co.CountryName).Contains(x.Key)).Count()))
                     .ToList(), "CountriesDictionnary", outputDir);
 
-            _writer.WriteTextCollection(countryCodesDefinitions.Select(x => string.Format("'{0}' est parsé en '{1}'", x.Key, x.Value.RebuildFromParsedValuesRepository())).ToList(), "Countries", outputDir);
+            _writer.WriteTextCollection(albumRepository.ExplodedReviews.Select(x => string.Format("'{0}' est parsé en '{1}'", x.ArtistCountry, TextSerialize(x.ProcessedArtistCountries))).ToList(), "Countries", outputDir);
 
+        }
+
+        private static string TextSerialize(IEnumerable<Country> countries)
+        {
+            var result = string.Empty;
+            result = countries.Aggregate(result, (seed, country) => seed + " / " + country);
+            return result;
         }
 
         public string ProcessDescription

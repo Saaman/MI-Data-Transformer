@@ -6,10 +6,11 @@ using MIProgram.Core.DataParsers;
 using MIProgram.Core.Logging;
 using MIProgram.Core.Writers;
 using System.Linq;
+using MIProgram.Model;
 
 namespace MetalImpactApp.Operations
 {
-    public class PublishAlbumCountriesProcessor : IOperationProcessor
+    public class PublishAlbumCountriesProcessor : IOperationProcessor<Album>
     {
         private readonly CountryCodesParser _countryCodesParser;
         private readonly IWriter _writer;
