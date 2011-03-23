@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using MIProgram.Core.Logging;
-using MIProgram.DataAccess;
 
 namespace MIProgram.Core.DataParsers
 {
-    public partial class StylesParser : IFieldParser<StyleDefinition, StyleDefinition>
+    public partial class AlbumStylesParser : IFieldParser<StyleDefinition>
     {
         public bool TryParse(string style, int reviewId, ref StyleDefinition fieldDefinition)
         {
@@ -15,7 +13,7 @@ namespace MIProgram.Core.DataParsers
                 throw new ArgumentNullException("style");
             }
 
-            var workingStyle = StyleDefinition.ReplaceMusicGenresReplacement(style.Trim(new[] { ',', ' ', '\t', ';', '.' }));
+            var workingStyle = StylesRepository.MusicGenresRepository.ReplaceReplacements(style.Trim(new[] { ',', ' ', '\t', ';', '.' }));
 
             try
             {
@@ -29,7 +27,7 @@ namespace MIProgram.Core.DataParsers
                 int? musicTypeIdx;
                 do
                 {
-                    musicTypeIdx = TryRecognizeMusicType(ref workingStyleForMusicTypeRecognition, ref beforeTypeString, ref afterTypeString);
+                    musicTypeIdx = StylesRepository.TryRecognizeMusicType(ref workingStyleForMusicTypeRecognition, ref beforeTypeString, ref afterTypeString);
                     if (musicTypeIdx.HasValue)
                     {
                         if (!musicTypesIdxs.Contains(musicTypeIdx.Value))
@@ -41,13 +39,13 @@ namespace MIProgram.Core.DataParsers
 
                 fieldDefinition = new StyleDefinition(musicTypesIdxs);
 
-                var beforeTypeRemainingParts = IntegrateExistingStylesAndAlterations(beforeTypeString, fieldDefinition, true);
-                var afterTypeRemainingParts = IntegrateExistingStylesAndAlterations(afterTypeString, fieldDefinition, false);
+                var beforeTypeRemainingParts = StylesRepository.IntegrateExistingStylesAndAlterations(beforeTypeString, fieldDefinition, true);
+                var afterTypeRemainingParts = StylesRepository.IntegrateExistingStylesAndAlterations(afterTypeString, fieldDefinition, false);
 
                 //Dernière chance pour trouver un type de musique
                 if (musicTypesIdxs.Count == 0)
                 {
-                    var lastChanceMusicType = GetLastChanceMusicType(fieldDefinition.MainStyles);
+                    var lastChanceMusicType = StylesRepository.GetLastChanceMusicType(fieldDefinition.MainStyles);
                     if (lastChanceMusicType.HasValue)
                     {
                         fieldDefinition.AttachMusicType(lastChanceMusicType.Value);
@@ -80,7 +78,7 @@ namespace MIProgram.Core.DataParsers
                         afterTypeRemainingParts.Insert(0, newMainStyle);
                         continue;
                     }
-                    fieldDefinition.AddMainStyleIdx(StyleDefinition.MainStylesRepository.AddOrRetrieveValueIndex(newMainStyle));
+                    fieldDefinition.AddMainStyleIdx(StylesRepository.MainStylesRepository.AddOrRetrieveValueIndex(newMainStyle));
                 }
 
                 //Attachement des styles
@@ -105,7 +103,7 @@ namespace MIProgram.Core.DataParsers
                         Logging.Logging.Instance.LogError(string.Format("A workaround will happen on review {0} : {1}", reviewId, message), ErrorLevel.Info);
                         continue;
                     }
-                    fieldDefinition.AddStyleAlterationIdx(StyleDefinition.StyleAlterationsRepository.AddOrRetrieveValueIndex(newAlteration));
+                    fieldDefinition.AddStyleAlterationIdx(StylesRepository.StyleAlterationsRepository.AddOrRetrieveValueIndex(newAlteration));
                 }
 
                 return true;
@@ -121,20 +119,6 @@ namespace MIProgram.Core.DataParsers
         public StyleDefinition ConvertToDestFieldDefinition(StyleDefinition fieldDefinition)
         {
             return fieldDefinition;
-        }
-
-        private static IList<string> _splittingStrings;
-        private static IEnumerable<string> SplittingStrings
-        {
-            get
-            {
-                if (_splittingStrings == null)
-                {
-                    var repository = new TextFileRepository(Constants.SplittingStringsFilePath);
-                    _splittingStrings = repository.GetData().Select(x => x.ToUpperInvariant()).ToList();
-                }
-                return _splittingStrings;
-            }
         }
     }
 }

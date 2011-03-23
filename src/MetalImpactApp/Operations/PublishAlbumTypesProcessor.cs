@@ -16,7 +16,7 @@ namespace MetalImpactApp.Operations
             _writer = writer;
         }
 
-        public void Process(IProductRepository<Album> productRepository)
+        public void Process(ProductRepository<Album> productRepository)
         {
             var albumRepository = productRepository as AlbumRepository;
             var outputDir = Constants.FieldsExtractionsOutputDirectoryPath;

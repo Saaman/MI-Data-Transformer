@@ -14,7 +14,7 @@ namespace MetalImpactApp.Operations
 {
     public class PublishReviewsWithNewModelProcessor : IOperationProcessor
     {
-        private readonly StylesParser _stylesParser;
+        private readonly AlbumStylesParser albumStylesParser;
         private readonly IWriter _writer;
         private readonly string _outputDir;
         private readonly PublishAlbumCountriesProcessor _publishAlbumCountriesProc;
@@ -25,7 +25,7 @@ namespace MetalImpactApp.Operations
         {
             _writer = writer;
             _outputDir = outputDir;
-            _stylesParser = new StylesParser();
+            albumStylesParser = new AlbumStylesParser();
             _albumTypesParser = new AlbumTypesParser();
             _publishAlbumCountriesProc = new PublishAlbumCountriesProcessor(writer, null);
             _sqlSerializer = new SQLSerializer(_writer, outputDir);
@@ -48,7 +48,7 @@ namespace MetalImpactApp.Operations
                     var newReview = Mapper.Map<MIProgram.WorkingModel.Review, Review>(review);
 
                     StyleDefinition styleDefinition = null;
-                    if (_stylesParser.TryParse(review.Album.MusicType, review.Id, ref styleDefinition))
+                    if (albumStylesParser.TryParse(review.Album.MusicType, review.Id, ref styleDefinition))
                     {
                         ((Album)newReview.ReviewProduct).AlbumMainStyles = styleDefinition.MainStyles;
                         ((Album)newReview.ReviewProduct).AlbumStyleAlterations = styleDefinition.StyleAlterations;

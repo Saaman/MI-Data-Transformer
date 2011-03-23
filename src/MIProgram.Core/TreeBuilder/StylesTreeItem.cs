@@ -58,7 +58,7 @@ namespace MIProgram.Core.TreeBuilder
 
                 foreach (var subStylesIdx in _subStylesIdxs)
                 {
-                    if(StyleDefinition.StylesAssociations.Contains(new KeyValuePair<int, int>(subStylesIdx, musicGenresIdx)))
+                    if(StylesRepository.StylesAssociations.Contains(new KeyValuePair<int, int>(subStylesIdx, musicGenresIdx)))
                     {                        
                         subStylePlusMusicGenreItems.Add(subStylesIdx, musicGenresIdx);
                         //create parent level 2

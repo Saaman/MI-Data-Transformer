@@ -22,7 +22,7 @@ namespace MIProgram.Core
             _reviewExploder = reviewExploder;
         }
 
-        public void Process(AsyncWorkerWrapper asyncWorkerWrapper, IProductRepository<T> productRepository)
+        public void Process(AsyncWorkerWrapper asyncWorkerWrapper, ProductRepository<T> productRepository)
         {
             IList<IExplodedReview<T>> explodedReviews = new List<IExplodedReview<T>>();
 

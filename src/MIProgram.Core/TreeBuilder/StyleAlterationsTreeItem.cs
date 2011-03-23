@@ -7,7 +7,7 @@ namespace MIProgram.Core.TreeBuilder
         public StyleAlterationsTreeItem(int styleAlterationIdx)
         {
             _styleAlterationsIdxs.Add(styleAlterationIdx);
-            _styleRebuildedString = StyleDefinition.StyleAlterationsValues[styleAlterationIdx];
+            _styleRebuildedString = StylesRepository.StyleAlterationsRepository.Values[styleAlterationIdx];
         }
     }
 }

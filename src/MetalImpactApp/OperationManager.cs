@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using MIProgram.Core;
@@ -13,7 +12,7 @@ namespace MetalImpactApp
         private readonly IList<Operation> _operationsToProcess;
         private AsyncWorkerWrapper _asyncWorkerWrapper;
         protected abstract IDictionary<OperationType, IOperationProcessor<T>> OperationsDefinition { get; }
-        public abstract IProductRepository<T> ProductRepository { get; }
+        public abstract ProductRepository<T> ProductRepository { get; }
 
         protected OperationManager(ReviewProcessor<T> reviewsProcessor, IList<Operation> operationsToProcess)
         {

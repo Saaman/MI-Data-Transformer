@@ -6,7 +6,7 @@ namespace MIProgram.Core
 {
     public class ReviewsManager<T> where T: Product
     {
-        public IProductRepository<T> ProductRepository { get; private set; }
+        public ProductRepository<T> ProductRepository { get; private set; }
 
         //private readonly IDGenerator _reviewerIdGenerator = new IDGenerator();
         //private readonly IDGenerator _artistIdGenerator = new IDGenerator();
@@ -15,7 +15,7 @@ namespace MIProgram.Core
         private readonly ReviewTextCleaner _reviewTextCleaner = new ReviewTextCleaner();
         private readonly IReviewExploder<T> _reviewExploder;
 
-        public ReviewsManager(IProductRepository<T> productRepository, IReviewExploder<T> reviewExploder)
+        public ReviewsManager(ProductRepository<T> productRepository, IReviewExploder<T> reviewExploder)
         {
             ProductRepository = productRepository;
             _reviewExploder = reviewExploder;

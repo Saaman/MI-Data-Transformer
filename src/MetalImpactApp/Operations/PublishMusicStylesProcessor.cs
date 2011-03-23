@@ -11,7 +11,7 @@ namespace MetalImpactApp.Operations
 {
     public class PublishMusicStylesProcessor : IOperationProcessor
     {
-        private readonly StylesParser _stylesParser;
+        private readonly AlbumStylesParser albumStylesParser;
         private readonly IWriter _writer;
         private readonly string _outputDir;
 
@@ -19,7 +19,7 @@ namespace MetalImpactApp.Operations
         {
             _writer = writer;
             _outputDir = outputDir;
-            _stylesParser = new StylesParser();
+            albumStylesParser = new AlbumStylesParser();
         }
 
         internal StylesTree InternalProcess(BackgroundWorker worker, DoWorkEventArgs e, OperationsManager_Deprecated managerDeprecated)
@@ -35,7 +35,7 @@ namespace MetalImpactApp.Operations
                 try
                 {
                     StyleDefinition styleDefinition = null;
-                    if (_stylesParser.TryParse(review.Album.MusicType, review.Id, ref styleDefinition))
+                    if (albumStylesParser.TryParse(review.Album.MusicType, review.Id, ref styleDefinition))
                     {
                         albumStyles.Add(review.Album.Id, styleDefinition);
                         if (!stylesDefinitions.Keys.Contains(review.Album.MusicType))

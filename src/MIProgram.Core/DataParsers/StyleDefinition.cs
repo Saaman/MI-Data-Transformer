@@ -1,45 +1,31 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using MIProgram.Core.TreeBuilder;
 using MIProgram.Model.Extensions;
 
 namespace MIProgram.Core.DataParsers
 {
-    public class StyleDefinition : IToDomainObject<IList<StylesTreeItem>>
+    public class StyleDefinition
     {
         private const int MaxNumberOfMusicTypes = 2;
         private const int MaxNumberOfMainStyles = 2;
         private const int MaxNumberOfStyleAlterations = 2;
 
-        #region Dictionnaries
-
-        public static readonly IList<KeyValuePair<int, int>> StylesAssociations = new List<KeyValuePair<int, int>>();
-
-        public static IList<string> MusicGenresValues { get { return MusicGenresRepository.Values; } }
-        public static IList<string> MainStylesValues { get { return MainStylesRepository.Values; } }
-        public static IList<string> StyleAlterationsValues { get { return StyleAlterationsRepository.Values; } }
-
-        internal static readonly ParsedValueRepository MusicGenresRepository = new ParsedValueRepository(Constants.MusicGenresFileName, Constants.MusicGenresReplacementsFileName, false);
-        internal static readonly ParsedValueRepository MainStylesRepository = new ParsedValueRepository(Constants.MainStylesFileName, Constants.MainStylesReplacementsFileName, true);
-        internal static readonly ParsedValueRepository StyleAlterationsRepository = new ParsedValueRepository(Constants.StyleAlterationsFileName, Constants.StyleAlterationsReplacementsFileName, true);
-
-        #endregion
-
         private IList<int> _musicTypesIdxs;
         private readonly IList<int> _mainStylesIdxs;
         private readonly IList<int> _styleAlterationIdxs;
-        public int Complexity
+        
+        /*public int Complexity
         {
             get { return _musicTypesIdxs.Count + _mainStylesIdxs.Count*2 + _styleAlterationIdxs.Count*3; }
-        }
+        }*/
 
         public IList<int> MusicTypesIdxs { get { return _musicTypesIdxs; } }
         public IList<int> MainStylesIdxs { get { return _mainStylesIdxs; } }
         public IList<int> StyleAlterationsIdxs { get { return _styleAlterationIdxs; } }
 
-        public IList<string> MusicTypes { get { return _musicTypesIdxs.Select(x => MusicGenresValues[x]).ToList(); } }
-        public IList<string> MainStyles { get { return _mainStylesIdxs.Select(x => (MainStylesValues[x])).ToList(); } }
-        public IList<string> StyleAlterations { get { return _styleAlterationIdxs.Select(x => (StyleAlterationsValues[x])).ToList(); } }
+        public IList<string> MusicTypes { get { return _musicTypesIdxs.Select(x => StylesRepository.MusicGenresRepository.Values[x]).ToList(); } }
+        public IList<string> MainStyles { get { return _mainStylesIdxs.Select(x => (StylesRepository.MainStylesRepository.Values[x])).ToList(); } }
+        public IList<string> StyleAlterations { get { return _styleAlterationIdxs.Select(x => (StylesRepository.StyleAlterationsRepository.Values[x])).ToList(); } }
 
         #region ctor
 
@@ -67,18 +53,13 @@ namespace MIProgram.Core.DataParsers
 
         #region public Methods
 
-        public static string ReplaceMusicGenresReplacement(string workingStyle)
-        {
-            return MusicGenresRepository.ReplaceReplacements(workingStyle);
-        }
-
         public static void AttachMainStyleToMusicType(int mainStyleIdx, int musicTypeIdx)
         {
-            if (StylesAssociations.Any(x => x.Key == mainStyleIdx && x.Value == musicTypeIdx))
+            if (StylesRepository.StylesAssociations.Any(x => x.Key == mainStyleIdx && x.Value == musicTypeIdx))
             {
                 return;
             }
-            StylesAssociations.Add(new KeyValuePair<int,int>(mainStyleIdx, musicTypeIdx));
+            StylesRepository.StylesAssociations.Add(new KeyValuePair<int, int>(mainStyleIdx, musicTypeIdx));
         }
 
         public void AttachMusicType(int musicTypeIdx)
@@ -90,7 +71,7 @@ namespace MIProgram.Core.DataParsers
         {
             var result = string.Empty;
 
-            result = _mainStylesIdxs.Aggregate(result, (current, mainStyleIdx) => current + MainStylesValues[mainStyleIdx].ToCamelCase() + "/");
+            result = _mainStylesIdxs.Aggregate(result, (current, mainStyleIdx) => current + StylesRepository.MainStylesRepository.Values[mainStyleIdx].ToCamelCase() + "/");
             result = result.TrimEnd(new[] { ' ', '/' });
 
             if(!string.IsNullOrEmpty(result))
@@ -98,12 +79,12 @@ namespace MIProgram.Core.DataParsers
                 result += " ";
             }
 
-            result = _musicTypesIdxs.Aggregate(result, (current, musicType) => current + MusicGenresValues[musicType] + "/");
+            result = _musicTypesIdxs.Aggregate(result, (current, musicType) => current + StylesRepository.MusicGenresRepository.Values[musicType] + "/");
             result = result.TrimEnd(new[] {' ', '/'});
 
             result += " ";
 
-            result = _styleAlterationIdxs.Aggregate(result, (current, styleAlteration) => current + StyleAlterationsValues[styleAlteration].ToCamelCase() + " ");
+            result = _styleAlterationIdxs.Aggregate(result, (current, styleAlteration) => current + StylesRepository.StyleAlterationsRepository.Values[styleAlteration].ToCamelCase() + " ");
             result = result.TrimEnd(new[] { ' ', '/' });            
 
             return result;
@@ -158,11 +139,6 @@ namespace MIProgram.Core.DataParsers
         }
 
         #endregion
-
-        public IList<StylesTreeItem> ToDomainObject()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 
 

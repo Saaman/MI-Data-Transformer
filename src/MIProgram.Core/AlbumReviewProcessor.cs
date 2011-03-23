@@ -11,6 +11,7 @@ namespace MIProgram.Core
     {
         private readonly CountryCodesParser _countryCodesParser = new CountryCodesParser();
         private readonly AlbumTypesParser _albumTypesParser = new AlbumTypesParser();
+        private readonly AlbumStylesParser _albumStylesParser = new AlbumStylesParser();
 
         public AlbumReviewProcessor(IMIRecordsProvider miRecordsProvider, IReviewExploder<Album> reviewExploder)
             : base(miRecordsProvider, reviewExploder)
@@ -28,6 +29,25 @@ namespace MIProgram.Core
 
             //Parse AlbumType
             ParseAlbumType(explodedReview);
+
+            //Parse Style
+            ParseAlbumStyle(explodedReview);
+        }
+
+        private void ParseAlbumStyle(IExplodedReview<Album> explodedReview)
+        {
+            var review = explodedReview as AlbumExplodedReview;
+
+            if (review == null)
+            {
+                throw new InvalidCastException("explodedReview cannot be cast as AlbumExplodedReview");
+            }
+
+            StyleDefinition albumStyle = null;
+            if (_albumStylesParser.TryParse(review.AlbumMusicGenre, review.RecordId, ref albumStyle))
+            {
+                review.ProcessedAlbumStyle = albumStyle;
+            }
         }
 
         private void ParseAlbumType(IExplodedReview<Album> explodedReview)

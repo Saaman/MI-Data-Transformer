@@ -71,7 +71,7 @@ namespace MIProgram.Core
                     "INSERT INTO  `midatabase`.`mi_artist` (`artist_id`, `name`, `creation_date`, `official_site`, `reviewer_id`, `countries`, `similar_artists_nodes`, `additionnal_similar_artists_names`, `sorting_weight`) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}');"
                     , artist.Id, artist.Name.ToCamelCase().GetSafeMySQL(), artist.CreationDate.ToUnixTimeStamp()
                     , artist.OfficialUrl, artist.Reviewer.Id
-                    , artist.Countries.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.ToCamelCase()).Trim('|')
+                    , artist.Countries.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.CountryName.ToCamelCase()).Trim('|')
                     , artist.SimilarArtists.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.Id).Trim('|')
                     , artist.ArtistSimilarArtistsNames.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.ToCamelCase()).Trim('|')
                     , artist.SortWeight);

@@ -58,6 +58,7 @@
     <Compile Include="Cleaners\ReviewTextCleaner.cs" />
     <Compile Include="DataParsers\CountriesRepository.cs" />
     <Compile Include="DataParsers\IToDomainObject.cs" />
+    <Compile Include="DataParsers\StylesRepository.cs" />
     <Compile Include="IExplodedReview.cs" />
     <Compile Include="IOperationProcessor.cs" />
     <Compile Include="IReviewExploder.cs" />
@@ -74,9 +75,8 @@
     <Compile Include="DataParsers\IFieldParser.cs" />
     <Compile Include="DataParsers\ParsedValueRepository.cs" />
     <Compile Include="DataParsers\StyleDefinition.cs" />
-    <Compile Include="DataParsers\StylesParser.cs" />
+    <Compile Include="DataParsers\AlbumStylesParser.cs" />
     <Compile Include="DataParsers\StylesParserHelpers.cs" />
-    <Compile Include="ProductStores\IProductRepository.cs" />
     <Compile Include="MIRecordsProviders\CSVFileProvider.cs" />
     <Compile Include="ProductStores\ProductRepository.cs" />
     <Compile Include="RemovalPresenter.cs" />

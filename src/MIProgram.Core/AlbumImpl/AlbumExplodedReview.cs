@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MIProgram.Core.DataParsers;
 using MIProgram.Model;
 
 namespace MIProgram.Core.AlbumImpl
@@ -47,6 +48,7 @@ namespace MIProgram.Core.AlbumImpl
         
         public IList<Country> ProcessedArtistCountries { get; set; }
         public string ProcessedAlbumType { get; set; }
+        public StyleDefinition ProcessedAlbumStyle { get; set; }
 
         #endregion
 
