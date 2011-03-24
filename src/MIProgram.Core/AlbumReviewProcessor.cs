@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MIProgram.Core.AlbumImpl;
 using MIProgram.Core.DataParsers;
 using MIProgram.Core.MIRecordsProviders;
+using MIProgram.Core.ProductStores;
+using MIProgram.Core.TreeBuilder;
 using MIProgram.Model;
 
 namespace MIProgram.Core
@@ -12,14 +15,19 @@ namespace MIProgram.Core
         private readonly CountryCodesParser _countryCodesParser = new CountryCodesParser();
         private readonly AlbumTypesParser _albumTypesParser = new AlbumTypesParser();
         private readonly AlbumStylesParser _albumStylesParser = new AlbumStylesParser();
+        private StylesTree _stylesTree;
 
         public AlbumReviewProcessor(IMIRecordsProvider miRecordsProvider, IReviewExploder<Album> reviewExploder)
             : base(miRecordsProvider, reviewExploder)
         {}
 
-        protected override void PostProcess()
+        protected override void PostProcess(IList<IExplodedReview<Album>> explodedReviews)
         {
-            throw new NotImplementedException();
+            var stylesDefinitions =
+                explodedReviews.ToDictionary(x => ((AlbumExplodedReview) x).AlbumMusicGenre,
+                                             x => ((AlbumExplodedReview) x).ProcessedAlbumStyle).OrderBy(
+                    x => x.Value.Complexity).ToDictionary(x => x.Key, y => y.Value);
+            _stylesTree = StylesTree.BuildFrom(stylesDefinitions);
         }
 
         protected override void SpecificProcess(IExplodedReview<Album> explodedReview)
@@ -32,6 +40,19 @@ namespace MIProgram.Core
 
             //Parse Style
             ParseAlbumStyle(explodedReview);
+        }
+
+        protected override void FinalizeProductRepository(ProductRepository<Album> productRepository)
+        {
+            var albumRepository = productRepository as AlbumRepository;
+
+            if(albumRepository == null)
+            {
+                throw new InvalidCastException("productRepository cannot be cast as AlbumRepository");
+            }
+
+            albumRepository.AttachStylesTree(_stylesTree);
+
         }
 
         private void ParseAlbumStyle(IExplodedReview<Album> explodedReview)

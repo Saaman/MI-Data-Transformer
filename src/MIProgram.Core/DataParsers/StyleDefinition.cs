@@ -14,10 +14,10 @@ namespace MIProgram.Core.DataParsers
         private readonly IList<int> _mainStylesIdxs;
         private readonly IList<int> _styleAlterationIdxs;
         
-        /*public int Complexity
+        public int Complexity
         {
             get { return _musicTypesIdxs.Count + _mainStylesIdxs.Count*2 + _styleAlterationIdxs.Count*3; }
-        }*/
+        }
 
         public IList<int> MusicTypesIdxs { get { return _musicTypesIdxs; } }
         public IList<int> MainStylesIdxs { get { return _mainStylesIdxs; } }

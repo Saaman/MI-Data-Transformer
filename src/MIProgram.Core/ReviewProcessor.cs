@@ -45,13 +45,16 @@ namespace MIProgram.Core
             }
 
             // post process
-            PostProcess();
+            PostProcess(explodedReviews);
 
             //Integrate reviews in Product repository
             foreach (var explodedReview in explodedReviews)
             {
                 productRepository.Add(explodedReview);
             }
+
+            //Attach additional repositories & processed stuff to ProductRepoistory
+            FinalizeProductRepository(productRepository);
 
             //Finalize work
             FinalizeWork();
@@ -63,7 +66,8 @@ namespace MIProgram.Core
                 _reviewTextCleaner.FinalizeWork();
         }
 
-        protected abstract void PostProcess();
+        protected abstract void PostProcess(IList<IExplodedReview<T>> explodedReviews);
         protected abstract void SpecificProcess(IExplodedReview<T> explodedReview);
+        protected abstract void FinalizeProductRepository(ProductRepository<T> productRepository);
     }
 }

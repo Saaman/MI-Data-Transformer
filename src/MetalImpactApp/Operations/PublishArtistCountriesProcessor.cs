@@ -9,16 +9,16 @@ using MIProgram.Model;
 
 namespace MetalImpactApp.Operations
 {
-    public class PublishArtistCountriesOperation : IOperationProcessor<Album>
+    public class PublishArtistCountriesProcessor : IOperationProcessor<Album>
     {
         private readonly IWriter _writer;
 
-        public PublishArtistCountriesOperation(IWriter _writer)
+        public PublishArtistCountriesProcessor(IWriter _writer)
         {
             this._writer = _writer;
         }
 
-        public void Process(IProductRepository<Album> productRepository)
+        public void Process(ProductRepository<Album> productRepository)
         {
             var albumRepository = productRepository as AlbumRepository;
             var outputDir = Constants.FieldsExtractionsOutputDirectoryPath;

@@ -14,12 +14,10 @@ namespace MIProgram.Model
         public string UnParsedType { get; private set; }
         public string CoverPath { get; private set; }
 
-        //New
-        /*public DateTime OriginalReleaseDate { get; private set; }
-        public int NumberOfDiscs { get; private set; }
-        public string CommercialCode { get; private set; }
-        public int VisitorsScore { get; private set; }
-        */
+        public string DeezerAlbum { get; private set;}
+        public string DeezerArtist { get; private set; }
+        public string ReviewText { get; private set; }
+
         //Taxo
         public IList<string> MainStyles { get; private set; }
         public string MainStyle2 { get; private set; }

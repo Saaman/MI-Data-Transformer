@@ -1,105 +1,61 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using MIProgram.Core;
 using MIProgram.Core.DataParsers;
-using MIProgram.Core.Logging;
-using MIProgram.Core.TreeBuilder;
+using MIProgram.Core.ProductStores;
 using MIProgram.Core.Writers;
 using System.Linq;
+using MIProgram.Model;
 
 namespace MetalImpactApp.Operations
 {
-    public class PublishMusicStylesProcessor : IOperationProcessor
+    public class PublishMusicStylesProcessor : IOperationProcessor<Album>
     {
-        private readonly AlbumStylesParser albumStylesParser;
         private readonly IWriter _writer;
-        private readonly string _outputDir;
 
-        public PublishMusicStylesProcessor(IWriter writer, string outputDir)
+        public PublishMusicStylesProcessor(IWriter writer)
         {
             _writer = writer;
-            _outputDir = outputDir;
-            albumStylesParser = new AlbumStylesParser();
         }
 
-        internal StylesTree InternalProcess(BackgroundWorker worker, DoWorkEventArgs e, OperationsManager_Deprecated managerDeprecated)
+        public void Process(ProductRepository<Album> productRepository)
         {
-            managerDeprecated.Infos = "extraction des styles... ";
-            var count = 0;
-            worker.ReportProgress(count);
-            var stylesDefinitions = new Dictionary<string, StyleDefinition>();
-            var albumStyles = new Dictionary<int, StyleDefinition>();
+            var albumRepository = productRepository as AlbumRepository;
+            var outputDir = Constants.FieldsExtractionsOutputDirectoryPath;
 
-            foreach (var review in managerDeprecated.ParsedReviews)
+            if (albumRepository == null)
             {
-                try
-                {
-                    StyleDefinition styleDefinition = null;
-                    if (albumStylesParser.TryParse(review.Album.MusicType, review.Id, ref styleDefinition))
-                    {
-                        albumStyles.Add(review.Album.Id, styleDefinition);
-                        if (!stylesDefinitions.Keys.Contains(review.Album.MusicType))
-                        {
-                            stylesDefinitions.Add(review.Album.MusicType, styleDefinition);
-                        }
-                    }
-
-                    if (worker.CancellationPending)
-                    {
-                        e.Cancel = true;
-                        break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logging.Instance.LogError(string.Format("Une erreur est survenue lors de l'extraction des styles (review {0}) : {1}", review.Id, ex.Message), ErrorLevel.Error);
-                    continue;
-                }
-
-                managerDeprecated.Infos = "extraction des styles... ";
-                worker.ReportProgress(++count * 100 / (managerDeprecated.ParsedReviews.Count));
+                throw new InvalidCastException("ProductRepository cannot be cast to AlbumRepository");
             }
 
-            stylesDefinitions = stylesDefinitions.OrderBy(x => x.Value.Complexity).ToDictionary(x => x.Key, y => y.Value);
-
-            var tree = StylesTree.BuildFrom(stylesDefinitions);
-
-            managerDeprecated.Infos = "publication des types de musique... ";
             _writer.WriteTextCollection(
-                StyleDefinition.MusicGenresValues.Select(
-                    x => string.Format("{0} : {1} occurences", x
-                        , stylesDefinitions.Values.Where(y => y.MusicTypes.Contains(x)).Count()))
-                .ToList(), "musicTypesDictionnary", _outputDir);
+                StylesRepository.MusicGenresRepository.Values.Select(
+                    x => string.Format("{0} : {1} occurences", x,
+                                       albumRepository.ExplodedReviews.Where(y => y.ProcessedAlbumStyle.MusicTypes.Contains(x)).Count()))
+                    .ToList(), "musicTypesDictionnary", outputDir);
 
-            managerDeprecated.Infos = "publication des styles principaux... ";
             _writer.WriteTextCollection(
-                StyleDefinition.MainStylesValues.Select(
+                StylesRepository.MainStylesRepository.Values.Select(
                     x => string.Format("{0} : {1} occurences", x
-                        , stylesDefinitions.Values.Where(y => y.MainStyles.Contains(x)).Count()))
-                .ToList(), "mainStylesDictionnary", _outputDir);
+                        , albumRepository.ExplodedReviews.Where(y => y.ProcessedAlbumStyle.MainStyles.Contains(x)).Count()))
+                .ToList(), "mainStylesDictionnary", outputDir);
 
-            managerDeprecated.Infos = "publication des associations type de musique / styles principaux... ";
-            _writer.WriteTextCollection(StyleDefinition.StylesAssociations.Select(
-                    x => string.Format("{0} associé à {1}", x.Key
-                        , x.Value)).ToList(),
-                        "musicStylesAndTypesAssociationsDictionnary", _outputDir);
+            _writer.WriteTextCollection(StylesRepository.StylesAssociations.Select(
+                    x => string.Format("{0} associé à {1}", StylesRepository.MainStylesRepository.Values[x.Key]
+                        , StylesRepository.MusicGenresRepository.Values[x.Value])).ToList(),
+                        "musicStylesAndTypesAssociationsDictionnary", outputDir);
 
-            managerDeprecated.Infos = "publication des altérations de style... ";
-            _writer.WriteTextCollection(StyleDefinition.StyleAlterationsValues.Select(
+            _writer.WriteTextCollection(StylesRepository.StyleAlterationsRepository.Values.Select(
                     x => string.Format("{0} : {1} occurences", x
-                        , stylesDefinitions.Values.Where(y => y.StyleAlterations.Contains(x)).Count())
-                ).ToList(), "StyleAlterationsDictionnary", _outputDir);
+                        , albumRepository.ExplodedReviews.Where(y => y.ProcessedAlbumStyle.StyleAlterations.Contains(x)).Count())
+                ).ToList(), "StyleAlterationsDictionnary", outputDir);
 
+            _writer.WriteTextCollection(albumRepository.ExplodedReviews.Select(x => string.Format("'{0}' est parsé en '{1}'", x.AlbumMusicGenre, x.ProcessedAlbumStyle.RebuildFromParsedValuesRepository())).ToList(), "Styles", outputDir);
 
-            managerDeprecated.Infos = "publication des styles parsés... ";
-            _writer.WriteTextCollection(stylesDefinitions.Select(x => string.Format("'{0}' est parsé en '{1}'", x.Key, x.Value.RebuildFromParsedValuesRepository())).ToList(), "Styles", _outputDir);
-
-            return tree;
         }
 
-        public void Process(BackgroundWorker worker, DoWorkEventArgs e, OperationsManager_Deprecated managerDeprecated)
+        public string ProcessDescription
         {
-            InternalProcess(worker, e, managerDeprecated);
+            get { return "publication des types de musique... "; }
         }
     }
 }

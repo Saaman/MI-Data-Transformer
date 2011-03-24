@@ -73,7 +73,7 @@ namespace MIProgram.Core
                     , artist.OfficialUrl, artist.Reviewer.Id
                     , artist.Countries.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.CountryName.ToCamelCase()).Trim('|')
                     , artist.SimilarArtists.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.Id).Trim('|')
-                    , artist.ArtistSimilarArtistsNames.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.ToCamelCase()).Trim('|')
+                    //, artist.SimilarArtists.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.ToCamelCase()).Trim('|')
                     , artist.SortWeight);
                 sb.AppendLine();
             }

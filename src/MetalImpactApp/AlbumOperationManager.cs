@@ -16,7 +16,12 @@ namespace MetalImpactApp
         public AlbumOperationManager(ReviewProcessor<Album> reviewsProcessor, IList<Operation> operationsToProcess, IWriter writer, List<Func<Product, bool>> filtersDefinitions)
             : base(reviewsProcessor, operationsToProcess)
         {
-            _operationsDefinitions = new Dictionary<OperationType, IOperationProcessor<Album>> { { OperationType.PublishAlbumCountries, new PublishArtistCountriesOperation(writer) } };
+            _operationsDefinitions = new Dictionary<OperationType, IOperationProcessor<Album>>
+                                         {
+                                             { OperationType.PublishAlbumCountries, new PublishArtistCountriesProcessor(writer) },
+                                             { OperationType.PublishAlbumTypes, new PublishAlbumTypesProcessor(writer) },
+                                             { OperationType.PublishMusicStyles, new PublishMusicStylesProcessor(writer)}
+                                         };
 
             _albumRepository = new AlbumRepository(filtersDefinitions);
         }
@@ -26,9 +31,9 @@ namespace MetalImpactApp
             get { return _operationsDefinitions; }
         }
 
-        public override IProductRepository<Album> ProductRepository
+        public override ProductRepository<Album> ProductRepository
         {
-            get { return _albumRepository as IProductRepository<Album>; }
+            get { return _albumRepository; }
         }
     }
 }

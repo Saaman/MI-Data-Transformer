@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using MIProgram.Core.AlbumImpl;
+using MIProgram.Core.TreeBuilder;
 using MIProgram.Model;
 
 namespace MIProgram.Core.ProductStores
@@ -9,6 +10,7 @@ namespace MIProgram.Core.ProductStores
     {
         private readonly IList<Album> _albums = new List<Album>();
         private readonly IList<AlbumExplodedReview> _explodedReviews = new List<AlbumExplodedReview>();
+        private StylesTree _stylesTree;
 
         public AlbumRepository(List<Func<Product, bool>> filtersDefinitions) : base(filtersDefinitions)
         {}
@@ -32,6 +34,11 @@ namespace MIProgram.Core.ProductStores
             _albums.Add(album);
         }
 
+        public void AttachStylesTree(StylesTree stylesTree)
+        {
+            _stylesTree = stylesTree;
+        }
+
         public override IList<Album> Products
         {
             get { return _albums; }
@@ -40,6 +47,11 @@ namespace MIProgram.Core.ProductStores
         public IList<AlbumExplodedReview> ExplodedReviews
         {
             get { return _explodedReviews; }
+        }
+
+        public StylesTree StylesTree
+        {
+            get { return _stylesTree; }
         }
     }
 }

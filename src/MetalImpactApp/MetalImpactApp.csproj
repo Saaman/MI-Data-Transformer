@@ -79,7 +79,7 @@
     <Compile Include="Operations\PublishReviewsXMLsForDeezerProcessor.cs" />
     <Compile Include="Operations\PublishSiteMapProcessor.cs" />
     <Compile Include="OperationType.cs" />
-    <Compile Include="Operations\PublishArtistCountriesOperation.cs" />
+    <Compile Include="Operations\PublishArtistCountriesProcessor.cs" />
     <Compile Include="ReviewCleaningForm.cs">
       <SubType>Form</SubType>
     </Compile>

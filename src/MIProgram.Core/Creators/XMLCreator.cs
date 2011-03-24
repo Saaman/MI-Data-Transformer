@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 using MIProgram.Core.Writers;
-using MIProgram.WorkingModel;
+using MIProgram.Model;
 
 namespace MIProgram.Core.Creators
 {
@@ -22,25 +22,17 @@ namespace MIProgram.Core.Creators
             _destRootDir = destRootDir;
         }
 
-        public void CreateXMLsFrom(IList<Review> reviews)
-        {
-            foreach (var review in reviews)
-            {
-                CreateSingleXML(review);
-            }
-        }
-
-        public XDocument CreateSingleXML(Review review)
+        public XDocument CreateSingleXML(Album album)
         {
             var xml = new XElement("review",
-                new XElement("album_name", new XCData(review.Album.Title)),
-                new XElement("artist_name", new XCData(review.Album.Artist.Name)),
-                new XElement("deezer_album_name", new XCData(review.DeezerAlbum)),
-                new XElement("deezer_artist_name", new XCData(review.DeezerArtist)),
-                new XElement("review", new XCData(review.Text)),
-                new XElement("id_mireview", new XCData(review.Id.ToString())),
-                new XElement("reviewer", new XCData(review.Reviewer.Name)),
-                new XElement("mireviewlink", new XCData(string.Format(ReviewLink, review.Id)))
+                new XElement("album_name", new XCData(album.Title)),
+                new XElement("artist_name", new XCData(album.Artist.Name)),
+                new XElement("deezer_album_name", new XCData(album.DeezerAlbum)),
+                new XElement("deezer_artist_name", new XCData(album.DeezerArtist)),
+                new XElement("review", new XCData(album.ReviewText)),
+                new XElement("id_mireview", new XCData(album.Id.ToString())),
+                new XElement("reviewer", new XCData(album.Reviewer.Name)),
+                new XElement("mireviewlink", new XCData(string.Format(ReviewLink, album.Id)))
                 );
 
             return new XDocument(new XDeclaration("1.0", "UTF-_8", "yes"), xml);
