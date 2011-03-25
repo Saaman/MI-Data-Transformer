@@ -13,7 +13,7 @@ namespace MetalImpactApp
         private readonly AlbumRepository _albumRepository;
         private readonly IDictionary<OperationType, IOperationProcessor<Album>> _operationsDefinitions;
 
-        public AlbumOperationManager(ReviewProcessor<Album> reviewsProcessor, IList<Operation> operationsToProcess, IWriter writer, List<Func<Product, bool>> filtersDefinitions)
+        public AlbumOperationManager(ReviewProcessor<Album> reviewsProcessor, IList<Operation> operationsToProcess, IWriter writer, List<Func<Product, bool>> filtersDefinitions, DateTime lastExportDate)
             : base(reviewsProcessor, operationsToProcess)
         {
             _operationsDefinitions = new Dictionary<OperationType, IOperationProcessor<Album>>
@@ -23,7 +23,7 @@ namespace MetalImpactApp
                                              { OperationType.PublishMusicStyles, new PublishMusicStylesProcessor(writer)}
                                          };
 
-            _albumRepository = new AlbumRepository(filtersDefinitions);
+            _albumRepository = new AlbumRepository(filtersDefinitions, lastExportDate);
         }
 
         protected override IDictionary<OperationType, IOperationProcessor<Album>> OperationsDefinition

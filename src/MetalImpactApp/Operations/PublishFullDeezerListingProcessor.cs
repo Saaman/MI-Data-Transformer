@@ -1,55 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Xml.Linq;
+using MIProgram.Core;
 using MIProgram.Core.Creators;
 using MIProgram.Core.Logging;
+using MIProgram.Core.ProductStores;
 using MIProgram.Core.Writers;
+using MIProgram.Model;
 
 namespace MetalImpactApp.Operations
 {
-    public class PublishFullDeezerListingProcessor : IOperationProcessor
+    public class PublishFullDeezerListingProcessor : IOperationProcessor<Album>
     {
-        private readonly string _outputDir;
         private readonly XMLCreator _xmlCreator;
 
-        public PublishFullDeezerListingProcessor(IWriter writer, string outputDir)
+        public PublishFullDeezerListingProcessor(IWriter writer)
         {
-            _outputDir = outputDir;
-            _xmlCreator = new XMLCreator(writer, outputDir);
+            _xmlCreator = new XMLCreator(writer, Constants.DeezerOperationsOutputDirectoryPath);
         }
 
-        public void Process(BackgroundWorker worker, DoWorkEventArgs e, OperationsManager_Deprecated managerDeprecated)
+        public void Process(ProductRepository<Album> productRepository)
         {
-            managerDeprecated.Infos = "Génération du fichier complet des reviews...";
-            var count = 0;
-            worker.ReportProgress(count);
+            var albumRepository = productRepository as AlbumRepository;
+
+            if (albumRepository == null)
+            {
+                throw new InvalidCastException("ProductRepository cannot be cast to AlbumRepository");
+            }
 
             var nodes = new List<XElement>();
-            foreach (var review in managerDeprecated.ParsedReviews)
+            foreach (var review in albumRepository.ExplodedReviews)
             {
                 try
                 {
-                    nodes.Add(_xmlCreator.GetXmlForReport(review.Id));
-
-                    if (worker.CancellationPending)
-                    {
-                        e.Cancel = true;
-                        break;
-                    }
+                    nodes.Add(_xmlCreator.GetXmlForReport(review.RecordId));
                 }
                 catch (Exception ex)
                 {
-                    Logging.Instance.LogError(string.Format("Une erreur est survenue lors de la génération du fichier complet des reviews (review {0}) : {1}", review.Id, ex.Message), ErrorLevel.Error);
+                    Logging.Instance.LogError(string.Format("Une erreur est survenue lors de la génération du fichier complet des reviews (review {0}) : {1}", review.RecordId, ex.Message), ErrorLevel.Error);
                     continue;
                 }
-
-                managerDeprecated.Infos = "Génération du fichier complet des reviews... ";
-                worker.ReportProgress(++count * 100 / (managerDeprecated.ParsedReviews.Count));
             }
 
             var doc = _xmlCreator.CreateReport(nodes);
-            _xmlCreator.Publish(doc, "AllReviews", _outputDir);
+            _xmlCreator.Publish(doc, "AllReviews");
+        }
+
+        public string ProcessDescription
+        {
+            get { return "Génération du fichier complet des reviews... "; }
         }
     }
 }

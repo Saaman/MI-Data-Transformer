@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MIProgram.Core.AlbumImpl;
 using MIProgram.Core.TreeBuilder;
 using MIProgram.Model;
@@ -11,9 +12,12 @@ namespace MIProgram.Core.ProductStores
         private readonly IList<Album> _albums = new List<Album>();
         private readonly IList<AlbumExplodedReview> _explodedReviews = new List<AlbumExplodedReview>();
         private StylesTree _stylesTree;
+        private readonly DateTime _lastExportDate;
 
-        public AlbumRepository(List<Func<Product, bool>> filtersDefinitions) : base(filtersDefinitions)
-        {}
+        public AlbumRepository(List<Func<Product, bool>> filtersDefinitions, DateTime lastExportDate) : base(filtersDefinitions)
+        {
+            _lastExportDate = lastExportDate;
+        }
 
         public override void Add(IExplodedReview<Album> explodedReview)
         {
@@ -48,6 +52,9 @@ namespace MIProgram.Core.ProductStores
         {
             get { return _explodedReviews; }
         }
+
+        public IList<AlbumExplodedReview> LatestExplodedReviews
+        { get { return _explodedReviews.Where(x => x.RecordLastUpdateDate > _lastExportDate).ToList(); } }
 
         public StylesTree StylesTree
         {

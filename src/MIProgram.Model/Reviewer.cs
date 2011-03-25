@@ -33,7 +33,7 @@ namespace MIProgram.Model
             Id = userId;
         }
 
-        public void UpdateInfos(string name, string mailAddress, DateTime lastUpdate)
+        public void UpdateInfos(string name, string mailAddress, DateTime? lastUpdate)
         {
             //if older version than the current one, return without doing anything
             if (lastUpdate < LastUpdate)

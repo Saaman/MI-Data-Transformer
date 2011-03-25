@@ -1,53 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Xml.Linq;
+using MIProgram.Core;
 using MIProgram.Core.Creators;
 using MIProgram.Core.Logging;
+using MIProgram.Core.ProductStores;
 using MIProgram.Core.Writers;
+using MIProgram.Model;
 
 namespace MetalImpactApp.Operations
 {
-    public class PublishSiteMapProcessor : IOperationProcessor
+    public class PublishSiteMapProcessor : IOperationProcessor<Album>
     {
         private readonly XMLCreator _xmlCreator;
 
-        public PublishSiteMapProcessor(IWriter writer, string outputDir)
+        public PublishSiteMapProcessor(IWriter writer)
         {
-            _xmlCreator = new XMLCreator(writer, outputDir);
+            _xmlCreator = new XMLCreator(writer, Constants.DeezerOperationsOutputDirectoryPath);
         }
 
-        public void Process(BackgroundWorker worker, DoWorkEventArgs e, OperationsManager_Deprecated managerDeprecated)
+        public void Process(ProductRepository<Album> productRepository)
         {
-            managerDeprecated.Infos = "Génération du sitemap...";
-            var count = 0;
-            worker.ReportProgress(count);
+            var albumRepository = productRepository as AlbumRepository;
+
+            if (albumRepository == null)
+            {
+                throw new InvalidCastException("ProductRepository cannot be cast to AlbumRepository");
+            }
+
 
             var nodes = new List<XElement>();
-            foreach (var record in managerDeprecated.AllOriginalReviews)
+            foreach (var explodedReview in albumRepository.ExplodedReviews)
             {
                 try
                 {
-                    nodes.Add(_xmlCreator.GetXmlForSitemap(record.LastUpdateDate ?? record.CreationDate, record.Id));
-
-                    if (worker.CancellationPending)
-                    {
-                        e.Cancel = true;
-                        break;
-                    }
+                    nodes.Add(_xmlCreator.GetXmlForSitemap(explodedReview.RecordLastUpdateDate, explodedReview.RecordId));
                 }
                 catch (Exception ex)
                 {
-                    Logging.Instance.LogError(string.Format("Une erreur est survenue lors de la génération du sitemap (review {0}) : {1}", record.Id, ex.Message), ErrorLevel.Error);
+                    Logging.Instance.LogError(string.Format("Une erreur est survenue lors de la génération du sitemap (review {0}) : {1}", explodedReview.RecordId, ex.Message), ErrorLevel.Error);
                     continue;
                 }
-
-                managerDeprecated.Infos = "Génération du sitemap... ";
-                worker.ReportProgress(++count * 100 / (managerDeprecated.AllOriginalReviews.Count));
             }
 
             var doc = _xmlCreator.CreateSiteMap(nodes);
             _xmlCreator.Publish(doc, "SitemapCDreviews");
+        }
+
+        public string ProcessDescription
+        {
+            get { return "Génération du sitemap... "; }
         }
     }
 }

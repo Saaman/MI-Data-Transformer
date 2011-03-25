@@ -62,7 +62,6 @@
     </Compile>
     <Compile Include="IOperationsLauncher.cs" />
     <Compile Include="OperationManager.cs" />
-    <Compile Include="MappingConfigurations.cs" />
     <Compile Include="mi_reviews.Designer.cs">
       <DependentUpon>mi_reviews.xsd</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -70,7 +69,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Operation.cs" />
-    <Compile Include="Operations\ParseReviewsProcessor.cs" />
     <Compile Include="Operations\PublishDiffDeezerListingProcessor.cs" />
     <Compile Include="Operations\PublishFullDeezerListingProcessor.cs" />
     <Compile Include="Operations\PublishMusicStylesProcessor.cs" />
@@ -86,7 +84,6 @@
     <Compile Include="ReviewCleaningForm.Designer.cs">
       <DependentUpon>ReviewCleaningForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="OperationsManager_Deprecated.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

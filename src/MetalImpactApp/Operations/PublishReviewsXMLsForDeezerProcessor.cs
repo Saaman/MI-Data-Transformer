@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using MIProgram.Core;
 using MIProgram.Core.Creators;
 using MIProgram.Core.Logging;
@@ -27,7 +26,7 @@ namespace MetalImpactApp.Operations
                 throw new InvalidCastException("ProductRepository cannot be cast to AlbumRepository");
             }
 
-            foreach (var product in albumRepository.Products)
+            foreach (var product in albumRepository.FilteredProducts)
             {
                 try
                 {

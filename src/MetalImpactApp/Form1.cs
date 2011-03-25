@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using MetalImpactApp.Properties;
 using MIProgram.Core;
 using MIProgram.Core.Logging;
-using MIProgram.Core.MIRecordsProviders;
 using MIProgram.Core.Writers;
 using System.Globalization;
 using System.Collections.Generic;
@@ -35,7 +34,7 @@ namespace MetalImpactApp
             Logging.SetInstance(new FileLogger(Constants.LogFilePath));
             InitializeComponent();
             InitializeView();
-            MappingConfigurations.Init();
+            //MappingConfigurations.Init();
         }
 
         #region Display
@@ -219,9 +218,9 @@ namespace MetalImpactApp
                 //_operationsManagerDeprecated = new OperationsManager_Deprecated(provider, writer, LastUpdateDateDTP.Value, OperationsListBox.CheckedItems.Cast<Operation>().ToList());
                 var reviewProcessorBuilder = new ReviewProcessorBuilder();
                 var operations = OperationsListBox.CheckedItems.Cast<Operation>().ToList();
-                ReviewProcessor<Album> reviewProcessor = reviewProcessorBuilder.BuildFor<Album>(SourceFileTB.Text, writer, filters, operations);
-                _operationLauncher = new AlbumOperationManager(reviewProcessor, OperationsListBox.CheckedItems.Cast<Operation>().ToList(), writer, filtersDefinitions);
-
+                _operationLauncher = reviewProcessorBuilder.BuildFor<Album>(SourceFileTB.Text, writer, filters, operations, LastUpdateDateDTP.Value);
+                //_operationLauncher = new AlbumOperationManager(reviewProcessor, OperationsListBox.CheckedItems.Cast<Operation>().ToList(), writer, );
+                
                 ReviewsBackgroundWorker.RunWorkerAsync();
                 StartStopButton.Text = Resources.CancelLabel;
                 StartStopButton.Enabled = true;

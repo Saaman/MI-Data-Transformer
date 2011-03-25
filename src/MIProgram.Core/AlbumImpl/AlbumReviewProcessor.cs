@@ -28,6 +28,16 @@ namespace MIProgram.Core
                                              x => ((AlbumExplodedReview) x).ProcessedAlbumStyle).OrderBy(
                     x => x.Value.Complexity).ToDictionary(x => x.Key, y => y.Value);
             _stylesTree = StylesTree.BuildFrom(stylesDefinitions);
+
+            /*foreach (var artist in newArtists)
+            {
+                var currentArtist = artist;
+                currentArtist.SimilarArtists = newArtists.Where(
+                    x => currentArtist.ArtistSimilarArtistsNames.Contains(x.Name, new UpperInvariantComparer())
+                        && x != currentArtist).ToList();
+                currentArtist.ArtistSimilarArtistsNames = currentArtist.ArtistSimilarArtistsNames.Where(
+                    y => !currentArtist.SimilarArtists.Select(x => x.Name).Contains(y, new UpperInvariantComparer())).ToList();
+            }*/
         }
 
         protected override void SpecificProcess(IExplodedReview<Album> explodedReview)

@@ -53,7 +53,7 @@
     <Compile Include="AlbumImpl\AlbumExplodedReview.cs" />
     <Compile Include="AlbumImpl\AlbumReviewExploder.cs" />
     <Compile Include="AlbumImpl\AlbumReviewBodyCleaner.cs" />
-    <Compile Include="AlbumReviewProcessor.cs" />
+    <Compile Include="AlbumImpl\AlbumReviewProcessor.cs" />
     <Compile Include="AsyncWorkerWrapper.cs" />
     <Compile Include="Cleaners\ReviewTextCleaner.cs" />
     <Compile Include="DataParsers\CountriesRepository.cs" />
