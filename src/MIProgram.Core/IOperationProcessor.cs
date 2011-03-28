@@ -1,5 +1,5 @@
-﻿using MIProgram.Core.ProductStores;
-using MIProgram.Model;
+﻿using MIProgram.Core.Model;
+using MIProgram.Core.ProductRepositories;
 
 namespace MIProgram.Core
 {

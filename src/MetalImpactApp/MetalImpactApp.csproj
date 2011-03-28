@@ -53,31 +53,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AlbumOperationManager.cs" />
+    <Compile Include="OperationManagement\AlbumImpl\AlbumOperationManager.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="IOperationsLauncher.cs" />
-    <Compile Include="OperationManager.cs" />
+    <Compile Include="OperationManagement\IOperationsLauncher.cs" />
+    <Compile Include="OperationManagement\OperationManager.cs" />
     <Compile Include="mi_reviews.Designer.cs">
       <DependentUpon>mi_reviews.xsd</DependentUpon>
       <AutoGen>True</AutoGen>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Operation.cs" />
-    <Compile Include="Operations\PublishDiffDeezerListingProcessor.cs" />
-    <Compile Include="Operations\PublishFullDeezerListingProcessor.cs" />
-    <Compile Include="Operations\PublishMusicStylesProcessor.cs" />
-    <Compile Include="Operations\PublishAlbumTypesProcessor.cs" />
-    <Compile Include="Operations\PublishReviewsWithNewModelProcessor.cs" />
-    <Compile Include="Operations\PublishReviewsXMLsForDeezerProcessor.cs" />
-    <Compile Include="Operations\PublishSiteMapProcessor.cs" />
-    <Compile Include="OperationType.cs" />
-    <Compile Include="Operations\PublishArtistCountriesProcessor.cs" />
+    <Compile Include="OperationManagement\Operation.cs" />
+    <Compile Include="OperationManagement\AlbumImpl\Operations\PublishDiffDeezerListingProcessor.cs" />
+    <Compile Include="OperationManagement\AlbumImpl\Operations\PublishFullDeezerListingProcessor.cs" />
+    <Compile Include="OperationManagement\AlbumImpl\Operations\PublishMusicStylesProcessor.cs" />
+    <Compile Include="OperationManagement\AlbumImpl\Operations\PublishAlbumTypesProcessor.cs" />
+    <Compile Include="OperationManagement\AlbumImpl\Operations\PublishReviewsWithNewModelProcessor.cs" />
+    <Compile Include="OperationManagement\AlbumImpl\Operations\PublishReviewsXMLsForDeezerProcessor.cs" />
+    <Compile Include="OperationManagement\AlbumImpl\Operations\PublishSiteMapProcessor.cs" />
+    <Compile Include="OperationManagement\OperationType.cs" />
+    <Compile Include="OperationManagement\AlbumImpl\Operations\PublishArtistCountriesProcessor.cs" />
     <Compile Include="ReviewCleaningForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,24 +128,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="OperationLauncherBuilder.cs" />
+    <Compile Include="OperationManagement\OperationLauncherBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MIProgram.Core\MIProgram.Core.csproj">
       <Project>{3A4D0883-4252-4F77-87D9-75838295557D}</Project>
       <Name>MIProgram.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MIProgram.DataAccess\MIProgram.DataAccess.csproj">
-      <Project>{744DB880-E5F5-47CC-BA9E-04D20CFB0A32}</Project>
-      <Name>MIProgram.DataAccess</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MIProgram.Model\MIProgram.Model.csproj">
-      <Project>{608B8F22-FD50-448F-B366-805C05744CC5}</Project>
-      <Name>MIProgram.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MIProgram.WorkingModel\MIProgram.WorkingModel.csproj">
-      <Project>{E613DA01-28A4-4FCF-B055-0F1D6512BD3D}</Project>
-      <Name>MIProgram.WorkingModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

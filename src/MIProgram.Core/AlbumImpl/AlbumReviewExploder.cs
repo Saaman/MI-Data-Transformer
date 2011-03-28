@@ -1,6 +1,6 @@
 using System;
-using MIProgram.DataAccess;
-using MIProgram.Model;
+using MIProgram.Core.DAL.Models;
+using MIProgram.Core.Model;
 
 namespace MIProgram.Core.AlbumImpl
 {

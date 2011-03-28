@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using MetalImpactApp.Properties;
-using MIProgram.Core.Cleaners;
+using MIProgram.Core.BodyCleaning;
 using MIProgram.Core;
 using System.Text.RegularExpressions;
 
@@ -22,7 +22,7 @@ namespace MetalImpactApp
 
         private bool IsFinalStep { get { return _currentMatchedStringIdx == _matchedStrings.Count; } }
 
-        public ReviewCleaningForm(ref ReviewCleaningFormResult reviewCleaningFormResult, RemovalsPresenter presenter)
+        public ReviewCleaningForm(ReviewCleaningFormResult reviewCleaningFormResult, RemovalsPresenter presenter)
         {
             _reviewCleaningFormResult = reviewCleaningFormResult;
             _originalText = presenter.ReviewText;

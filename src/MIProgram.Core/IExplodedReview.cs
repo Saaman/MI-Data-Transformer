@@ -1,5 +1,5 @@
 using System;
-using MIProgram.Model;
+using MIProgram.Core.Model;
 
 namespace MIProgram.Core
 {

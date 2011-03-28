@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using MIProgram.Model;
+using MIProgram.Core.Model;
 
 namespace MIProgram.Core.AlbumImpl
 {

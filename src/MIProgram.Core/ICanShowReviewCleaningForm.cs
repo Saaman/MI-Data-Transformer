@@ -1,4 +1,4 @@
-﻿using MIProgram.Core.Cleaners;
+﻿using MIProgram.Core.BodyCleaning;
 
 namespace MIProgram.Core
 {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using MIProgram.Core.Cleaners;
-using MIProgram.Model;
+using MIProgram.Core.BodyCleaning;
+using MIProgram.Core.Model;
 
 namespace MIProgram.Core
 {

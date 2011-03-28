@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MIProgram.Core.AlbumImpl;
-using MIProgram.Core.DataParsers;
+using MIProgram.Core.AlbumImpl.DataParsers;
+using MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder;
 using MIProgram.Core.MIRecordsProviders;
-using MIProgram.Core.ProductStores;
-using MIProgram.Core.TreeBuilder;
-using MIProgram.Model;
+using MIProgram.Core.Model;
+using MIProgram.Core.ProductRepositories;
 
-namespace MIProgram.Core
+namespace MIProgram.Core.AlbumImpl
 {
     public class AlbumReviewProcessor : ReviewProcessor<Album>
     {

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using MIProgram.Core.Cleaners;
+using MIProgram.Core.BodyCleaning;
 using MIProgram.Core.MIRecordsProviders;
-using MIProgram.Core.ProductStores;
-using MIProgram.Model;
+using MIProgram.Core.Model;
+using MIProgram.Core.ProductRepositories;
 
 namespace MIProgram.Core
 {
@@ -10,15 +10,11 @@ namespace MIProgram.Core
     {
         private readonly IMIRecordsProvider _miRecordsProvider;
         protected readonly IReviewExploder<T> _reviewExploder;
-        //protected readonly IProductRepository<T> _productRepository;
         private readonly ReviewTextCleaner _reviewTextCleaner = new ReviewTextCleaner();
-
-        //public IProductRepository<T> ProductRepository { get { return _productRepository; } }
 
         protected ReviewProcessor(IMIRecordsProvider miRecordsProvider, IReviewExploder<T> reviewExploder)
         {
             _miRecordsProvider = miRecordsProvider;
-            //_productRepository = productRepository;
             _reviewExploder = reviewExploder;
         }
 
@@ -27,7 +23,7 @@ namespace MIProgram.Core
             IList<IExplodedReview<T>> explodedReviews = new List<IExplodedReview<T>>();
 
             //get reviews
-            var reviews = _miRecordsProvider.GetRecords();
+            var reviews = _miRecordsProvider.GetAllRecords();
 
             foreach (var review in reviews)
             {

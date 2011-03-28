@@ -3,19 +3,21 @@ using System.Linq;
 using System.ComponentModel;
 using System.Configuration;
 using System.Windows.Forms;
+using MetalImpactApp.OperationManagement;
 using MetalImpactApp.Properties;
 using MIProgram.Core;
+using MIProgram.Core.DAL.Writers;
 using MIProgram.Core.Logging;
+using MIProgram.Core.Model;
+using MIProgram.Core.ProductRepositories;
 using MIProgram.Core.Writers;
 using System.Globalization;
 using System.Collections.Generic;
-using MIProgram.Model;
 
 namespace MetalImpactApp
 {
     public partial class Form1 : Form
     {
-        //private OperationsManager_Deprecated _operationsManagerDeprecated;
         private IOperationsLauncher _operationLauncher;
         private readonly IFormatProvider _culture = new CultureInfo("fr-FR", true);
         public static IList<Operation> MainOperations = new List<Operation>
@@ -34,7 +36,6 @@ namespace MetalImpactApp
             Logging.SetInstance(new FileLogger(Constants.LogFilePath));
             InitializeComponent();
             InitializeView();
-            //MappingConfigurations.Init();
         }
 
         #region Display

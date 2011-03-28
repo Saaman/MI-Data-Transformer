@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using MIProgram.DataAccess;
+using MIProgram.Core.DAL;
+using MIProgram.Core.DAL.Models;
 using MIProgram.Core.Logging;
 
 namespace MIProgram.Core.MIRecordsProviders
 {
-    public class CSVFileProvider : MIRecordsProvider<string>
+    public class CSVFileProvider : IMIRecordsProvider
     {
         private readonly CSVFileRepository<MIDBRecord> _miRecordsRepository;
 
@@ -13,14 +14,9 @@ namespace MIProgram.Core.MIRecordsProviders
             _miRecordsRepository = new CSVFileRepository<MIDBRecord>(fileName);
         }
 
-        public override IList<MIDBRecord> GetAllRecords()
+        public IList<MIDBRecord> GetAllRecords()
         {
             return _miRecordsRepository.GetData();
-        }
-
-        public override IList<MIDBRecord> GetRecords()
-        {
-            return Filter(_miRecordsRepository.GetData());
         }
 
         public static bool TryBuildProvider(string fileName, out IMIRecordsProvider provider)

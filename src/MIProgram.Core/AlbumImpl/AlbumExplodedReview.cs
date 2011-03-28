@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using MIProgram.Core.DataParsers;
-using MIProgram.Model;
+using MIProgram.Core.AlbumImpl.DataParsers;
+using MIProgram.Core.Model;
 
 namespace MIProgram.Core.AlbumImpl
 {
@@ -13,6 +13,11 @@ namespace MIProgram.Core.AlbumImpl
         public string ReviewerMail { get; private set; }
         
         public DateTime RecordCreationDate { get; private set; }
+        public Album AsDomainEntity
+        {
+            get { throw new NotImplementedException(); }
+        }
+
         public int RecordId { get; private set; }
         public DateTime RecordLastUpdateDate { get; private set; }
 
@@ -38,11 +43,6 @@ namespace MIProgram.Core.AlbumImpl
         
         public string DeezerAlbum { get; private set; }
         public string DeezerArtist { get; private set; }
-
-        public Album AsDomainEntity
-        {
-            get { throw new NotImplementedException(); }
-        }
 
         #region processed fields
         
