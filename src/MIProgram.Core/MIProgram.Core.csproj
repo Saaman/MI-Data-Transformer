@@ -54,6 +54,7 @@
     <Compile Include="AlbumImpl\AlbumReviewExploder.cs" />
     <Compile Include="AlbumImpl\AlbumReviewBodyCleaner.cs" />
     <Compile Include="AlbumImpl\AlbumReviewProcessor.cs" />
+    <Compile Include="Extensions\UpperInvariantComparer.cs" />
     <Compile Include="DAL\Models\CountryEntity.cs" />
     <Compile Include="DAL\CSVFileRepository.cs" />
     <Compile Include="DAL\IFileRepository.cs" />

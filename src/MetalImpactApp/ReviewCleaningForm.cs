@@ -22,7 +22,7 @@ namespace MetalImpactApp
 
         private bool IsFinalStep { get { return _currentMatchedStringIdx == _matchedStrings.Count; } }
 
-        public ReviewCleaningForm(ReviewCleaningFormResult reviewCleaningFormResult, RemovalsPresenter presenter)
+        public ReviewCleaningForm(ref ReviewCleaningFormResult reviewCleaningFormResult, RemovalsPresenter presenter)
         {
             _reviewCleaningFormResult = reviewCleaningFormResult;
             _originalText = presenter.ReviewText;

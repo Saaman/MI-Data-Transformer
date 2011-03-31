@@ -77,13 +77,17 @@ namespace MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder
             {
                 parentsToReturn.Add(new StyleAlterationsTreeItem(styleAlterationsIdx));
 
+                var newParents = new List<StylesTreeItem>();
+
                 foreach (var parent in parentsToReturn)
                 {
                     if (parent is RealStylesTreeItem)
                     {
-                        parentsToReturn.Add(new RealStylesTreeItem(parent as RealStylesTreeItem, styleAlterationsIdx));
+                        newParents.Add(new RealStylesTreeItem(parent as RealStylesTreeItem, styleAlterationsIdx));
                     }
                 }
+
+                parentsToReturn.AddRange(newParents);
             }
 
             return parentsToReturn.Where(x => !ContentEqualsTo(x)).ToList();

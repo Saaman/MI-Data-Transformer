@@ -8,7 +8,7 @@ namespace MetalImpactApp.OperationManagement
 {
     public abstract class OperationManager<T> : IOperationsLauncher where T : Product
     {
-        protected readonly ReviewProcessor<T> _reviewsProcessor;
+        protected readonly ReviewProcessor<T> ReviewsProcessor;
         private readonly IList<Operation> _operationsToProcess;
         private AsyncWorkerWrapper _asyncWorkerWrapper;
         protected abstract IDictionary<OperationType, IOperationProcessor<T>> OperationsDefinition { get; }
@@ -16,14 +16,14 @@ namespace MetalImpactApp.OperationManagement
 
         protected OperationManager(ReviewProcessor<T> reviewsProcessor, IList<Operation> operationsToProcess)
         {
-            _reviewsProcessor = reviewsProcessor;
+            ReviewsProcessor = reviewsProcessor;
             _operationsToProcess = operationsToProcess;
         }
 
         public void EndWork()
         {
             _asyncWorkerWrapper.IsWorking = false;
-            _reviewsProcessor.FinalizeWork();
+            ReviewsProcessor.FinalizeWork();
         }
 
         public bool IsWorking
@@ -41,7 +41,7 @@ namespace MetalImpactApp.OperationManagement
             _asyncWorkerWrapper = new AsyncWorkerWrapper(worker, e);
 
             //Explode, process & post process reviews
-            _reviewsProcessor.Process(_asyncWorkerWrapper, ProductRepository);
+            ReviewsProcessor.Process(_asyncWorkerWrapper, ProductRepository);
             /*
             _reviewsExtractorProcessor.Process(worker, e, this);
             */

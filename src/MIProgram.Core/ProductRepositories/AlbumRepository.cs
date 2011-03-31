@@ -32,9 +32,9 @@ namespace MIProgram.Core.ProductRepositories
             var reviewer = GetOrBuildReviewer(review.ReviewerName, review.ReviewerMail, review.RecordLastUpdateDate);
 
             var artist = GetOrBuildArtist(review.ArtistName, review.ProcessedArtistCountries, review.ArtistOfficialUrl,
-                                          review.RecordLastUpdateDate, reviewer, review.ProcessedSimilarArtists);
+                                          review.RecordLastUpdateDate, reviewer, review.ArtistSimilarArtists);
 
-            var album = new Album(review.AlbumName, DateTime.Parse(review.AlbumReleaseDate), review.ReviewScore, review.AlbumLabel, review.AlbumCoverFileName, artist);
+            var album = new Album(review.AlbumName, DateTime.Parse(review.AlbumReleaseDate), review.ReviewScore, review.AlbumLabel, review.AlbumCoverFileName, artist, review.AlbumSimilarAlbums);
             _albums.Add(album);
         }
 

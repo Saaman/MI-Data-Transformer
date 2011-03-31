@@ -12,6 +12,7 @@ namespace MIProgram.Core.Model
         //public string ArtistParsedCountries { get; set; }
         //public string ArtistActivity { get; set; }
         //public IList<Artist> ArtistLineUpMember { get; set; }
+        public IList<string> RawSimilarArtists { get; set; }
         public IList<Artist> SimilarArtists { get; set; }
         public string OfficialUrl { get; set; }
         //public IList<string> ArtistSimilarArtistsNames { get; set; }
@@ -22,7 +23,7 @@ namespace MIProgram.Core.Model
 
         public int SortWeight { get { return SimilarArtists.Count; } }
 
-        public Artist(int id, string name, IList<Country> countries, string officialUrl, DateTime lastUpdate, Reviewer reviewer, IList<Artist> similarArtists)
+        public Artist(int id, string name, IList<Country> countries, string officialUrl, DateTime lastUpdate, Reviewer reviewer, IList<string> similarArtists)
         {
             #region parameters validation
 
@@ -39,7 +40,7 @@ namespace MIProgram.Core.Model
 
             Reviewer = reviewer;
             Id = id;
-            SimilarArtists = similarArtists;
+            RawSimilarArtists = similarArtists;
             Name = name.ToUpperInvariant();
             Countries = countries;
             OfficialUrl = officialUrl;
@@ -48,7 +49,7 @@ namespace MIProgram.Core.Model
 
         }
 
-        public void UpdateInfos(IList<Country> countries, string officialUrl, DateTime lastUpdate, Reviewer reviewer, IList<Artist> similarArtists)
+        public void UpdateInfos(IList<Country> countries, string officialUrl, DateTime lastUpdate, Reviewer reviewer, IList<string> similarArtists)
         {
             #region parameters validation
 
@@ -82,9 +83,9 @@ namespace MIProgram.Core.Model
             //Add new similar artists, avoiding duplicates
             foreach (var similarArtist in similarArtists)
             {
-                if (!SimilarArtists.Contains(similarArtist))
+                if (!RawSimilarArtists.Contains(similarArtist))
                 {
-                    SimilarArtists.Add(similarArtist);
+                    RawSimilarArtists.Add(similarArtist);
                 }
             }
         }

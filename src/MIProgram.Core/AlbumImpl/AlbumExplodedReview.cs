@@ -52,15 +52,9 @@ namespace MIProgram.Core.AlbumImpl
 
         #endregion
 
-        #region Post processed fields
-
-        public IList<Artist> ProcessedSimilarArtists { get; set; }
-
-        #endregion
-
-        public void CleanTextUsing(Func<int, string, string> cleanTextMethod)
+        public void CleanTextUsing(Func<IExplodedReview<Album>, string> cleanTextMethod)
         {
-            ReviewBody = cleanTextMethod(RecordId, ReviewBody);
+            ReviewBody = cleanTextMethod(this);
         }
 
         public AlbumExplodedReview(string reviewerName, string reviewerMail, DateTime recordCreationDate, string artistName, string artistCountry, string artistOfficialUrl, IList<string> artistSimilarArtists, string albumName, string albumReleaseDate, string albumLabel, string albumDistributor, string albumMusicGenre, string albumType, TimeSpan albumPlayTime, string albumCoverFileName, int albumSongsCount, IList<string> albumSimilarAlbums, int recordId, int reviewScore, int reviewHits, string reviewBody, DateTime recordLastUpdateDate, string deezerAlbum, string deezerArtist, string recordTitle)

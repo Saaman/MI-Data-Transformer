@@ -15,7 +15,7 @@ namespace MetalImpactApp.OperationManagement
             IMIRecordsProvider provider;
             CSVFileProvider.TryBuildProvider(sourceFile, out provider);
             var reviewExploder = new AlbumReviewExploder();
-            var reviewProcessor = new AlbumReviewProcessor(provider, reviewExploder);
+            var reviewProcessor = new AlbumReviewProcessor(provider, reviewExploder, new CleaningFormLauncher());
             return new AlbumOperationManager(reviewProcessor, operations, outputsWriter, filtersDefinitions, lastExportDate);
         }
 

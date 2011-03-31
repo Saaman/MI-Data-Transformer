@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MIProgram.Core.AlbumImpl.DataParsers;
 using MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder;
+using MIProgram.Core.Extensions;
 using MIProgram.Core.MIRecordsProviders;
 using MIProgram.Core.Model;
 using MIProgram.Core.ProductRepositories;
@@ -16,27 +17,33 @@ namespace MIProgram.Core.AlbumImpl
         private readonly AlbumStylesParser _albumStylesParser = new AlbumStylesParser();
         private StylesTree _stylesTree;
 
-        public AlbumReviewProcessor(IMIRecordsProvider miRecordsProvider, IReviewExploder<Album> reviewExploder)
-            : base(miRecordsProvider, reviewExploder)
+        public AlbumReviewProcessor(IMIRecordsProvider miRecordsProvider, IReviewExploder<Album> reviewExploder, ICanShowReviewCleaningForm iCanShowReviewCleaningForm)
+            : base(miRecordsProvider, reviewExploder, new AlbumReviewBodyCleaner(iCanShowReviewCleaningForm))
         {}
 
-        protected override void PostProcess(IList<IExplodedReview<Album>> explodedReviews)
+        protected override void PostProcessExplodedReviews(IList<IExplodedReview<Album>> explodedReviews)
         {
-            var stylesDefinitions =
-                explodedReviews.ToDictionary(x => ((AlbumExplodedReview) x).AlbumMusicGenre,
-                                             x => ((AlbumExplodedReview) x).ProcessedAlbumStyle).OrderBy(
-                    x => x.Value.Complexity).ToDictionary(x => x.Key, y => y.Value);
-            _stylesTree = StylesTree.BuildFrom(stylesDefinitions);
-
-            /*foreach (var artist in newArtists)
+            var stylesDefinitions = new Dictionary<string, StyleDefinition>();
+            foreach (var explodedReview in explodedReviews)
             {
-                var currentArtist = artist;
-                currentArtist.SimilarArtists = newArtists.Where(
-                    x => currentArtist.ArtistSimilarArtistsNames.Contains(x.Name, new UpperInvariantComparer())
-                        && x != currentArtist).ToList();
-                currentArtist.ArtistSimilarArtistsNames = currentArtist.ArtistSimilarArtistsNames.Where(
-                    y => !currentArtist.SimilarArtists.Select(x => x.Name).Contains(y, new UpperInvariantComparer())).ToList();
-            }*/
+                var albumReview = explodedReview as AlbumExplodedReview;
+                if(albumReview == null)
+                {
+                    throw new InvalidCastException("explodedReview cannot be cast as AlbumExplodedReview");
+                }
+
+                if (albumReview.ProcessedAlbumStyle == null)
+                {
+                    continue;
+                }
+
+                if(!stylesDefinitions.ContainsKey(albumReview.AlbumMusicGenre.ToUpperInvariant()))
+                {
+                    stylesDefinitions.Add(albumReview.AlbumMusicGenre.ToUpperInvariant(), albumReview.ProcessedAlbumStyle);
+                }
+            }
+
+            _stylesTree = StylesTree.BuildFrom(stylesDefinitions);
         }
 
         protected override void SpecificProcess(IExplodedReview<Album> explodedReview)
@@ -51,7 +58,7 @@ namespace MIProgram.Core.AlbumImpl
             ParseAlbumStyle(explodedReview);
         }
 
-        protected override void FinalizeProductRepository(ProductRepository<Album> productRepository)
+        protected override void PostProcessProductRepository(ProductRepository<Album> productRepository)
         {
             var albumRepository = productRepository as AlbumRepository;
 
@@ -62,7 +69,26 @@ namespace MIProgram.Core.AlbumImpl
 
             albumRepository.AttachStylesTree(_stylesTree);
 
+            //Build links between artists
+            foreach (var artist in productRepository.Artists)
+            {
+                var currentArtist = artist;
+                currentArtist.SimilarArtists = productRepository.Artists.Where(
+                    x => currentArtist.RawSimilarArtists.Contains(x.Name, new UpperInvariantComparer())
+                        && x != currentArtist).ToList();
+            }
+
+            //Build links between albums
+            foreach (var album in productRepository.Products)
+            {
+                var currentAlbum = album;
+                currentAlbum.SimilarAlbums = productRepository.Products.Where(
+                    x => currentAlbum.RawSimilarAlbums.Contains(x.Title, new UpperInvariantComparer())
+                        && x != currentAlbum).ToList();
+            }
         }
+
+        #region private methods
 
         private void ParseAlbumStyle(IExplodedReview<Album> explodedReview)
         {
@@ -90,7 +116,7 @@ namespace MIProgram.Core.AlbumImpl
             }
 
             string albumType = null;
-            if (_albumTypesParser.TryParse(review.ArtistCountry, review.RecordId, ref albumType))
+            if (_albumTypesParser.TryParse(review.AlbumType, review.RecordId, ref albumType))
             {
                 review.ProcessedAlbumType = albumType;
             }
@@ -111,5 +137,7 @@ namespace MIProgram.Core.AlbumImpl
                 review.ProcessedArtistCountries = countries;
             }
         }
+
+        #endregion
     }
 }

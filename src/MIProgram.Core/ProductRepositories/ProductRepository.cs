@@ -23,7 +23,7 @@ namespace MIProgram.Core.ProductRepositories
 
         #region Common stuff
 
-        protected Artist GetOrBuildArtist(string artistName, IList<Country> countries, string officialUrl, DateTime lastUpdate, Reviewer reviewer, IList<Artist> similarArtists)
+        protected Artist GetOrBuildArtist(string artistName, IList<Country> countries, string officialUrl, DateTime lastUpdate, Reviewer reviewer, IList<string> similarArtists)
         {
             var selectedArtist = (from artist in Artists where artist.Name == artistName.ToUpperInvariant() select artist).SingleOrDefault();
 
@@ -88,11 +88,7 @@ namespace MIProgram.Core.ProductRepositories
 
                 var results = Products.AsEnumerable();
 
-                foreach (var filterDefinition in _filtersDefinitions)
-                {
-                    var filter = filterDefinition;
-                    results = results.Where(x => filter((Product)x));
-                }
+                results = _filtersDefinitions.Aggregate(results, (current, filter) => current.Where(x => filter((Product) x)));
 
                 _filteredProducts = results.ToList();
                 return _filteredProducts;

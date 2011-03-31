@@ -18,6 +18,9 @@ namespace MIProgram.Core.Model
         public string DeezerArtist { get; private set; }
         public string ReviewText { get; private set; }
 
+        public IList<string> RawSimilarAlbums { get; set; }
+        public IList<Album> SimilarAlbums { get; set; }
+
         //Taxo
         public IList<string> MainStyles { get; private set; }
         public string MainStyle2 { get; private set; }
@@ -28,7 +31,7 @@ namespace MIProgram.Core.Model
         //Relations
         public IList<Disc> Discs { get; private set; }
 
-        public Album(string title, DateTime releaseDate, int score, string label, string coverPath, Artist artist)
+        public Album(string title, DateTime releaseDate, int score, string label, string coverPath, Artist artist, IList<string> albumSimilarAlbums)
         {
             Title = title;
             ReleaseDate = releaseDate;
@@ -36,6 +39,7 @@ namespace MIProgram.Core.Model
             Label = label;
             CoverPath = coverPath;
             Artist = artist;
+            RawSimilarAlbums = albumSimilarAlbums;
         }
     }
 }

@@ -12,6 +12,6 @@ namespace MIProgram.Core
         string ReviewerName { get; }
         DateTime RecordCreationDate { get; }
 
-        void CleanTextUsing(Func<int, string, string> cleanTextMethod);
+        void CleanTextUsing(Func<IExplodedReview<T>, string> cleanTextMethod);
     }
 }
