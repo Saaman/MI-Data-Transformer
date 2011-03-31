@@ -60,6 +60,8 @@ namespace MIProgram.Core.AlbumImpl
                 }
             }
 
+            var parsedReleaseDate = ParseDate(releaseDate);
+
             var similarAlbums = _parsingMethods.ExtractAlbumsReferences(reviewBody);
 
             /*var album = new Album(artist, recordTitle.Split(Pipe)[1], releaseDate, label, distributor, musicType, recordType, playTime, record.CoverFileName, songsCount, _albumIdGenerator.NewID(), similarAlbums);
@@ -67,12 +69,32 @@ namespace MIProgram.Core.AlbumImpl
             return new Review(record.Id, album, reviewer, record.Score, record.Hits, reviewBody, record.LastUpdateDate ?? record.CreationDate, record.DeezerAlbum, record.DeezerArtist);*/
 
             return new AlbumExplodedReview(record.ReviewerName, record.ReviewerMail, record.CreationDate, recordTitleParts[0],
-                                           recordOriginCountry, officialUrl, similarArtists, recordTitleParts[1], releaseDate,
+                                           recordOriginCountry, officialUrl, similarArtists, recordTitleParts[1], parsedReleaseDate,
                                            label, distributor, musicType, recordType, playTime, record.CoverFileName,
                                            songsCount, similarAlbums, record.Id, record.Score, record.Hits, reviewBody,
                                            record.LastUpdateDate ?? record.CreationDate, record.DeezerAlbum,
                                            record.DeezerArtist, record.Title);
 
+        }
+
+        private DateTime ParseDate(string releaseDate)
+        {
+            DateTime parsedDate = DateTime.MinValue;
+
+            releaseDate = releaseDate.Replace("1er", "1");
+
+            if (DateTime.TryParse(releaseDate, out parsedDate))
+            {
+                return parsedDate;
+            }
+            int year;
+            
+            if (int.TryParse(releaseDate, out year))
+            {
+                return new DateTime(year, 1, 1);
+            }
+
+            return parsedDate;
         }
     }
 }

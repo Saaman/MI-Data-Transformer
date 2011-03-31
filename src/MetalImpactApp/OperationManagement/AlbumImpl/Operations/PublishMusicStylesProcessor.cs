@@ -30,13 +30,15 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
             _writer.WriteTextCollection(
                 StylesRepository.MusicGenresRepository.Values.Select(
                     x => string.Format("{0} : {1} occurences", x,
-                                       albumRepository.ExplodedReviews.Where(y => y.ProcessedAlbumStyle.MusicTypes.Contains(x)).Count()))
+                                       albumRepository.ExplodedReviews.Where(
+                                       y => y.ProcessedAlbumStyle != null && y.ProcessedAlbumStyle.MusicTypes.Contains(x)).Count()))
                     .ToList(), "musicTypesDictionnary", outputDir);
 
             _writer.WriteTextCollection(
                 StylesRepository.MainStylesRepository.Values.Select(
                     x => string.Format("{0} : {1} occurences", x
-                                       , albumRepository.ExplodedReviews.Where(y => y.ProcessedAlbumStyle.MainStyles.Contains(x)).Count()))
+                                       , albumRepository.ExplodedReviews.Where(
+                                       y => y.ProcessedAlbumStyle != null && y.ProcessedAlbumStyle.MainStyles.Contains(x)).Count()))
                     .ToList(), "mainStylesDictionnary", outputDir);
 
             _writer.WriteTextCollection(StylesRepository.StylesAssociations.Select(
@@ -46,10 +48,12 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
 
             _writer.WriteTextCollection(StylesRepository.StyleAlterationsRepository.Values.Select(
                                             x => string.Format("{0} : {1} occurences", x
-                                                               , albumRepository.ExplodedReviews.Where(y => y.ProcessedAlbumStyle.StyleAlterations.Contains(x)).Count())
+                                                               , albumRepository.ExplodedReviews.Where(
+                                                               y =>  y.ProcessedAlbumStyle != null && y.ProcessedAlbumStyle.StyleAlterations.Contains(x)).Count())
                                             ).ToList(), "StyleAlterationsDictionnary", outputDir);
 
-            _writer.WriteTextCollection(albumRepository.ExplodedReviews.Select(x => string.Format("'{0}' est parsé en '{1}'", x.AlbumMusicGenre, x.ProcessedAlbumStyle.RebuildFromParsedValuesRepository())).ToList(), "Styles", outputDir);
+            _writer.WriteTextCollection(albumRepository.ExplodedReviews.Select(x => string.Format("'{0}' est parsé en '{1}'", x.AlbumMusicGenre,
+                (x.ProcessedAlbumStyle == null)? "Non parsé" : x.ProcessedAlbumStyle.RebuildFromParsedValuesRepository())).ToList(), "Styles", outputDir);
 
         }
 

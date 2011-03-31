@@ -103,9 +103,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Content Include="App.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Include="App.config" />
     <None Include="mi_reviews.xsc">
       <DependentUpon>mi_reviews.xsd</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

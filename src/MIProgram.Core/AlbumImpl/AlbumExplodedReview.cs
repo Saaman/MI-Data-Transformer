@@ -27,7 +27,7 @@ namespace MIProgram.Core.AlbumImpl
         public IList<string> ArtistSimilarArtists { get; private set; }
         
         public string AlbumName { get; private set; }
-        public string AlbumReleaseDate { get; private set; }
+        public DateTime AlbumReleaseDate { get; private set; }
         public string AlbumLabel { get; private set; }
         public string AlbumDistributor { get; private set; }
         public string AlbumMusicGenre { get; private set; }
@@ -57,7 +57,7 @@ namespace MIProgram.Core.AlbumImpl
             ReviewBody = cleanTextMethod(this);
         }
 
-        public AlbumExplodedReview(string reviewerName, string reviewerMail, DateTime recordCreationDate, string artistName, string artistCountry, string artistOfficialUrl, IList<string> artistSimilarArtists, string albumName, string albumReleaseDate, string albumLabel, string albumDistributor, string albumMusicGenre, string albumType, TimeSpan albumPlayTime, string albumCoverFileName, int albumSongsCount, IList<string> albumSimilarAlbums, int recordId, int reviewScore, int reviewHits, string reviewBody, DateTime recordLastUpdateDate, string deezerAlbum, string deezerArtist, string recordTitle)
+        public AlbumExplodedReview(string reviewerName, string reviewerMail, DateTime recordCreationDate, string artistName, string artistCountry, string artistOfficialUrl, IList<string> artistSimilarArtists, string albumName, DateTime albumReleaseDate, string albumLabel, string albumDistributor, string albumMusicGenre, string albumType, TimeSpan albumPlayTime, string albumCoverFileName, int albumSongsCount, IList<string> albumSimilarAlbums, int recordId, int reviewScore, int reviewHits, string reviewBody, DateTime recordLastUpdateDate, string deezerAlbum, string deezerArtist, string recordTitle)
         {
             ReviewerName = reviewerName;
             ReviewerMail = reviewerMail;

@@ -6,6 +6,7 @@ using MIProgram.Core.AlbumImpl.LocalRepositories;
 using MIProgram.Core.Model;
 using MIProgram.Core.ProductRepositories;
 using MIProgram.Core.Writers;
+using MIProgram.Core.Extensions;
 
 namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
 {
@@ -31,7 +32,7 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
             _writer.WriteTextCollection(
                 CountriesRepository.CountriesLabelsAndCodesDictionnary.Select(
                     x => string.Format("{0}({1}) : {2} occurences", x.Key, x.Value
-                                       , productRepository.Artists.Where(y => y.Countries.Select(co => co.CountryName).Contains(x.Key)).Count()))
+                                       , productRepository.Artists.Where(y => y.Countries.Select(co => co.CountryName).Contains(x.Key, new UpperInvariantComparer())).Count()))
                     .ToList(), "CountriesDictionnary", outputDir);
 
             _writer.WriteTextCollection(albumRepository.ExplodedReviews.Select(x => string.Format("'{0}' est parsé en '{1}'", x.ArtistCountry, TextSerialize(x.ProcessedArtistCountries))).ToList(), "Countries", outputDir);
@@ -41,7 +42,7 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
         private static string TextSerialize(IEnumerable<Country> countries)
         {
             var result = string.Empty;
-            result = countries.Aggregate(result, (seed, country) => seed + " / " + country);
+            result = countries.Aggregate(result, (seed, country) => seed + country.CountryName + "(" + country.CountryCode + ") / ", x => x.TrimEnd(new[] {' ', '/'}));
             return result;
         }
 
