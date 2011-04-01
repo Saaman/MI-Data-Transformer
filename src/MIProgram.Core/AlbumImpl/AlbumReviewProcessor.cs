@@ -74,8 +74,7 @@ namespace MIProgram.Core.AlbumImpl
             {
                 var currentArtist = artist;
                 currentArtist.SimilarArtists = productRepository.Artists.Where(
-                    x => currentArtist.RawSimilarArtists.Contains(x.Name, new UpperInvariantComparer())
-                        && x != currentArtist).ToList();
+                    x => currentArtist.RawSimilarArtists.Contains(x.Name, new UpperInvariantComparer())).ToList();
             }
 
             //Build links between albums
@@ -83,8 +82,7 @@ namespace MIProgram.Core.AlbumImpl
             {
                 var currentAlbum = album;
                 currentAlbum.SimilarAlbums = productRepository.Products.Where(
-                    x => currentAlbum.RawSimilarAlbums.Contains(x.Title, new UpperInvariantComparer())
-                        && x != currentAlbum).ToList();
+                    x => currentAlbum.RawSimilarAlbums.Contains(x.Title, new UpperInvariantComparer())).ToList();
             }
         }
 

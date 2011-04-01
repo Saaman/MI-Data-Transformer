@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MIProgram.Core.AlbumImpl.LocalRepositories;
+using MIProgram.Core.Extensions;
 using System.Linq;
 
 namespace MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder
@@ -23,13 +24,18 @@ namespace MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder
 
         public void SetParents(IList<StylesTreeItem> parents)
         {
-            Parents = parents;
+            if (parents != null)
+            {
+                Parents = parents;
+            }
         }
 
         protected StylesTreeItem()
-        {}
+        {
+            Parents = new List<StylesTreeItem>();
+        }
 
-        public StylesTreeItem(StyleDefinition definition)
+        public StylesTreeItem(StyleDefinition definition) : this()
         {
             _styleRebuildedString = definition.RebuildFromParsedValuesRepository();
             _musicGenresIdxs = definition.MusicTypesIdxs;
@@ -143,8 +149,7 @@ namespace MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder
         public string ConvertToPrintableString()
         {
             string parentsString = string.Empty;
-            parentsString = Parents.Aggregate(parentsString, (current, parent) => current + parent.ID + ",");
-            parentsString.TrimEnd(',');
+            parentsString = Parents.Aggregate(parentsString, (current, parent) => current + parent.ID + ",", y => y.TrimEnd(','));
 
             if(!string.IsNullOrEmpty(_styleOriginalString))
             {
@@ -158,6 +163,15 @@ namespace MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder
             }
 
             return string.Format("style {0} : altération '{1}' crée de toutes pièces et ses parents sont : '{2}' ", ID, _styleRebuildedString, parentsString);
+        }
+
+        public string ToSQLInsert()
+        {
+            string parentsString = string.Empty;
+            return string.Format("INSERT INTO  `midatabase`.`{0}` (`album_style_id`, `album_style_name`, `album_style_description`, `album_style_parents_ids`) VALUES ('{1}', '{2}', '{3}', '{4}');",
+                StylesTree.SQLTableName, ID, string.IsNullOrEmpty(_styleOriginalString) ? _styleRebuildedString.ToCamelCase().ToSQLValue() : _styleOriginalString.ToCamelCase().ToSQLValue(),
+                _styleRebuildedString.ToCamelCase().ToSQLValue(),
+                Parents.Aggregate(parentsString, (current, parent) => current + parent.ID + ",", y => y.TrimEnd(',')));
         }
     }
 }

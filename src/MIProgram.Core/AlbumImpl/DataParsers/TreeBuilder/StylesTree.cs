@@ -9,6 +9,13 @@ namespace MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder
         private readonly IDGenerator _idGenerator = new IDGenerator();
         private readonly IList<StylesTreeItem> _stylesTreeItems = new List<StylesTreeItem>();
 
+        public const string SQLTableName = "mi_album_style";
+
+        public IList<StylesTreeItem> OrderStylesItems
+        {
+            get { return _stylesTreeItems.OrderBy(x => x.Complexity).ToList(); }
+        }
+
         public static StylesTree BuildFrom(IDictionary<string, StyleDefinition> styleDefinitions)
         {
             var stylesTree = new StylesTree();

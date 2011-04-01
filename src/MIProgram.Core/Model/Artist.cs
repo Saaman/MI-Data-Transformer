@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using MIProgram.Core.Extensions;
+using System.Linq;
 
 namespace MIProgram.Core.Model
 {
@@ -8,19 +10,13 @@ namespace MIProgram.Core.Model
         public int Id { get; set; }
         public string Name { get; set; }
         public IList<Country> Countries { get; set; }
-        //public string ArtistUnparsedCountries { get; set; }
-        //public string ArtistParsedCountries { get; set; }
-        //public string ArtistActivity { get; set; }
-        //public IList<Artist> ArtistLineUpMember { get; set; }
         public IList<string> RawSimilarArtists { get; set; }
         public IList<Artist> SimilarArtists { get; set; }
         public string OfficialUrl { get; set; }
-        //public IList<string> ArtistSimilarArtistsNames { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastUpdate { get; set; }
         public Reviewer Reviewer { get; set; }
-        //public string ArtistBiography { get; set; }
-
+        
         public int SortWeight { get { return SimilarArtists.Count; } }
 
         public Artist(int id, string name, IList<Country> countries, string officialUrl, DateTime lastUpdate, Reviewer reviewer, IList<string> similarArtists)
@@ -40,7 +36,7 @@ namespace MIProgram.Core.Model
 
             Reviewer = reviewer;
             Id = id;
-            RawSimilarArtists = similarArtists;
+            RawSimilarArtists = similarArtists.Where(x => x.ToUpperInvariant() != name.ToUpperInvariant()).ToList();
             Name = name.ToUpperInvariant();
             Countries = countries;
             OfficialUrl = officialUrl;
@@ -83,12 +79,24 @@ namespace MIProgram.Core.Model
             //Add new similar artists, avoiding duplicates
             foreach (var similarArtist in similarArtists)
             {
-                if (!RawSimilarArtists.Contains(similarArtist))
+                if (!RawSimilarArtists.Contains(similarArtist) && similarArtist != Name)
                 {
                     RawSimilarArtists.Add(similarArtist);
                 }
             }
         }
+
+        public string ToSQLInsert()
+        {
+            return string.Format("INSERT INTO  `midatabase`.`{0}` (`artist_id`, `name`, `creation_date`, `official_site`, `reviewer_id`, `countries`, `similar_artists_nodes`, `additionnal_similar_artists_names`, `sorting_weight`) VALUES ('{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}');"
+                    , SQLTableName, Id, Name.ToCamelCase().GetSafeMySQL(), CreationDate.ToUnixTimeStamp(), OfficialUrl, Reviewer.Id
+                    , Countries.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.CountryName.ToCamelCase()).Trim('|')
+                    , SimilarArtists.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.Id).Trim('|')
+                    , RawSimilarArtists.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.ToCamelCase()).Trim('|')
+                    , SortWeight);
+        }
+
+        public const string SQLTableName = "mi_artist";
 
         #region IEqualityMembers
 

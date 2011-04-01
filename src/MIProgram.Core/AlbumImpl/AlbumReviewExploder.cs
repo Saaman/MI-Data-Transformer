@@ -1,6 +1,7 @@
 using System;
 using MIProgram.Core.DAL.Models;
 using MIProgram.Core.Model;
+using System.Linq;
 
 namespace MIProgram.Core.AlbumImpl
 {
@@ -12,18 +13,11 @@ namespace MIProgram.Core.AlbumImpl
         {
             var recordTitleParts = _parsingMethods.ExtractTitle(record.Title.Replace((char)8211, '-'), record.Id);
             var recordOriginCountry = _parsingMethods.ExtractCountry(record.Text, record.Id);
-
-            //var reviewer = reviewsManager.GetOrBuildReviewer(record.ReviewerName, record.ReviewerMail, record.CreationDate);
-
+                        
             var reviewBody = _parsingMethods.ExtractReviewBody(record.Text, record.Id);
-            //var text = ExtractText(record); => TODO : add a step after the explode to apply & add replacements for the review
-
+            
             var similarArtists = _parsingMethods.ExtractArtistsReferences(reviewBody);
 
-            /*var artist = reviewsManager.GetOrBuildArtist((recordTitle.Split(Pipe))[0], recordOriginCountry,
-                (record.OfficialUrl.Contains("mailto")) ? string.Empty : record.OfficialUrl, record.CreationDate, reviewer
-                , similarArtists);
-            */
             var releaseDate = _parsingMethods.ExtractReleaseDate(record.Text, record.Id);
             var labelInfos = _parsingMethods.ExtractLabelAndDistributor(record.Text, record.Id);
 
@@ -63,10 +57,6 @@ namespace MIProgram.Core.AlbumImpl
             var parsedReleaseDate = ParseDate(releaseDate);
 
             var similarAlbums = _parsingMethods.ExtractAlbumsReferences(reviewBody);
-
-            /*var album = new Album(artist, recordTitle.Split(Pipe)[1], releaseDate, label, distributor, musicType, recordType, playTime, record.CoverFileName, songsCount, _albumIdGenerator.NewID(), similarAlbums);
-
-            return new Review(record.Id, album, reviewer, record.Score, record.Hits, reviewBody, record.LastUpdateDate ?? record.CreationDate, record.DeezerAlbum, record.DeezerArtist);*/
 
             return new AlbumExplodedReview(record.ReviewerName, record.ReviewerMail, record.CreationDate, recordTitleParts[0],
                                            recordOriginCountry, officialUrl, similarArtists, recordTitleParts[1], parsedReleaseDate,

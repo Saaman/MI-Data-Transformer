@@ -1,4 +1,5 @@
 ﻿using System;
+using MIProgram.Core.Extensions;
 
 namespace MIProgram.Core.Model
 {
@@ -31,6 +32,7 @@ namespace MIProgram.Core.Model
             LastUpdate = lastUpdate;
             CreationDate = LastUpdate;
             Id = userId;
+            Password = name + Id;
         }
 
         public void UpdateInfos(string name, string mailAddress, DateTime? lastUpdate)
@@ -51,5 +53,13 @@ namespace MIProgram.Core.Model
                 MailAddress = mailAddress;
             }
         }
+
+        public string ToSQLInsert()
+        {
+            return string.Format("INSERT INTO  `midatabase`.`{0}` (`reviewer_id`, `name`, `creation_date`, `mail`, `password`) VALUES ('{1}',  '{2}',  '{3}',  '{4}', '{5}');",
+                SQLTableName, Id, Name, CreationDate.ToUnixTimeStamp(), MailAddress, Password);
+        }
+
+        public const string SQLTableName = "mi_artist_creator";
     }
 }

@@ -224,21 +224,6 @@ namespace MIProgram.Core.AlbumImpl
             return string.Empty;
         }
 
-        /*private static string PipeString(GroupCollection collection)
-        {
-            return PipeString(collection, string.Empty);
-        }
-        private static string PipeString(GroupCollection collection, string replacementString)
-        {
-            string res = string.Empty;
-            for (int i = 1; i < collection.Count; i++)
-            {
-                res += string.IsNullOrEmpty(collection[i].ToString()) ? replacementString : collection[i].ToString();
-                res += "|";
-            }
-            return res.Substring(0, res.Length - 1);
-        }*/
-
         private static IList<string> GroupsToStringList(GroupCollection collection, string replacementString)
         {
             var res = new List<string>();

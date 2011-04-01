@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace MIProgram.Core.Extensions
 {
-    public static class StringExtensions
+    public static class BaseTypesExtensions
     {
         public static string ToCamelCase(this string input)
         {
@@ -16,6 +17,17 @@ namespace MIProgram.Core.Extensions
         public static string ToSQLValue(this string input)
         {
             return input.Replace("'", "''");
+        }
+
+        public static string GetSafeMySQL(this string myString)
+        {
+            return myString.Replace("'", "''");
+        }
+
+        public static int ToUnixTimeStamp(this DateTime dateTime)
+        {
+            var diff = dateTime - new DateTime(1970, 1, 1).ToLocalTime();
+            return (int)diff.TotalSeconds;
         }
     }
 }

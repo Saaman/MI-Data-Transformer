@@ -28,19 +28,24 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
             }
 
             //Publication des reviewers
-            _sqlSerializer.SerializeReviewers(productRepository.Reviewers, "reviewers");
+            _sqlSerializer.SerializeReviewers(albumRepository.Reviewers, "reviewers");
 
             //Publication des pays
             _sqlSerializer.SerializeCountries(CountriesRepository.CountriesLabelsAndCodesDictionnary, "countries");
 
             //Publication des artistes
-            _sqlSerializer.SerializeArtists(productRepository.Artists, "artists");
+            _sqlSerializer.SerializeArtists(albumRepository.Artists, "artists");
 
+            //Publication des types d'album
+            _sqlSerializer.SerializeAlbumTypes(AlbumTypesRepository.Repo.Values, "album_types");
+
+            //Publication des styles d'album
+            _sqlSerializer.SerializeAlbumStyles(albumRepository.StylesTree.OrderStylesItems, "album_styles");
         }
 
         public string ProcessDescription
         {
-            get { return "Publication des reviewers avec le nouveau modèle... "; }
+            get { return "Publication des reviews avec le nouveau modèle... "; }
         }
     }
 }

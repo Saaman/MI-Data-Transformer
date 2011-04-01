@@ -5,6 +5,7 @@ using System.Text;
 using MIProgram.Core.Extensions;
 using MIProgram.Core.Model;
 using MIProgram.Core.Writers;
+using MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder;
 
 namespace MIProgram.Core.DAL.Writers
 {
@@ -37,7 +38,7 @@ namespace MIProgram.Core.DAL.Writers
 
             foreach (var country in countriesLabelsAndCodes)
             {
-                sb.AppendFormat("INSERT INTO  `midatabase`.`MI_artist_country` (`country_name` , `country_code`, `country_term_alias`) VALUES ('{0}',  '{1}', '{2}');", country.Key.ToCamelCase().ToSQLValue(), country.Value.ToSQLValue(), "Pays/" + country.Key.ToCamelCase().ToSQLValue());
+                sb.AppendFormat("INSERT INTO  `midatabase`.`mi_artist_country` (`country_name` , `country_code`, `country_term_alias`) VALUES ('{0}',  '{1}', '{2}');", country.Key.ToCamelCase().ToSQLValue(), country.Value.ToSQLValue(), "Pays/" + country.Key.ToCamelCase().ToSQLValue());
                 sb.AppendLine();
             }
 
@@ -48,12 +49,11 @@ namespace MIProgram.Core.DAL.Writers
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine(GetHeader("mi_artist_creator"));
+            sb.AppendLine(GetHeader(Reviewer.SQLTableName));
 
             foreach (var reviewer in reviewers)
             {
-                sb.AppendFormat("INSERT INTO  `midatabase`.`mi_artist_creator` (`reviewer_id`, `name`, `creation_date`, `mail`, `password`) VALUES ('{0}',  '{1}',  '{2}',  '{3}',  '{4}');", reviewer.Id, reviewer.Name, reviewer.CreationDate.ToUnixTimeStamp(), reviewer.MailAddress, reviewer.Password);
-                sb.AppendLine();
+                sb.AppendLine(reviewer.ToSQLInsert());
             }
 
             _fileWriter.WriteSQL(sb.ToString(), fileName, _outputDir);
@@ -63,39 +63,43 @@ namespace MIProgram.Core.DAL.Writers
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine(GetHeader("mi_artist"));
+            sb.AppendLine(GetHeader(Artist.SQLTableName));
 
             foreach (var artist in newArtists)
             {
-                sb.AppendFormat(
-                    "INSERT INTO  `midatabase`.`mi_artist` (`artist_id`, `name`, `creation_date`, `official_site`, `reviewer_id`, `countries`, `similar_artists_nodes`, `additionnal_similar_artists_names`, `sorting_weight`) VALUES ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}');"
-                    , artist.Id, artist.Name.ToCamelCase().GetSafeMySQL(), artist.CreationDate.ToUnixTimeStamp()
-                    , artist.OfficialUrl, artist.Reviewer.Id
-                    , artist.Countries.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.CountryName.ToCamelCase()).Trim('|')
-                    , artist.SimilarArtists.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.Id).Trim('|')
-                    //, artist.SimilarArtists.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.ToCamelCase()).Trim('|')
-                    , artist.SortWeight);
+                sb.AppendLine(artist.ToSQLInsert());
+            }
+
+            _fileWriter.WriteSQL(sb.ToString(), fileName, _outputDir);
+        }
+
+        public void SerializeAlbumTypes(List<string> albumTypes, string fileName)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine(GetHeader("mi_album_type"));
+
+            foreach (var albumType in albumTypes)
+            {
+                sb.AppendFormat("INSERT INTO  `midatabase`.`mi_album_type` (`album_type`) VALUES ('{0}');", albumType.ToCamelCase());
                 sb.AppendLine();
             }
 
             _fileWriter.WriteSQL(sb.ToString(), fileName, _outputDir);
         }
-    }
 
-    public static class DateTimeExtensions
-    {
-        public static int ToUnixTimeStamp(this DateTime dateTime)
+        public void SerializeAlbumStyles(IList<StylesTreeItem> albumStyles, string fileName)
         {
-            var diff = dateTime - new DateTime(1970, 1, 1).ToLocalTime();
-            return (int) diff.TotalSeconds;
-        }
-    }
+            var sb = new StringBuilder();
 
-    public static class StringExtensions
-    {
-        public static string GetSafeMySQL(this string myString)
-        {
-            return myString.Replace("'", "''");
+            sb.AppendLine(GetHeader(StylesTree.SQLTableName));
+
+            foreach (var albumStyle in albumStyles)
+            {
+                sb.AppendLine(albumStyle.ToSQLInsert());
+            }
+
+            _fileWriter.WriteSQL(sb.ToString(), fileName, _outputDir);
         }
     }
 }

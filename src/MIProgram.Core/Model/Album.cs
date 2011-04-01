@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MIProgram.Core.Model
 {
@@ -39,7 +40,7 @@ namespace MIProgram.Core.Model
             Label = label;
             CoverPath = coverPath;
             Artist = artist;
-            RawSimilarAlbums = albumSimilarAlbums;
+            RawSimilarAlbums = albumSimilarAlbums.Where(x => x.ToUpperInvariant() != title.ToUpperInvariant()).ToList();
         }
     }
 }
