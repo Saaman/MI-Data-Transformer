@@ -17,27 +17,26 @@ namespace MIProgram.Core.DAL.Writers
             _outputDir = outputDir;
         }
 
-        private static string GetHeader(string modelName)
+        private static string GetHeader(string modelName, bool overrideTimeStamps = false)
         {
             var sb = new StringBuilder();
+            if (overrideTimeStamps)
+            {
+                sb.AppendLine("ActiveRecord::Base.record_timestamps = false");
+                sb.AppendLine();
+            }
             sb.AppendFormat("{0}s = []", modelName);
+            sb.AppendLine();
             return sb.ToString();
         }
 
-        private static string GetFooter(string modelName)
+        private static string GetFooter(string modelName, bool overrideTimeStamps = false)
         {
             var sb = new StringBuilder();
-            sb.AppendFormat("puts 'create {0}s...'", modelName);
+            sb.AppendFormat("bulk_save({0}s)", modelName);
             sb.AppendLine();
-            sb.AppendFormat("{0}s.each do |{0}|", modelName);
-            sb.AppendLine();
-            sb.AppendFormat("\tunless {0}.save!", modelName);
-            sb.AppendLine();
-            sb.AppendFormat("\t\tputs \"cannot create {0} #{{{0}.inspect}}\"", modelName);
-            sb.AppendLine();
-            sb.Append("\tend");
-            sb.AppendLine();
-            sb.Append("end");
+            if (overrideTimeStamps)
+                sb.AppendLine("ActiveRecord::Base.record_timestamps = true");
             return sb.ToString();
         }
 
@@ -60,14 +59,14 @@ namespace MIProgram.Core.DAL.Writers
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine(GetHeader(Reviewer.RailsModelName));
+            sb.AppendLine(GetHeader(Reviewer.RailsModelName, true));
 
             foreach (var reviewer in reviewers)
             {
                 sb.AppendLine(reviewer.ToRailsInsert());
             }
 
-            sb.Append(GetFooter(Reviewer.RailsModelName));
+            sb.Append(GetFooter(Reviewer.RailsModelName, true));
 
             _fileWriter.WriteRB(sb.ToString(), fileName, _outputDir);
         }

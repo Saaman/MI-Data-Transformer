@@ -29,11 +29,19 @@ namespace MIProgram.Core.Model
             #endregion
 
             Name = name;
-            MailAddress = mailAddress;
+            while (Name.Length < 4)
+            {
+                Name += name;
+            }
+            MailAddress = name + mailAddress;
             LastUpdate = lastUpdate;
             CreationDate = LastUpdate;
             Id = userId;
             Password = name + Id;
+            while(Password.Length < 7)
+            {
+                Password += Id;
+            }
         }
 
         public void UpdateInfos(string name, string mailAddress, DateTime? lastUpdate)
@@ -47,11 +55,15 @@ namespace MIProgram.Core.Model
             if (!string.IsNullOrEmpty(name))
             {
                 Name = name;
+                while (Name.Length < 4)
+                {
+                    Name += name;
+                }
             }
 
             if (!string.IsNullOrEmpty(mailAddress))
             {
-                MailAddress = mailAddress;
+                MailAddress = name + mailAddress;
             }
         }
 
@@ -64,10 +76,12 @@ namespace MIProgram.Core.Model
         public string ToRailsInsert()
         {
             var sb = new StringBuilder();
-            sb.AppendFormat("{5} = {0}.new(pseudo: '{1}', email: '{2}', email_confirmation: '{2}', password: '{3}', created_at: '{4}')",
-                RailsModelName.ToCamelCase(), Name, MailAddress, Password, CreationDate.ToUnixTimeStamp(), RailsModelName);
+            sb.AppendFormat("{0} = {1}.new", RailsModelName, RailsModelName.ToCamelCase());
             sb.AppendLine();
-            sb.AppendFormat("{0}.id = {1}", RailsModelName, Id);
+            sb.AppendFormat("{0}.assign_attributes({{id: {1}, pseudo: '{2}', email: '{3}', password: '{4}', created_at: DateTime.parse('{5}'), updated_at: DateTime.parse('{6}')}}, :without_protection => true)",
+                RailsModelName, Id, Name, MailAddress, Password, CreationDate, LastUpdate);
+            sb.AppendLine();
+            sb.AppendFormat("{0}.email_confirmation = {0}.email", RailsModelName);
             sb.AppendLine();
             sb.AppendFormat("{0}.skip_confirmation!", RailsModelName);
             sb.AppendLine();
