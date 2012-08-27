@@ -31,38 +31,47 @@ namespace MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder
         public void AddNewStyle(StyleDefinition definition, string styleOriginalString)
         {
             var newStyle = new RealStylesTreeItem(definition, styleOriginalString);
+            
+            ComputeParents(newStyle);
 
+            CreateOrUpdateStylesTreeItem(newStyle);
+        }
+
+        protected StylesTreeItem ComputeParents(StylesTreeItem newStyle)
+        {
             var computedParents = newStyle.ExtractParentStyles();
             computedParents = computedParents.OrderBy(x => x.Complexity).ToList();
             var integratedParents = new List<StylesTreeItem>();
 
             foreach (var parent in computedParents)
             {
-                integratedParents.Add(GetOrCreateStyle(parent));
+                integratedParents.Add(GetOrCreateParent(parent));
             }
 
             newStyle.SetParents(integratedParents);
-            CreateOrUpdateStylesTreeItem(newStyle);
+            return newStyle;
         }
 
-        private void CreateOrUpdateStylesTreeItem(StylesTreeItem stylesTreeItem)
+        private StylesTreeItem CreateOrUpdateStylesTreeItem(StylesTreeItem stylesTreeItem)
         {
             StylesTreeItem result = stylesTreeItem;
             if (TryGetStylesTreeItem(ref result))
             {
                 result.UpdateFrom(stylesTreeItem);
-                return;
+                return result;
             }
 
             CreateStylesTreeItem(stylesTreeItem);
+            return stylesTreeItem;
         }
 
-        private StylesTreeItem GetOrCreateStyle(StylesTreeItem stylesTreeItem)
+        private StylesTreeItem GetOrCreateParent(StylesTreeItem stylesTreeItem)
         {
             StylesTreeItem result = stylesTreeItem;
             if (!TryGetStylesTreeItem(ref result))
             {
-                result = CreateStylesTreeItem(stylesTreeItem);
+                ComputeParents(stylesTreeItem);
+                return CreateOrUpdateStylesTreeItem(stylesTreeItem);
             }
 
             return result;
@@ -93,7 +102,7 @@ namespace MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder
         private bool TryGetStylesTreeItem(ref StylesTreeItem stylesTreeItem)
         {
             var result = GetStylesTreeItem(stylesTreeItem);
-            if(GetStylesTreeItem(stylesTreeItem) == null)
+            if (result == null)
             {
                 return false;
             }

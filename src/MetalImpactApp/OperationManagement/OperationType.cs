@@ -10,6 +10,7 @@ namespace MetalImpactApp.OperationManagement
         PublishReviewsXMLsForDeezer,
         PublishReviewsWithNewModel,
         PublishAlbumCountries,
-        PublishAlbumTypes
+        PublishAlbumTypes,
+        PublishRailsFixtures
     }
 }

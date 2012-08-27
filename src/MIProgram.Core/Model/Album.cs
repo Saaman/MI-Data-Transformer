@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MIProgram.Core.Extensions;
 
 namespace MIProgram.Core.Model
 {
     public class Album : Product
     {
+        public const string SQLTableName = "mi_album";
+
         //Existing
         public string Title { get; private set; }
         public DateTime ReleaseDate { get; private set; }
@@ -19,6 +22,7 @@ namespace MIProgram.Core.Model
         public string DeezerArtist { get; private set; }
         public string ReviewText { get; private set; }
 
+        public LabelVendor LabelVendor { get; set; }
         public IList<string> RawSimilarAlbums { get; set; }
         public IList<Album> SimilarAlbums { get; set; }
 
@@ -32,15 +36,33 @@ namespace MIProgram.Core.Model
         //Relations
         public IList<Disc> Discs { get; private set; }
 
-        public Album(string title, DateTime releaseDate, int score, string label, string coverPath, Artist artist, IList<string> albumSimilarAlbums)
+        public int SortWeight { get { return SimilarAlbums.Count; } }
+
+        public Album(int id, string title, DateTime releaseDate, int score, LabelVendor labelVendor, string coverPath
+            , DateTime creationDate, Artist artist, Reviewer reviewer, IList<string> albumSimilarAlbums)
         {
+            Id = id;
             Title = title;
             ReleaseDate = releaseDate;
             Score = score;
-            Label = label;
+            LabelVendor = labelVendor;
             CoverPath = coverPath;
             Artist = artist;
-            RawSimilarAlbums = albumSimilarAlbums.Where(x => x.ToUpperInvariant() != title.ToUpperInvariant()).ToList();
+            Reviewer = reviewer;
+            var tmpSimilarAlbums = albumSimilarAlbums.Select(x => x.Replace("<i>", "").Replace("</i>", ""));
+            RawSimilarAlbums = tmpSimilarAlbums.Where(x => x.ToUpperInvariant() != title.ToUpperInvariant()).Distinct().ToList();
+            CreationDate = creationDate;
+        }
+
+
+        public string ToSQLInsert()
+        {
+            return string.Format("INSERT INTO `{0}` (`album_id`, `title`, `creation_date`, `release_date`, `reviewer_id`, `artist_id`, `score`, `label`, `cover_path`, `similar_albums_nodes`, `additionnal_similar_albums_titles` `sorting_weight`) VALUES ('{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}', '{10}', '{11}');"
+                    , SQLTableName, Id, Title.ToCamelCase().GetSafeMySQL(), CreationDate.ToUnixTimeStamp(), ReleaseDate.ToUnixTimeStamp()
+                    , Reviewer.Id, Artist.Id, Score, LabelVendor.Label.ToCamelCase(), CoverPath.GetSafeMySQL() 
+                    , SimilarAlbums.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.Id).Trim('|')
+                    , RawSimilarAlbums.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.ToCamelCase().GetSafeMySQL()).Trim('|')
+                    , SortWeight);
         }
     }
 }

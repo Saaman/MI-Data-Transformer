@@ -48,6 +48,7 @@ namespace MIProgram.Core.AlbumImpl
         
         public IList<Country> ProcessedArtistCountries { get; set; }
         public string ProcessedAlbumType { get; set; }
+        public LabelVendor ProcessedLabelVendor { get; set; }        
         public StyleDefinition ProcessedAlbumStyle { get; set; }
 
         #endregion

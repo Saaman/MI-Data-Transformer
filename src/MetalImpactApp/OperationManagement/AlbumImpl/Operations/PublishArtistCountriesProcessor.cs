@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using MIProgram.Core;
 using MIProgram.Core.AlbumImpl.LocalRepositories;
+using MIProgram.Core.DAL.Writers;
 using MIProgram.Core.Model;
 using MIProgram.Core.ProductRepositories;
-using MIProgram.Core.Writers;
 using MIProgram.Core.Extensions;
 
 namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
@@ -14,9 +14,9 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
     {
         private readonly IWriter _writer;
 
-        public PublishArtistCountriesProcessor(IWriter _writer)
+        public PublishArtistCountriesProcessor(IWriter writer)
         {
-            this._writer = _writer;
+            _writer = writer;
         }
 
         public void Process(ProductRepository<Album> productRepository)

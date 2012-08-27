@@ -5,7 +5,7 @@ using System.IO;
 using System.Net;
 using System.Xml;
 
-namespace MIProgram.Core.Writers
+namespace MIProgram.Core.DAL.Writers
 {
     public class FTPFileWriter : IWriter
     {
@@ -73,6 +73,11 @@ namespace MIProgram.Core.Writers
         }
 
         public void WriteSQL(string sqlString, string fileNameWithoutExtension, string rootDir)
+        {
+            throw new NotImplementedException("You are not allowed to publish such information on FTP");
+        }
+
+        public void WriteRB(string railsString, string fileNameWithoutExtension, string rootDir)
         {
             throw new NotImplementedException("You are not allowed to publish such information on FTP");
         }

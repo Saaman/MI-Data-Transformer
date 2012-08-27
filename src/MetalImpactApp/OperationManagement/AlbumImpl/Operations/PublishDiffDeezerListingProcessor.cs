@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 using MIProgram.Core;
-using MIProgram.Core.Creators;
+using MIProgram.Core.DAL.Writers;
 using MIProgram.Core.Model;
 using MIProgram.Core.ProductRepositories;
-using MIProgram.Core.Writers;
 
 namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
 {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using MIProgram.Core.Extensions;
 
 namespace MIProgram.Core.Model
@@ -56,10 +57,27 @@ namespace MIProgram.Core.Model
 
         public string ToSQLInsert()
         {
-            return string.Format("INSERT INTO  `midatabase`.`{0}` (`reviewer_id`, `name`, `creation_date`, `mail`, `password`) VALUES ('{1}',  '{2}',  '{3}',  '{4}', '{5}');",
+            return string.Format("INSERT INTO `{0}` (`reviewer_id`, `name`, `creation_date`, `mail`, `password`) VALUES ('{1}',  '{2}',  '{3}',  '{4}', '{5}');",
                 SQLTableName, Id, Name, CreationDate.ToUnixTimeStamp(), MailAddress, Password);
         }
 
-        public const string SQLTableName = "mi_artist_creator";
+        public string ToRailsInsert()
+        {
+            var sb = new StringBuilder();
+            sb.AppendFormat("{5} = {0}.new(pseudo: '{1}', email: '{2}', email_confirmation: '{2}', password: '{3}', created_at: '{4}')",
+                RailsModelName.ToCamelCase(), Name, MailAddress, Password, CreationDate.ToUnixTimeStamp(), RailsModelName);
+            sb.AppendLine();
+            sb.AppendFormat("{0}.id = {1}", RailsModelName, Id);
+            sb.AppendLine();
+            sb.AppendFormat("{0}.skip_confirmation!", RailsModelName);
+            sb.AppendLine();
+            sb.AppendFormat("{0}s << {0}", RailsModelName);
+            sb.AppendLine();
+            sb.AppendLine();
+            return sb.ToString();
+        }
+
+        public const string SQLTableName = "mi_accounts";
+        public const string RailsModelName = "user";
     }
 }

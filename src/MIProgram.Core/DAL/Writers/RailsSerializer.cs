@@ -6,24 +6,38 @@ using MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder;
 
 namespace MIProgram.Core.DAL.Writers
 {
-    public class SQLSerializer
+    public class RailsSerializer
     {
         private readonly IWriter _fileWriter;
         private readonly string _outputDir;
-        
-        public SQLSerializer(IWriter writer, string outputDir)
+
+        public RailsSerializer(IWriter writer, string outputDir)
         {
             _fileWriter = writer;
             _outputDir = outputDir;
         }
 
-        public static string GetHeader(string tableName)
+        private static string GetHeader(string modelName)
         {
             var sb = new StringBuilder();
-            sb.AppendFormat("DELETE FROM `{0}`;", tableName);
+            sb.AppendFormat("{0}s = []", modelName);
+            return sb.ToString();
+        }
+
+        private static string GetFooter(string modelName)
+        {
+            var sb = new StringBuilder();
+            sb.AppendFormat("puts 'create {0}s...'", modelName);
             sb.AppendLine();
-            sb.AppendFormat("ALTER TABLE `{0}` AUTO_INCREMENT=0;", tableName);
+            sb.AppendFormat("{0}s.each do |{0}|", modelName);
             sb.AppendLine();
+            sb.AppendFormat("\tunless {0}.save!", modelName);
+            sb.AppendLine();
+            sb.AppendFormat("\t\tputs \"cannot create {0} #{{{0}.inspect}}\"", modelName);
+            sb.AppendLine();
+            sb.Append("\tend");
+            sb.AppendLine();
+            sb.Append("end");
             return sb.ToString();
         }
 
@@ -46,14 +60,16 @@ namespace MIProgram.Core.DAL.Writers
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine(GetHeader(Reviewer.SQLTableName));
+            sb.AppendLine(GetHeader(Reviewer.RailsModelName));
 
             foreach (var reviewer in reviewers)
             {
-                sb.AppendLine(reviewer.ToSQLInsert());
+                sb.AppendLine(reviewer.ToRailsInsert());
             }
 
-            _fileWriter.WriteSQL(sb.ToString(), fileName, _outputDir);
+            sb.Append(GetFooter(Reviewer.RailsModelName));
+
+            _fileWriter.WriteRB(sb.ToString(), fileName, _outputDir);
         }
 
         public void SerializeArtists(IList<Artist> newArtists, string fileName)

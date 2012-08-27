@@ -10,7 +10,6 @@ using MIProgram.Core.DAL.Writers;
 using MIProgram.Core.Logging;
 using MIProgram.Core.Model;
 using MIProgram.Core.ProductRepositories;
-using MIProgram.Core.Writers;
 using System.Globalization;
 using System.Collections.Generic;
 
@@ -28,7 +27,8 @@ namespace MetalImpactApp
             new Operation(OperationType.PublishAlbumTypes, "Publier les types d'albums"),
             new Operation(OperationType.PublishAlbumCountries, "Publier les pays d'artistes"),
             new Operation(OperationType.PublishReviewsWithNewModel, "Publier les reviews avec le nouveau modèle"),
-            new Operation(OperationType.PublishSiteMap, "Publier le sitemap")
+            new Operation(OperationType.PublishSiteMap, "Publier le sitemap"),
+            new Operation(OperationType.PublishRailsFixtures, "Publier les fixtures rails"),
         };
 
         public Form1()
@@ -95,10 +95,7 @@ namespace MetalImpactApp
                     throw new NotImplementedException(string.Format("La valeur '{0}' de la clé de configuration 'DefaultDest' n'est pas reconnue", ConfigurationManager.AppSettings["DefaultDest"]));
             }
 
-            if (string.IsNullOrEmpty(ConfigurationManager.AppSettings["LastUpdateDate"]))
-                LastUpdateDateDTP.Value = DateTime.Now;
-            else
-                LastUpdateDateDTP.Value = DateTime.Parse(ConfigurationManager.AppSettings["LastUpdateDate"], _culture);
+            LastUpdateDateDTP.Value = string.IsNullOrEmpty(ConfigurationManager.AppSettings["LastUpdateDate"]) ? DateTime.Now : DateTime.Parse(ConfigurationManager.AppSettings["LastUpdateDate"], _culture);
 
             //Operations
             OperationsListBox.Items.Clear();

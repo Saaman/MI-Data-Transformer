@@ -7,6 +7,8 @@ namespace MIProgram.Core.Model
 {
     public class Artist
     {
+        public const string SQLTableName = "mi_artist";
+
         public int Id { get; set; }
         public string Name { get; set; }
         public IList<Country> Countries { get; set; }
@@ -36,7 +38,7 @@ namespace MIProgram.Core.Model
 
             Reviewer = reviewer;
             Id = id;
-            RawSimilarArtists = similarArtists.Where(x => x.ToUpperInvariant() != name.ToUpperInvariant()).ToList();
+            RawSimilarArtists = similarArtists.Where(x => x.ToUpperInvariant() != name.ToUpperInvariant()).Distinct().ToList();
             Name = name.ToUpperInvariant();
             Countries = countries;
             OfficialUrl = officialUrl;
@@ -88,15 +90,13 @@ namespace MIProgram.Core.Model
 
         public string ToSQLInsert()
         {
-            return string.Format("INSERT INTO  `midatabase`.`{0}` (`artist_id`, `name`, `creation_date`, `official_site`, `reviewer_id`, `countries`, `similar_artists_nodes`, `additionnal_similar_artists_names`, `sorting_weight`) VALUES ('{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}');"
+            return string.Format("INSERT INTO `{0}` (`artist_id`, `name`, `creation_date`, `official_site`, `reviewer_id`, `countries`, `similar_artists_nodes`, `additionnal_similar_artists_names`, `sorting_weight`) VALUES ('{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}', '{8}', '{9}');"
                     , SQLTableName, Id, Name.ToCamelCase().GetSafeMySQL(), CreationDate.ToUnixTimeStamp(), OfficialUrl, Reviewer.Id
-                    , Countries.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.CountryName.ToCamelCase()).Trim('|')
+                    , Countries.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.CountryName.ToCamelCase().GetSafeMySQL()).Trim('|')
                     , SimilarArtists.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.Id).Trim('|')
-                    , RawSimilarArtists.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.ToCamelCase()).Trim('|')
+                    , RawSimilarArtists.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.ToCamelCase().GetSafeMySQL()).Trim('|')
                     , SortWeight);
         }
-
-        public const string SQLTableName = "mi_artist";
 
         #region IEqualityMembers
 

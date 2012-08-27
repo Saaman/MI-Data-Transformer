@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using MetalImpactApp.OperationManagement.AlbumImpl;
 using MIProgram.Core.AlbumImpl;
+using MIProgram.Core.DAL.Writers;
 using MIProgram.Core.MIRecordsProviders;
 using MIProgram.Core.Model;
-using MIProgram.Core.Writers;
 
 namespace MetalImpactApp.OperationManagement
 {

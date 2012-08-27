@@ -13,14 +13,19 @@ namespace MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder
         protected IList<int> _subStylesIdxs = new List<int>();
         protected IList<int> _styleAlterationsIdxs = new List<int>();
 
-        public int Complexity
+        public virtual int Complexity
         {
-            get { return _musicGenresIdxs.Count + _subStylesIdxs.Count * 2 + _styleAlterationsIdxs.Count * 3; }
+            get { return _musicGenresIdxs.Count + _subStylesIdxs.Count*2  + _styleAlterationsIdxs.Count ; }
         }
 
-        public IList<StylesTreeItem> Parents { get; private set; }
+        public virtual string ConsolidatedName
+        {
+            get { return string.IsNullOrEmpty(_styleOriginalString) ? _styleRebuildedString.ToCamelCase() : _styleOriginalString.ToCamelCase(); }
+        }
 
-        public int? ID { get; set; }
+        public virtual IList<StylesTreeItem> Parents { get; private set; }
+
+        public virtual  int? ID { get; set; }
 
         public void SetParents(IList<StylesTreeItem> parents)
         {
@@ -168,10 +173,10 @@ namespace MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder
         public string ToSQLInsert()
         {
             string parentsString = string.Empty;
-            return string.Format("INSERT INTO  `midatabase`.`{0}` (`album_style_id`, `album_style_name`, `album_style_description`, `album_style_parents_ids`) VALUES ('{1}', '{2}', '{3}', '{4}');",
-                StylesTree.SQLTableName, ID, string.IsNullOrEmpty(_styleOriginalString) ? _styleRebuildedString.ToCamelCase().ToSQLValue() : _styleOriginalString.ToCamelCase().ToSQLValue(),
-                _styleRebuildedString.ToCamelCase().ToSQLValue(),
-                Parents.Aggregate(parentsString, (current, parent) => current + parent.ID + ",", y => y.TrimEnd(',')));
+            return string.Format("INSERT INTO `{0}` (`album_style_id`, `album_style_name`, `album_style_description`, `album_style_parents_ids`, `complexity`) VALUES ('{1}', '{2}', '{3}', '{4}', '{5}');",
+                StylesTree.SQLTableName, ID, ConsolidatedName.ToSQLValue(), _styleRebuildedString.ToCamelCase().ToSQLValue(),
+                Parents.Aggregate(parentsString, (current, parent) => current + parent.ID + "|", y => y.TrimEnd('|')),
+                Complexity);
         }
     }
 }

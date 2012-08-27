@@ -14,6 +14,7 @@ namespace MIProgram.Core.AlbumImpl
     {
         private readonly CountryCodesParser _countryCodesParser = new CountryCodesParser();
         private readonly AlbumTypesParser _albumTypesParser = new AlbumTypesParser();
+        private readonly AlbumLabelsParser _albumLabelsParser = new AlbumLabelsParser();
         private readonly AlbumStylesParser _albumStylesParser = new AlbumStylesParser();
         private StylesTree _stylesTree;
 
@@ -56,6 +57,9 @@ namespace MIProgram.Core.AlbumImpl
 
             //Parse Style
             ParseAlbumStyle(explodedReview);
+
+            //Parse Label & Vendor
+            ParseAlbumLabelAndVendor(explodedReview);
         }
 
         protected override void PostProcessProductRepository(ProductRepository<Album> productRepository)
@@ -77,12 +81,28 @@ namespace MIProgram.Core.AlbumImpl
                     x => currentArtist.RawSimilarArtists.Contains(x.Name, new UpperInvariantComparer())).ToList();
             }
 
+            //Remove identified SimilarArtists from rawSimilarArtists
+            foreach (var artist in productRepository.Artists)
+            {
+                var currentArtist = artist;
+                currentArtist.RawSimilarArtists = currentArtist.RawSimilarArtists.Where(
+                    x => !currentArtist.SimilarArtists.Select(y => y.Name.ToUpperInvariant()).Contains(x.ToUpperInvariant())).ToList();
+            }
+
             //Build links between albums
             foreach (var album in productRepository.Products)
             {
                 var currentAlbum = album;
                 currentAlbum.SimilarAlbums = productRepository.Products.Where(
                     x => currentAlbum.RawSimilarAlbums.Contains(x.Title, new UpperInvariantComparer())).ToList();
+            }
+
+            //Remove identified SimilarAlbums from rawSimilarAlbums
+            foreach (var album in productRepository.Products)
+            {
+                var currentAlbum = album;
+                currentAlbum.RawSimilarAlbums = currentAlbum.RawSimilarAlbums.Where(
+                    x => !currentAlbum.SimilarAlbums.Select(y => y.Title.ToUpperInvariant()).Contains(x.ToUpperInvariant())).ToList();
             }
         }
 
@@ -117,6 +137,22 @@ namespace MIProgram.Core.AlbumImpl
             if (_albumTypesParser.TryParse(review.AlbumType, review.RecordId, ref albumType))
             {
                 review.ProcessedAlbumType = albumType;
+            }
+        }
+
+        private void ParseAlbumLabelAndVendor(IExplodedReview<Album> explodedReview)
+        {
+            var review = explodedReview as AlbumExplodedReview;
+
+            if (review == null)
+            {
+                throw new InvalidCastException("explodedReview cannot be cast as AlbumExplodedReview");
+            }
+
+            LabelVendor labelVendor = null;
+            if (_albumLabelsParser.TryParse(review.AlbumLabel, review.AlbumDistributor, review.RecordLastUpdateDate, review.RecordId, ref labelVendor))
+            {
+                review.ProcessedLabelVendor = labelVendor;
             }
         }
 

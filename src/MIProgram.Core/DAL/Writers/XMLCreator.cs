@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 using MIProgram.Core.Model;
-using MIProgram.Core.Writers;
 
-namespace MIProgram.Core.Creators
+namespace MIProgram.Core.DAL.Writers
 {
     public class XMLCreator
     {

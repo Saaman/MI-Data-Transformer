@@ -1,23 +1,23 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MIProgram.Core", "MIProgram.Core\MIProgram.Core.csproj", "{3A4D0883-4252-4F77-87D9-75838295557D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetalImpactApp", "MetalImpactApp\MetalImpactApp.csproj", "{7E60AE88-FB2E-45CB-B19E-B500CC9F2242}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dictionnaries", "Dictionnaries", "{298BC1CE-B788-4B35-8AAF-D78D9F8EA73F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dictionnaires", "Dictionnaires", "{7C9DF69E-B1BB-40DA-B1D3-D6B0CE8B3F16}"
 	ProjectSection(SolutionItems) = preProject
-		..\Dictionnaires\albumTypes.txt = ..\Dictionnaires\albumTypes.txt
-		..\Dictionnaires\albumTypesReplacements.csv = ..\Dictionnaires\albumTypesReplacements.csv
-		..\Dictionnaires\countriesLabelsReplacements.csv = ..\Dictionnaires\countriesLabelsReplacements.csv
-		..\Dictionnaires\coutriesList.csv = ..\Dictionnaires\coutriesList.csv
-		..\Dictionnaires\mainStyles.txt = ..\Dictionnaires\mainStyles.txt
-		..\Dictionnaires\mainStylesReplacements.csv = ..\Dictionnaires\mainStylesReplacements.csv
-		..\Dictionnaires\musicGenres.txt = ..\Dictionnaires\musicGenres.txt
-		..\Dictionnaires\musicGenresReplacements.csv = ..\Dictionnaires\musicGenresReplacements.csv
-		..\Dictionnaires\splittingStrings.txt = ..\Dictionnaires\splittingStrings.txt
-		..\Dictionnaires\styleAlterations.txt = ..\Dictionnaires\styleAlterations.txt
-		..\Dictionnaires\styleAlterationsReplacements.csv = ..\Dictionnaires\styleAlterationsReplacements.csv
+		Dictionnaires\albumTypes.txt = Dictionnaires\albumTypes.txt
+		Dictionnaires\albumTypesReplacements.csv = Dictionnaires\albumTypesReplacements.csv
+		Dictionnaires\countriesLabelsReplacements.csv = Dictionnaires\countriesLabelsReplacements.csv
+		Dictionnaires\coutriesList.csv = Dictionnaires\coutriesList.csv
+		Dictionnaires\mainStyles.txt = Dictionnaires\mainStyles.txt
+		Dictionnaires\mainStylesReplacements.csv = Dictionnaires\mainStylesReplacements.csv
+		Dictionnaires\musicGenres.txt = Dictionnaires\musicGenres.txt
+		Dictionnaires\musicGenresReplacements.csv = Dictionnaires\musicGenresReplacements.csv
+		Dictionnaires\splittingStrings.txt = Dictionnaires\splittingStrings.txt
+		Dictionnaires\styleAlterations.txt = Dictionnaires\styleAlterations.txt
+		Dictionnaires\styleAlterationsReplacements.csv = Dictionnaires\styleAlterationsReplacements.csv
 	EndProjectSection
 EndProject
 Global

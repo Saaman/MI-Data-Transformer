@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using MetalImpactApp.OperationManagement.AlbumImpl.Operations;
 using MIProgram.Core;
+using MIProgram.Core.DAL.Writers;
 using MIProgram.Core.Model;
 using MIProgram.Core.ProductRepositories;
-using MIProgram.Core.Writers;
 
 namespace MetalImpactApp.OperationManagement.AlbumImpl
 {
@@ -25,7 +25,8 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl
                                              { OperationType.PublishFullDeezerListing, new PublishFullDeezerListingProcessor(writer)},
                                              { OperationType.PublishReviewsWithNewModel, new PublishReviewsWithNewModelProcessor(writer)},
                                              { OperationType.PublishReviewsXMLsForDeezer, new PublishReviewsXMLsForDeezerProcessor(writer)},
-                                             { OperationType.PublishSiteMap, new PublishSiteMapProcessor(writer)}
+                                             { OperationType.PublishSiteMap, new PublishSiteMapProcessor(writer)},
+                                             {OperationType.PublishRailsFixtures, new PublishRailsFixturesProcessor(writer)}
                                          };
 
             _albumRepository = new AlbumRepository(filtersDefinitions, lastExportDate);

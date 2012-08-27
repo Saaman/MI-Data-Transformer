@@ -58,8 +58,7 @@ namespace MIProgram.Core.BodyCleaning
                 throw new InvalidOperationException(
                     string.Format(
                         "A removal already exists to replace '{0}' by '{1}' in review '{2}'. You currently trying to replace it with '{3}' instead.",
-                        removal.ReviewId, removal.RemovedString, existingRemoval.ReplacementString,
-                        removal.ReplacementString));
+                        existingRemoval.RemovedString, existingRemoval.ReplacementString, removal.ReviewId, removal.ReplacementString));
             }
 
             //Otherwise the same removal is already in the list, no need to do something

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace MIProgram.Core.Writers
+namespace MIProgram.Core.DAL.Writers
 {
     public interface IWriter
     {
@@ -9,5 +9,6 @@ namespace MIProgram.Core.Writers
         void WriteTextCollection(IList<string> collection, string fileNameWithoutExtension, string rootDir);
         void WriteCSV<T>(IList<T> collection, string fileNameWithoutExtension, string rootDir);
         void WriteSQL(string sqlString, string fileNameWithoutExtension, string rootDir);
+        void WriteRB(string railsString, string fileNameWithoutExtension, string rootDir);
     }
 }

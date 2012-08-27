@@ -1,9 +1,9 @@
 ﻿using System;
 using MIProgram.Core;
 using MIProgram.Core.AlbumImpl.LocalRepositories;
+using MIProgram.Core.DAL.Writers;
 using MIProgram.Core.Model;
 using MIProgram.Core.ProductRepositories;
-using MIProgram.Core.Writers;
 using System.Linq;
 
 namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations

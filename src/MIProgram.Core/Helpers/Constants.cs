@@ -9,8 +9,9 @@ namespace MIProgram.Core
     {
         public static readonly string DictionnariesDirectoryPath = ConfigurationManager.AppSettings["DictionnariesPath"];
         public static readonly string SQLPath = ConfigurationManager.AppSettings["SQLPath"];
+        public static readonly string RailsPath = ConfigurationManager.AppSettings["RailsPath"];
         public static readonly string DeezerOperationsOutputDirectoryPath = ConfigurationManager.AppSettings["DeezerDir"];
-        public static readonly string MigrationOperationsOutputDirectoryPath = ConfigurationManager.AppSettings["MigrationDir"];
+        //public static readonly string MigrationOperationsOutputDirectoryPath = ConfigurationManager.AppSettings["MigrationDir"];
         public static readonly string FieldsExtractionsOutputDirectoryPath = ConfigurationManager.AppSettings["FieldsExtractionsDir"];
 
         public static readonly string SplittingStringsFilePath = Path.Combine(DictionnariesDirectoryPath, "splittingStrings.txt");

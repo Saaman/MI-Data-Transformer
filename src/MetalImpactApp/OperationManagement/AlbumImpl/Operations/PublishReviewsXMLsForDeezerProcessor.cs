@@ -1,10 +1,9 @@
 ﻿using System;
 using MIProgram.Core;
-using MIProgram.Core.Creators;
+using MIProgram.Core.DAL.Writers;
 using MIProgram.Core.Logging;
 using MIProgram.Core.Model;
 using MIProgram.Core.ProductRepositories;
-using MIProgram.Core.Writers;
 
 namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
 {

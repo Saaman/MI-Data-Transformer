@@ -113,13 +113,19 @@ namespace MIProgram.Core.AlbumImpl
             return similarArtists;
         }
 
-        private void SafeAddSimilarArtist(ICollection<string> similarArtists, string artistName)
+        private void SafeAddSimilarArtist(ICollection<string> similarArtists, string artistNameInput)
         {
-            artistName = artistName.Trim(ponctuations.ToArray());
-            artistName.Trim(' ');
-            if (artistName.Length > 3 && !similarArtists.Contains(artistName))
+            var artistNames = artistNameInput.Split(ponctuations.ToArray());
+
+            foreach (var artName in artistNames)
             {
-                similarArtists.Add(artistName);
+                var artistName = artName.Trim(ponctuations.ToArray());
+                artistName = artistName.Trim(' ');
+
+                if (artistName.Length > 3 && !similarArtists.Contains(artistName))
+                {
+                    similarArtists.Add(artistName);
+                }
             }
         }
 

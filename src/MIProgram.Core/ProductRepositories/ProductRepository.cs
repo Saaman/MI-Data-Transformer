@@ -13,8 +13,8 @@ namespace MIProgram.Core.ProductRepositories
         private IList<T> _filteredProducts;
 
         /*Id generators*/
-        private readonly IDGenerator _artistIdGenerator = new IDGenerator();
-        private readonly IDGenerator _reviewerIdGenerator = new IDGenerator();
+        protected readonly IDGenerator _nodeIdGenerator = new IDGenerator();
+        private readonly IDGenerator _userIdGenerator = new IDGenerator();
 
         protected ProductRepository(List<Func<Product, bool>> filtersDefinitions)
         {
@@ -29,7 +29,7 @@ namespace MIProgram.Core.ProductRepositories
 
             if (selectedArtist == null)
             {
-                selectedArtist = new Artist(_artistIdGenerator.NewID(), artistName, countries, officialUrl, lastUpdate, reviewer, similarArtists);
+                selectedArtist = new Artist(_nodeIdGenerator.NewID(), artistName, countries, officialUrl, lastUpdate, reviewer, similarArtists);
                 Artists.Add(selectedArtist);
                 return selectedArtist;
             }
@@ -45,7 +45,7 @@ namespace MIProgram.Core.ProductRepositories
 
             if (selectedReviewer == null)
             {
-                selectedReviewer = new Reviewer(_reviewerIdGenerator.NewID(), name, mailAddress, lastUpdate);
+                selectedReviewer = new Reviewer(_userIdGenerator.NewID(), name, mailAddress, lastUpdate);
                 Reviewers.Add(selectedReviewer);
                 return selectedReviewer;
             }

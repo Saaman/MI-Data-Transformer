@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 using System.IO;
-using MIProgram.Core.Writers;
 
 namespace MIProgram.Core.DAL.Writers
 {
@@ -21,47 +20,37 @@ namespace MIProgram.Core.DAL.Writers
             _mainDirectory = mainDirectory;
         }
 
-        public void WriteXML(XDocument xDoc, string fileNameWithoutExtension, string rootDir)
+        private string ComputeFilePath(string rootDir, string fileName)
         {
             string filePath = _mainDirectory;
-            if(!string.IsNullOrEmpty(rootDir))
+            if (!string.IsNullOrEmpty(rootDir))
             {
                 filePath = Path.Combine(filePath, rootDir);
-                if(!Directory.Exists(filePath))
+                if (!Directory.Exists(filePath))
                     Directory.CreateDirectory(filePath);
             }
 
-            filePath = Path.Combine(filePath, string.Format("{0}.xml", fileNameWithoutExtension));
+            filePath = Path.Combine(filePath, fileName);
+            return filePath;
+        }
+
+        public void WriteXML(XDocument xDoc, string fileNameWithoutExtension, string rootDir)
+        {
+            var filePath = ComputeFilePath(rootDir, string.Format("{0}.xml", fileNameWithoutExtension));
 
             xDoc.Save(filePath, SaveOptions.None);
         }
 
         public void WriteTextCollection(IList<string> collection, string fileNameWithoutExtension, string rootDir)
         {
-            string filePath = _mainDirectory;
-            if (!string.IsNullOrEmpty(rootDir))
-            {
-                filePath = Path.Combine(filePath, rootDir);
-                if (!Directory.Exists(filePath))
-                    Directory.CreateDirectory(filePath);
-            }
-
-            filePath = Path.Combine(filePath, string.Format("{0}.txt", fileNameWithoutExtension));
+            var filePath = ComputeFilePath(rootDir, string.Format("{0}.txt", fileNameWithoutExtension));
             var repository = new TextFileRepository(filePath);
             repository.WriteData(collection);
         }
 
         public void WriteSQL(string sqlString, string fileNameWithoutExtension, string rootDir)
         {
-            string filePath = _mainDirectory;
-            if (!string.IsNullOrEmpty(rootDir))
-            {
-                filePath = Path.Combine(filePath, rootDir);
-                if (!Directory.Exists(filePath))
-                    Directory.CreateDirectory(filePath);
-            }
-
-            filePath = Path.Combine(filePath, string.Format("{0}.sql", fileNameWithoutExtension));
+            var filePath = ComputeFilePath(rootDir, string.Format("{0}.sql", fileNameWithoutExtension));
             using (var sw = new StreamWriter(filePath))
             {
                 sw.Write(sqlString);
@@ -69,17 +58,19 @@ namespace MIProgram.Core.DAL.Writers
             
         }
 
-        public void WriteCSV<T>(IList<T> collection, string fileNameWithoutExtension, string rootDir)
+        public void WriteRB(string sqlString, string fileNameWithoutExtension, string rootDir)
         {
-            string filePath = _mainDirectory;
-            if (!string.IsNullOrEmpty(rootDir))
+            var filePath = ComputeFilePath(rootDir, string.Format("{0}.rb", fileNameWithoutExtension));
+            using (var sw = new StreamWriter(filePath))
             {
-                filePath = Path.Combine(filePath, rootDir);
-                if (!Directory.Exists(filePath))
-                    Directory.CreateDirectory(filePath);
+                sw.Write(sqlString);
             }
 
-            filePath = Path.Combine(filePath, string.Format("{0}.csv", fileNameWithoutExtension));
+        }
+
+        public void WriteCSV<T>(IList<T> collection, string fileNameWithoutExtension, string rootDir)
+        {
+            var filePath = ComputeFilePath(rootDir, string.Format("{0}.csv", fileNameWithoutExtension));
             var repository = new CSVFileRepository<T>(filePath);
             repository.WriteData(collection);
         }
