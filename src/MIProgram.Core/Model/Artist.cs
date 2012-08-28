@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using MIProgram.Core.Extensions;
 using System.Linq;
 
@@ -8,6 +9,7 @@ namespace MIProgram.Core.Model
     public class Artist
     {
         public const string SQLTableName = "mi_artist";
+        public const string RailsModelName = "artist";
 
         public int Id { get; set; }
         public string Name { get; set; }
@@ -21,7 +23,7 @@ namespace MIProgram.Core.Model
         
         public int SortWeight { get { return SimilarArtists.Count; } }
 
-        public Artist(int id, string name, IList<Country> countries, string officialUrl, DateTime lastUpdate, Reviewer reviewer, IList<string> similarArtists)
+        public Artist(int id, string name, IList<Country> countries, string officialUrl, DateTime lastUpdate, Reviewer reviewer, IEnumerable<string> similarArtists)
         {
             #region parameters validation
 
@@ -96,6 +98,22 @@ namespace MIProgram.Core.Model
                     , SimilarArtists.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.Id).Trim('|')
                     , RawSimilarArtists.Aggregate(string.Empty, (seed, entry) => seed + "|" + entry.ToCamelCase().GetSafeMySQL()).Trim('|')
                     , SortWeight);
+        }
+
+        public string ToRailsInsert()
+        {
+            var sb = new StringBuilder();
+            sb.AppendFormat("{0} = {1}.new", RailsModelName, RailsModelName.ToCamelCase());
+            sb.AppendLine();
+            var countriesArray =
+                Countries.Select(x => string.Format("'{0}'", x.CountryCode)).Aggregate((countriesString, nextCountry) => countriesString + ", " + nextCountry);
+            sb.AppendFormat("{0}.assign_attributes({{id: {1}, name: '{2}', practices_attributes: [{{:kind => :band, created_at: DateTime.parse('{4}'), updated_at: DateTime.parse('{5}')}}], countries: [{3}], created_at: DateTime.parse('{4}'), updated_at: DateTime.parse('{5}')}}, :without_protection => true)",
+                RailsModelName, Id, Name, countriesArray , CreationDate, LastUpdate);
+            sb.AppendLine();
+            sb.AppendFormat("{0}s << {0}", RailsModelName);
+            sb.AppendLine();
+            sb.AppendLine();
+            return sb.ToString();
         }
 
         #region IEqualityMembers

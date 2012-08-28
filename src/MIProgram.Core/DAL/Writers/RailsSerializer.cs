@@ -17,7 +17,7 @@ namespace MIProgram.Core.DAL.Writers
             _outputDir = outputDir;
         }
 
-        private static string GetHeader(string modelName, bool overrideTimeStamps = false)
+        private static string GetHeader(string modelName, bool overrideTimeStamps = true)
         {
             var sb = new StringBuilder();
             if (overrideTimeStamps)
@@ -30,7 +30,7 @@ namespace MIProgram.Core.DAL.Writers
             return sb.ToString();
         }
 
-        private static string GetFooter(string modelName, bool overrideTimeStamps = false)
+        private static string GetFooter(string modelName, bool overrideTimeStamps = true)
         {
             var sb = new StringBuilder();
             sb.AppendFormat("bulk_save({0}s)", modelName);
@@ -59,14 +59,14 @@ namespace MIProgram.Core.DAL.Writers
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine(GetHeader(Reviewer.RailsModelName, true));
+            sb.AppendLine(GetHeader(Reviewer.RailsModelName));
 
             foreach (var reviewer in reviewers)
             {
                 sb.AppendLine(reviewer.ToRailsInsert());
             }
 
-            sb.Append(GetFooter(Reviewer.RailsModelName, true));
+            sb.Append(GetFooter(Reviewer.RailsModelName));
 
             _fileWriter.WriteRB(sb.ToString(), fileName, _outputDir);
         }
@@ -75,14 +75,16 @@ namespace MIProgram.Core.DAL.Writers
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine(GetHeader(Artist.SQLTableName));
+            sb.AppendLine(GetHeader(Artist.RailsModelName));
 
             foreach (var artist in newArtists)
             {
-                sb.AppendLine(artist.ToSQLInsert());
+                sb.AppendLine(artist.ToRailsInsert());
             }
 
-            _fileWriter.WriteSQL(sb.ToString(), fileName, _outputDir);
+            sb.Append(GetFooter(Artist.RailsModelName));
+
+            _fileWriter.WriteRB(sb.ToString(), fileName, _outputDir);
         }
 
         public void SerializeAlbumTypes(List<string> albumTypes, string fileName)

@@ -29,13 +29,14 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
 
             //Publication des reviewers
             _railsSerializer.SerializeReviewers(albumRepository.Reviewers, "reviewers");
-            /*
+            
             //Publication des pays
-            _railsSerializer.SerializeCountries(CountriesRepository.CountriesLabelsAndCodesDictionnary, "countries");
+            //_railsSerializer.SerializeCountries(CountriesRepository.CountriesLabelsAndCodesDictionnary, "countries");
 
             //Publication des artistes
             _railsSerializer.SerializeArtists(albumRepository.Artists.OrderBy(x => x.SortWeight).ToList(), "artists");
 
+            /*
             //Publication des types d'album
             _railsSerializer.SerializeAlbumTypes(AlbumTypesRepository.Repo.Values, "album_types");
 
