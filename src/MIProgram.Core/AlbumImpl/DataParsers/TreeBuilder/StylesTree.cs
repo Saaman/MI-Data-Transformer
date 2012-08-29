@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using MIProgram.Core.Helpers;
 
 namespace MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder
 {
@@ -41,12 +42,7 @@ namespace MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder
         {
             var computedParents = newStyle.ExtractParentStyles();
             computedParents = computedParents.OrderBy(x => x.Complexity).ToList();
-            var integratedParents = new List<StylesTreeItem>();
-
-            foreach (var parent in computedParents)
-            {
-                integratedParents.Add(GetOrCreateParent(parent));
-            }
+            var integratedParents = computedParents.Select(GetOrCreateParent).ToList();
 
             newStyle.SetParents(integratedParents);
             return newStyle;
@@ -77,7 +73,7 @@ namespace MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder
             return result;
         }
 
-        private StylesTreeItem CreateStylesTreeItem(StylesTreeItem stylesTreeItem)
+        private void CreateStylesTreeItem(StylesTreeItem stylesTreeItem)
         {
             stylesTreeItem.ID = _idGenerator.NewID();
 
@@ -86,7 +82,7 @@ namespace MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder
 
             _stylesTreeItems.Add(stylesTreeItem);
 
-            return stylesTreeItem;
+            return;
         }
 
         private StylesTreeItem GetStylesTreeItem(StylesTreeItem treeItem)

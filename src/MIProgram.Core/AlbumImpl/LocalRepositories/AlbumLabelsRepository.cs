@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using MIProgram.Core.Helpers;
 using MIProgram.Core.Model;
-using MIProgram.Core.Extensions;
 
 namespace MIProgram.Core.AlbumImpl.LocalRepositories
 {
     public static class AlbumLabelsRepository
     {
-        private static readonly IList<LabelVendor> _labelVendors = new List<LabelVendor>();
+        private static readonly IList<LabelVendor> LabelVendors = new List<LabelVendor>();
+        private static readonly IDGenerator AlbumLabelsIdGenerator = new IDGenerator();
 
         public static IList<LabelVendor> Repo
         {
-            get { return _labelVendors; }
+            get { return LabelVendors; }
         }
 
         public static LabelVendor CreateOrUpdate(string label, string vendor, DateTime lastUpdate)
@@ -26,11 +26,11 @@ namespace MIProgram.Core.AlbumImpl.LocalRepositories
             var lb = label.Trim();
             var vd = vendor.Trim();
 
-            var existingLb = _labelVendors.Where(x => x.Label.ToUpperInvariant() == lb.ToUpperInvariant()).SingleOrDefault();
+            var existingLb = LabelVendors.Where(x => x.Label.ToUpperInvariant() == lb.ToUpperInvariant()).SingleOrDefault();
             if (existingLb == null)
             {
-                var labelVendor = new LabelVendor(lb, vd, lastUpdate);
-                _labelVendors.Add(labelVendor);
+                var labelVendor = new LabelVendor(AlbumLabelsIdGenerator.NewID(), lb, vd, lastUpdate);
+                LabelVendors.Add(labelVendor);
                 return labelVendor;
             }
 

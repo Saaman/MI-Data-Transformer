@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MIProgram.Core.AlbumImpl;
 using MIProgram.Core.AlbumImpl.DataParsers.TreeBuilder;
+using MIProgram.Core.Helpers;
 using MIProgram.Core.Model;
 
 namespace MIProgram.Core.ProductRepositories
@@ -13,6 +14,8 @@ namespace MIProgram.Core.ProductRepositories
         private readonly IList<AlbumExplodedReview> _explodedReviews = new List<AlbumExplodedReview>();
         private StylesTree _stylesTree;
         private readonly DateTime _lastExportDate;
+
+        protected readonly IDGenerator _albumIdGenerator = new IDGenerator();
 
         public AlbumRepository(List<Func<Product, bool>> filtersDefinitions, DateTime lastExportDate) : base(filtersDefinitions)
         {
@@ -34,8 +37,8 @@ namespace MIProgram.Core.ProductRepositories
             var artist = GetOrBuildArtist(review.ArtistName, review.ProcessedArtistCountries, review.ArtistOfficialUrl,
                                           review.RecordLastUpdateDate, reviewer, review.ArtistSimilarArtists);
 
-            var album = new Album(_nodeIdGenerator.NewID(), review.AlbumName, review.AlbumReleaseDate, review.ReviewScore
-                , review.ProcessedLabelVendor, review.AlbumCoverFileName, review.RecordLastUpdateDate, artist, reviewer, review.AlbumSimilarAlbums);
+            var album = new Album(_albumIdGenerator.NewID(), review.AlbumName, review.AlbumReleaseDate, review.ReviewScore
+                , review.ProcessedLabelVendor, review.AlbumCoverFileName, review.RecordLastUpdateDate, artist, reviewer, review.AlbumSimilarAlbums, review.ProcessedAlbumType);
             _albums.Add(album);
         }
 

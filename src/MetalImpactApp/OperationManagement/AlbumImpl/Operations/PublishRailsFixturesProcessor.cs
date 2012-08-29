@@ -28,26 +28,26 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
             }
 
             //Publication des reviewers
-            _railsSerializer.SerializeReviewers(albumRepository.Reviewers, "reviewers");
+            _railsSerializer.SerializeReviewers(albumRepository.Reviewers, "0-reviewers");
             
             //Publication des pays
             //_railsSerializer.SerializeCountries(CountriesRepository.CountriesLabelsAndCodesDictionnary, "countries");
 
             //Publication des artistes
-            _railsSerializer.SerializeArtists(albumRepository.Artists.OrderBy(x => x.SortWeight).ToList(), "artists");
+            _railsSerializer.SerializeArtists(albumRepository.Artists.OrderBy(x => x.SortWeight).ToList(), "1-artists");
 
-            /*
+            
             //Publication des types d'album
-            _railsSerializer.SerializeAlbumTypes(AlbumTypesRepository.Repo.Values, "album_types");
+            //_railsSerializer.SerializeAlbumTypes(AlbumTypesRepository.Repo.Values, "album_types");
 
             //Publication des styles d'album
-            _railsSerializer.SerializeAlbumStyles(albumRepository.StylesTree.OrderStylesItems, "album_styles");
+            //_railsSerializer.SerializeAlbumStyles(albumRepository.StylesTree.OrderStylesItems, "album_styles");
 
             //Publication des labels
-            _railsSerializer.SerializeLabelVendors(AlbumLabelsRepository.Repo, "album_labels");
+            _railsSerializer.SerializeLabelVendors(AlbumLabelsRepository.Repo, "2-music_labels");
 
             //Publication des albums
-            _railsSerializer.SerializeAlbums(albumRepository.Products.OrderBy(x => x.SortWeight).ToList(), "albums");*/
+            _railsSerializer.SerializeAlbums(albumRepository.Products.OrderBy(x => x.SortWeight).ToList(), "3-albums");
         }
 
         public string ProcessDescription

@@ -1,4 +1,4 @@
-namespace MIProgram.Core
+namespace MIProgram.Core.Helpers
 {
     public class IDGenerator
     {

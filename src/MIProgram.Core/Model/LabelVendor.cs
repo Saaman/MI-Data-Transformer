@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using MIProgram.Core.Extensions;
 
@@ -8,14 +6,22 @@ namespace MIProgram.Core.Model
 {
     public class LabelVendor
     {
+        public int Id { get; set; }
         public string Label { get; private set; }
         public string Vendor { get; private set; }
         public DateTime _lastUpdate;
 
-        public LabelVendor(string label, string vendor, DateTime lastUpdate)
+        public const string RailsModelName = "music_label";
+        public const string RailsModelClassName = "MusicLabel";
+
+        public LabelVendor(int labelId, string label, string vendor, DateTime lastUpdate)
         {
             #region Parameters validation
-
+            if (labelId == 0)
+            {
+                throw new ArgumentException("Reviewer creation : 'Id' cannot be null");
+            }
+            
             if (string.IsNullOrEmpty(label))
             {
                 throw new ArgumentNullException("label");
@@ -28,6 +34,7 @@ namespace MIProgram.Core.Model
 
             #endregion
 
+            Id = labelId;
             Label = label;
             Vendor = vendor;
             _lastUpdate = lastUpdate;
@@ -51,9 +58,21 @@ namespace MIProgram.Core.Model
 
         public string ToSQLInsert()
         {
-            string parentsString = string.Empty;
             return string.Format("INSERT INTO `mi_label_vendor` (`label`, `vendor`) VALUES ('{0}', '{1}');", Label.ToCamelCase()
                     , string.IsNullOrEmpty(Vendor) ? string.Empty : Vendor.ToCamelCase());
+        }
+
+        public string ToRailsInsert()
+        {
+            var sb = new StringBuilder();
+            sb.AppendFormat("{0} = {1}.new", RailsModelName, RailsModelClassName);
+            sb.AppendLine();
+            sb.AppendFormat("{0}.assign_attributes({{id: {1}, name: '{2}', distributor: '{3}'}}, :without_protection => true)", RailsModelName, Id, Label.GetSafeRails(), Vendor);
+            sb.AppendLine();
+            sb.AppendFormat("{0}s << {0}", RailsModelName);
+            sb.AppendLine();
+            sb.AppendLine();
+            return sb.ToString();
         }
 
         #region IEquality members

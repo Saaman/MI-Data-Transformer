@@ -9,21 +9,21 @@ namespace MIProgram.Core.AlbumImpl.LocalRepositories
         private static readonly string AlbumTypesFileName = Path.Combine(ConfigurationManager.AppSettings["DictionnariesPath"], "albumTypes.txt");
         private static readonly string AlbumTypesReplacementsFileName = Path.Combine(ConfigurationManager.AppSettings["DictionnariesPath"], "albumTypesReplacements.csv");
 
-        private static readonly ParsedValueRepository _albumTypes;
+        private static readonly ParsedValueRepository AlbumTypes;
 
         static AlbumTypesRepository()
         {
-            _albumTypes = new ParsedValueRepository(AlbumTypesFileName, AlbumTypesReplacementsFileName, true);
+            AlbumTypes = new ParsedValueRepository(AlbumTypesFileName, AlbumTypesReplacementsFileName, true);
         }
 
         public static ParsedValueRepository Repo
         {
-            get { return _albumTypes; }
+            get { return AlbumTypes; }
         }
 
         public static string ToDomainObject(int albumTypeIdx)
         {
-            return _albumTypes.Values[albumTypeIdx].ToCamelCase();
+            return AlbumTypes.Values[albumTypeIdx].ToCamelCase();
         }
     }
 }

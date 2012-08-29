@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MIProgram.Core.Helpers;
 using MIProgram.Core.Model;
 
 namespace MIProgram.Core.ProductRepositories
@@ -13,7 +14,7 @@ namespace MIProgram.Core.ProductRepositories
         private IList<T> _filteredProducts;
 
         /*Id generators*/
-        protected readonly IDGenerator _nodeIdGenerator = new IDGenerator();
+        private readonly IDGenerator _artistIdGenerator = new IDGenerator();
         private readonly IDGenerator _userIdGenerator = new IDGenerator();
 
         protected ProductRepository(List<Func<Product, bool>> filtersDefinitions)
@@ -29,7 +30,7 @@ namespace MIProgram.Core.ProductRepositories
 
             if (selectedArtist == null)
             {
-                selectedArtist = new Artist(_nodeIdGenerator.NewID(), artistName, countries, officialUrl, lastUpdate, reviewer, similarArtists);
+                selectedArtist = new Artist(_artistIdGenerator.NewID(), artistName, countries, officialUrl, lastUpdate, reviewer, similarArtists);
                 Artists.Add(selectedArtist);
                 return selectedArtist;
             }

@@ -106,14 +106,16 @@ namespace MIProgram.Core.DAL.Writers
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine(GetHeader("mi_label_vendor"));
+            sb.AppendLine(GetHeader(LabelVendor.RailsModelName, false));
 
             foreach (var labelVendor in labelVendors)
             {
-                sb.AppendLine(labelVendor.ToSQLInsert());
+                sb.AppendLine(labelVendor.ToRailsInsert());
             }
 
-            _fileWriter.WriteSQL(sb.ToString(), fileName, _outputDir);
+            sb.Append(GetFooter(LabelVendor.RailsModelName, false));
+
+            _fileWriter.WriteRB(sb.ToString(), fileName, _outputDir);
         }
 
         public void SerializeAlbumStyles(IList<StylesTreeItem> albumStyles, string fileName)
@@ -134,14 +136,16 @@ namespace MIProgram.Core.DAL.Writers
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine(GetHeader(Album.SQLTableName));
+            sb.AppendLine(GetHeader(Album.RailsModelName));
 
             foreach (var album in albums)
             {
-                sb.AppendLine(album.ToSQLInsert());
+                sb.AppendLine(album.ToRailsInsert());
             }
 
-            _fileWriter.WriteSQL(sb.ToString(), fileName, _outputDir);
+            sb.Append(GetFooter(Album.RailsModelName));
+
+            _fileWriter.WriteRB(sb.ToString(), fileName, _outputDir);
         }
     }
 }
