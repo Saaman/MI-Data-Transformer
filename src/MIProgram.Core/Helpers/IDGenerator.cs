@@ -2,11 +2,17 @@ namespace MIProgram.Core.Helpers
 {
     public class IDGenerator
     {
-        private int _curentId;
+        private int _currentId;
 
         public int NewID()
         {
-            return ++_curentId;
+            return ++_currentId;
+        }
+
+        public IDGenerator() {}
+        public IDGenerator(int startIdx)
+        {
+            _currentId = startIdx;
         }
     }
 }

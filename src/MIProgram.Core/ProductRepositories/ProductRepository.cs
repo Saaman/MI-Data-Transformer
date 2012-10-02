@@ -15,7 +15,7 @@ namespace MIProgram.Core.ProductRepositories
 
         /*Id generators*/
         private readonly IDGenerator _artistIdGenerator = new IDGenerator();
-        private readonly IDGenerator _userIdGenerator = new IDGenerator();
+        private readonly IDGenerator _userIdGenerator = new IDGenerator(1);
 
         protected ProductRepository(List<Func<Product, bool>> filtersDefinitions)
         {
