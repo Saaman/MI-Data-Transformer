@@ -72,8 +72,8 @@ namespace MIProgram.Core.Model
             var sb = new StringBuilder();
             sb.AppendFormat("{0} = {1}.new", RailsModelName, RailsModelName.ToCamelCase());
             sb.AppendLine();
-            sb.AppendFormat("{0}.assign_attributes({{id: {1}, title: '{2}', release_date: DateTime.parse('{3}'), kind_cd: {4}.kinds({5}), music_label_id: {6}, created_at: DateTime.parse('{7}'), updated_at: DateTime.parse('{7}'), artist_ids: [{8}]}}, :without_protection => true)",
-                RailsModelName, Id, Title.GetSafeRails(), ReleaseDate, RailsModelName.ToCamelCase(), AlbumType.ToRailsSym() ?? ":album", LabelVendor.Id, CreationDate, Artist.Id);
+            sb.AppendFormat("{0}.assign_attributes({{ id: {1}, title: '{2}', release_date: DateTime.parse('{3}'), kind_cd: {4}.kinds({5}), music_label_id: {6}, created_at: DateTime.parse('{7}'), updated_at: DateTime.parse('{7}'), artist_ids: [{8}], creator_id: {9}, updater_id: {9} }}, :without_protection => true)",
+                RailsModelName, Id, Title.GetSafeRails(), ReleaseDate, RailsModelName.ToCamelCase(), AlbumType.ToRailsSym() ?? ":album", LabelVendor.Id, CreationDate, Artist.Id, Reviewer.Id);
             sb.AppendLine();
             sb.AppendFormat("{0}s << {0}", RailsModelName);
             sb.AppendLine();

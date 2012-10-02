@@ -107,8 +107,8 @@ namespace MIProgram.Core.Model
             sb.AppendLine();
             var countriesArray =
                 Countries.Select(x => string.Format("'{0}'", x.CountryCode)).Aggregate((countriesString, nextCountry) => countriesString + ", " + nextCountry);
-            sb.AppendFormat("{0}.assign_attributes({{id: {1}, name: '{2}', practices_attributes: [{{:kind => :band, created_at: DateTime.parse('{4}'), updated_at: DateTime.parse('{5}')}}], countries: [{3}], created_at: DateTime.parse('{4}'), updated_at: DateTime.parse('{5}')}}, :without_protection => true)",
-                RailsModelName, Id, Name, countriesArray , CreationDate, LastUpdate);
+            sb.AppendFormat("{0}.assign_attributes({{ id: {1}, name: '{2}', practices_attributes: [{{:kind => :band, created_at: DateTime.parse('{4}'), updated_at: DateTime.parse('{5}')}}], countries: [{3}], created_at: DateTime.parse('{4}'), updated_at: DateTime.parse('{5}'), creator_id: {6}, updater_id: {6} }}, :without_protection => true)",
+                RailsModelName, Id, Name, countriesArray , CreationDate, LastUpdate, Reviewer.Id);
             sb.AppendLine();
             sb.AppendFormat("{0}s << {0}", RailsModelName);
             sb.AppendLine();
