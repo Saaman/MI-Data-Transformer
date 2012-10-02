@@ -78,7 +78,7 @@ namespace MIProgram.Core.Model
             var sb = new StringBuilder();
             sb.AppendFormat("{0} = {1}.new", RailsModelName, RailsModelName.ToCamelCase());
             sb.AppendLine();
-            sb.AppendFormat("{0}.assign_attributes({{id: {1}, pseudo: '{2}', email: '{3}', password: '{4}', created_at: DateTime.parse('{5}'), updated_at: DateTime.parse('{6}')}}, :without_protection => true)",
+            sb.AppendFormat("{0}.assign_attributes({{id: {1}, pseudo: '{2}', email: '{3}', password: '{4}', created_at: DateTime.parse('{5}'), updated_at: DateTime.parse('{6}'), :role => :staff }}, :without_protection => true)",
                 RailsModelName, Id, Name, MailAddress, Password, CreationDate, LastUpdate);
             sb.AppendLine();
             sb.AppendFormat("{0}.email_confirmation = {0}.email", RailsModelName);
