@@ -105,6 +105,8 @@ namespace MIProgram.Core.Model
             var sb = new StringBuilder();
             sb.AppendFormat("{0} = {1}.new", RailsModelName, RailsModelName.ToCamelCase());
             sb.AppendLine();
+            if(Countries == null)
+                throw new InvalidOperationException("Artist must have at least one country");
             var countriesArray =
                 Countries.Select(x => string.Format("'{0}'", x.CountryCode)).Aggregate((countriesString, nextCountry) => countriesString + ", " + nextCountry);
             sb.AppendFormat("{0}.assign_attributes({{ id: {1}, name: '{2}', practices: [Practice.find_by_kind(:band)], countries: [{3}], created_at: DateTime.parse('{4}'), updated_at: DateTime.parse('{5}'), creator_id: {6}, updater_id: {6}, published: true }}, :without_protection => true)",

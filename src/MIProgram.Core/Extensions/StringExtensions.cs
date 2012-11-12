@@ -31,9 +31,12 @@ namespace MIProgram.Core.Extensions
             return myString.Replace("'", "''");
         }
 
-        public static string GetSafeRails(this string myString)
+        public static string GetSafeRails(this string myString, bool removeDiatrics = false)
         {
-            return myString.Replace("’", "''").Replace("'", "''").Replace("…", "...");
+            var result = myString.Replace("’", "''").Replace("'", "''").Replace("…", "...");
+            if (removeDiatrics)
+                result = result.RemoveDiacritics();
+            return result;
         }
 
         public static int ToUnixTimeStamp(this DateTime dateTime)

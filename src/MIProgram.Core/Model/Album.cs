@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MIProgram.Core.Extensions;
+using MIProgram.Core.Logging;
 
 namespace MIProgram.Core.Model
 {
@@ -73,8 +74,15 @@ namespace MIProgram.Core.Model
             var sb = new StringBuilder();
             sb.AppendFormat("{0} = {1}.new", RailsModelName, RailsModelName.ToCamelCase());
             sb.AppendLine();
+            var convertedAlbumType = string.IsNullOrEmpty(AlbumType) ? string.Empty : AlbumType.ToRailsSym();
+            var allowedAlbumTypes = new List<string> {":album", ":demo", ":mini_album", ":live"};
+            if (!allowedAlbumTypes.Contains(convertedAlbumType))
+            {
+                Logging.Logging.Instance.LogError(string.Format("'{0}' is not recognized as a valid album type for album {1}-{2}. value is fallbacked to ':album'", AlbumType, Id, Title), ErrorLevel.Warning);
+                convertedAlbumType = ":album";
+            }
             sb.AppendFormat("{0}.assign_attributes({{ id: {1}, title: '{2}', release_date: DateTime.parse('{3}'), kind_cd: {4}.kinds({5}), music_label_id: {6}, created_at: DateTime.parse('{7}'), updated_at: DateTime.parse('{7}'), artist_ids: [{8}], creator_id: {9}, updater_id: {9}, published: true, remote_cover_url: \"{10}\" }}, :without_protection => true)",
-                RailsModelName, Id, Title.GetSafeRails(), ReleaseDate, RailsModelName.ToCamelCase(), AlbumType.ToRailsSym() ?? ":album", LabelVendor.Id, CreationDate, Artist.Id, Reviewer.Id, CoversRootUri + CoverName);
+                RailsModelName, Id, Title.GetSafeRails(), ReleaseDate, RailsModelName.ToCamelCase(), convertedAlbumType, LabelVendor.Id, CreationDate, Artist.Id, Reviewer.Id, CoversRootUri + CoverName);
             sb.AppendLine();
             sb.AppendFormat("{0}s << {0}", RailsModelName);
             sb.AppendLine();
