@@ -81,5 +81,10 @@ namespace MIProgram.Core.DAL.Writers
         {
             throw new NotImplementedException("You are not allowed to publish such information on FTP");
         }
+
+        public void WriteYAML(string railsString, string fileNameWithoutExtension, string rootDir)
+        {
+            throw new NotImplementedException("You are not allowed to publish such information on FTP");
+        }
     }
 }

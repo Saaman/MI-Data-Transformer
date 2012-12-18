@@ -10,5 +10,6 @@ namespace MIProgram.Core.DAL.Writers
         void WriteCSV<T>(IList<T> collection, string fileNameWithoutExtension, string rootDir);
         void WriteSQL(string sqlString, string fileNameWithoutExtension, string rootDir);
         void WriteRB(string railsString, string fileNameWithoutExtension, string rootDir);
+        void WriteYAML(string railsString, string fileNameWithoutExtension, string rootDir);
     }
 }

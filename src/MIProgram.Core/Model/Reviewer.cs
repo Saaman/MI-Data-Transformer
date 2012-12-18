@@ -73,25 +73,27 @@ namespace MIProgram.Core.Model
                 SQLTableName, Id, Name, CreationDate.ToUnixTimeStamp(), MailAddress, Password);
         }
 
-        public string ToRailsInsert()
+        public string ToYAMLInsert()
         {
             var sb = new StringBuilder();
-            sb.AppendFormat("{0} = {1}.new", RailsModelName, RailsModelName.ToCamelCase());
+            sb.AppendFormat("  - id: {0}", Id);
             sb.AppendLine();
-            sb.AppendFormat("{0}.assign_attributes({{id: {1}, pseudo: '{2}', email: '{3}', password: '{4}', created_at: DateTime.parse('{5}'), updated_at: DateTime.parse('{6}'), :role => :staff }}, :without_protection => true)",
-                RailsModelName, Id, Name, MailAddress.GetSafeRails(true), Password, CreationDate, LastUpdate);
+            sb.AppendFormat("    pseudo: {0}", Name);
             sb.AppendLine();
-            sb.AppendFormat("{0}.email_confirmation = {0}.email", RailsModelName);
+            sb.AppendFormat("    email: {0}", MailAddress.GetSafeRails(true));
             sb.AppendLine();
-            sb.AppendFormat("{0}.skip_confirmation!", RailsModelName);
+            sb.AppendFormat("    password: {0}", Password);
             sb.AppendLine();
-            sb.AppendFormat("{0}s << {0}", RailsModelName);
+            sb.AppendFormat("    created_at: {0}", CreationDate);
             sb.AppendLine();
+            sb.AppendFormat("    updated_at: {0}", LastUpdate);
+            sb.AppendLine();
+            sb.AppendFormat("    role: :staff");
             sb.AppendLine();
             return sb.ToString();
         }
 
         public const string SQLTableName = "mi_accounts";
-        public const string RailsModelName = "user";
+        public const string RailsPluralizedModelName = "users";
     }
 }

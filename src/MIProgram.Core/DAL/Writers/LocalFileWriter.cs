@@ -58,12 +58,22 @@ namespace MIProgram.Core.DAL.Writers
             
         }
 
-        public void WriteRB(string sqlString, string fileNameWithoutExtension, string rootDir)
+        public void WriteRB(string rbString, string fileNameWithoutExtension, string rootDir)
         {
             var filePath = ComputeFilePath(rootDir, string.Format("{0}.rb", fileNameWithoutExtension));
             using (var sw = new StreamWriter(filePath))
             {
-                sw.Write(sqlString);
+                sw.Write(rbString);
+            }
+
+        }
+
+        public void WriteYAML(string yamlString, string fileNameWithoutExtension, string rootDir)
+        {
+            var filePath = ComputeFilePath(rootDir, string.Format("{0}.yml", fileNameWithoutExtension));
+            using (var sw = new StreamWriter(filePath))
+            {
+                sw.Write(yamlString);
             }
 
         }

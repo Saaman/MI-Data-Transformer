@@ -76,7 +76,7 @@
     <Compile Include="AlbumImpl\AlbumReviewBodyCleaner.cs" />
     <Compile Include="AlbumImpl\AlbumReviewProcessor.cs" />
     <Compile Include="AlbumImpl\DataParsers\AlbumLabelsParser.cs" />
-    <Compile Include="DAL\Writers\RailsSerializer.cs" />
+    <Compile Include="DAL\Writers\YAMLSerializer.cs" />
     <Compile Include="Model\LabelVendor.cs" />
     <Compile Include="AlbumImpl\LocalRepositories\AlbumLabelsRepository.cs" />
     <Compile Include="Extensions\UpperInvariantComparer.cs" />

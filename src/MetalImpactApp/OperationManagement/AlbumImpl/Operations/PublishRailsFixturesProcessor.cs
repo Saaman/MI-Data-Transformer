@@ -11,11 +11,11 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
 {
     public class PublishRailsFixturesProcessor : IOperationProcessor<Album>
     {
-        private readonly RailsSerializer _railsSerializer;
+        private readonly YAMLSerializer _yamlSerializer;
 
         public PublishRailsFixturesProcessor(IWriter writer)
         {
-            _railsSerializer = new RailsSerializer(writer, Constants.RailsPath);
+            _yamlSerializer = new YAMLSerializer(writer, Constants.RailsPath);
         }
 
         public void Process(ProductRepository<Album> productRepository)
@@ -28,13 +28,13 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
             }
 
             //Publication des reviewers
-            _railsSerializer.SerializeReviewers(albumRepository.Reviewers, "0-reviewers");
+            _yamlSerializer.SerializeReviewers(albumRepository.Reviewers, "0-reviewers");
             
             //Publication des pays
             //_railsSerializer.SerializeCountries(CountriesRepository.CountriesLabelsAndCodesDictionnary, "countries");
 
             //Publication des artistes
-            _railsSerializer.SerializeArtists(albumRepository.Artists.OrderBy(x => x.SortWeight).ToList(), "1-artists");
+            //_yamlSerializer.SerializeArtists(albumRepository.Artists.OrderBy(x => x.SortWeight).ToList(), "1-artists");
 
             
             //Publication des types d'album
@@ -44,10 +44,10 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
             //_railsSerializer.SerializeAlbumStyles(albumRepository.StylesTree.OrderStylesItems, "album_styles");
 
             //Publication des labels
-            _railsSerializer.SerializeLabelVendors(AlbumLabelsRepository.Repo, "2-music_labels");
+            //_yamlSerializer.SerializeLabelVendors(AlbumLabelsRepository.Repo, "2-music_labels");
 
             //Publication des albums
-            _railsSerializer.SerializeAlbums(albumRepository.Products.OrderBy(x => x.SortWeight).ToList(), "3-albums");
+            //_yamlSerializer.SerializeAlbums(albumRepository.Products.OrderBy(x => x.SortWeight).ToList(), "3-albums");
         }
 
         public string ProcessDescription
