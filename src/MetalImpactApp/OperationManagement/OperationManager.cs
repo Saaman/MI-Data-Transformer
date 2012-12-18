@@ -42,9 +42,6 @@ namespace MetalImpactApp.OperationManagement
 
             //Explode, process & post process reviews
             ReviewsProcessor.Process(_asyncWorkerWrapper, ProductRepository);
-            /*
-            _reviewsExtractorProcessor.Process(worker, e, this);
-            */
 
             _asyncWorkerWrapper.BackgroudWorker.ReportProgress(0);
             foreach (var operation in _operationsToProcess)

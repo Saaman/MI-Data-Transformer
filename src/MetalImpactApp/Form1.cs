@@ -82,6 +82,7 @@ namespace MetalImpactApp
             DestFTPPasswordLB.Visible = false;
             DestFTPPasswordTB.Visible = false;
             DestFTPPasswordTB.Text = ConfigurationManager.AppSettings["DefaultDestFTPPassword"];
+            DoReviewCleaning.Checked = Convert.ToBoolean(ConfigurationManager.AppSettings["DoReviewCleaning"]);
 
             switch (ConfigurationManager.AppSettings["DefaultDest"].ToUpperInvariant())
             {
@@ -123,6 +124,7 @@ namespace MetalImpactApp
             ConfigurationManager.AppSettings["DefaultDestFTPDirectory"] = DestFTPDirTB.Text;
             ConfigurationManager.AppSettings["DefaultDestFTPUser"] = DestFTPUserTB.Text;
             ConfigurationManager.AppSettings["DefaultDestFTPPassword"] = DestFTPPasswordTB.Text;
+            ConfigurationManager.AppSettings["DoReviewCleaning"] = DoReviewCleaning.Checked.ToString();
 
             if (DestFileRB.Checked)
             {
@@ -216,7 +218,7 @@ namespace MetalImpactApp
                 //_operationsManagerDeprecated = new OperationsManager_Deprecated(provider, writer, LastUpdateDateDTP.Value, OperationsListBox.CheckedItems.Cast<Operation>().ToList());
                 var reviewProcessorBuilder = new ReviewProcessorBuilder();
                 var operations = OperationsListBox.CheckedItems.Cast<Operation>().ToList();
-                _operationLauncher = reviewProcessorBuilder.BuildFor<Album>(SourceFileTB.Text, writer, filters, operations, LastUpdateDateDTP.Value);
+                _operationLauncher = reviewProcessorBuilder.BuildFor<Album>(SourceFileTB.Text, writer, filters, operations, LastUpdateDateDTP.Value, DoReviewCleaning.Checked);
                 //_operationLauncher = new AlbumOperationManager(reviewProcessor, OperationsListBox.CheckedItems.Cast<Operation>().ToList(), writer, );
                 
                 ReviewsBackgroundWorker.RunWorkerAsync();

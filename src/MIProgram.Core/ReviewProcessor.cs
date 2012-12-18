@@ -10,11 +10,13 @@ namespace MIProgram.Core
         private readonly IMIRecordsProvider _miRecordsProvider;
         protected readonly IReviewExploder<T> ReviewExploder;
         private readonly ProductReviewBodyCleaner<T> _reviewBodyCleaner;
+        private readonly bool _doReviewCleaning;
 
-        protected ReviewProcessor(IMIRecordsProvider miRecordsProvider, IReviewExploder<T> reviewExploder, ProductReviewBodyCleaner<T> reviewBodyCleaner)
+        protected ReviewProcessor(IMIRecordsProvider miRecordsProvider, IReviewExploder<T> reviewExploder, ProductReviewBodyCleaner<T> reviewBodyCleaner, bool doReviewCleaning)
         {
             _miRecordsProvider = miRecordsProvider;
             _reviewBodyCleaner = reviewBodyCleaner;
+            _doReviewCleaning = doReviewCleaning;
             ReviewExploder = reviewExploder;
         }
 
@@ -35,7 +37,10 @@ namespace MIProgram.Core
                 var explodedReview = ReviewExploder.ExplodeReviewFrom(review);
                 
                 //clean review text
-                explodedReview.CleanTextUsing(_reviewBodyCleaner.CleanReviewBody);
+                if (_doReviewCleaning)
+                {
+                    explodedReview.CleanTextUsing(_reviewBodyCleaner.CleanReviewBody);
+                }
 
                 //Integrate review
                 explodedReviews.Add(explodedReview);

@@ -18,8 +18,8 @@ namespace MIProgram.Core.AlbumImpl
         private readonly AlbumStylesParser _albumStylesParser = new AlbumStylesParser();
         private StylesTree _stylesTree;
 
-        public AlbumReviewProcessor(IMIRecordsProvider miRecordsProvider, IReviewExploder<Album> reviewExploder, ICanShowReviewCleaningForm iCanShowReviewCleaningForm)
-            : base(miRecordsProvider, reviewExploder, new AlbumReviewBodyCleaner(iCanShowReviewCleaningForm))
+        public AlbumReviewProcessor(IMIRecordsProvider miRecordsProvider, IReviewExploder<Album> reviewExploder, ICanShowReviewCleaningForm iCanShowReviewCleaningForm, bool doReviewCleaning)
+            : base(miRecordsProvider, reviewExploder, new AlbumReviewBodyCleaner(iCanShowReviewCleaningForm), doReviewCleaning)
         {}
 
         protected override void PostProcessExplodedReviews(IList<IExplodedReview<Album>> explodedReviews)
