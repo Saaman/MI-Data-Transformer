@@ -76,19 +76,19 @@ namespace MIProgram.Core.Model
         public string ToYAMLInsert()
         {
             var sb = new StringBuilder();
-            sb.AppendFormat("  - id: {0}", Id);
+            sb.AppendFormat("id: {0}", Id);
             sb.AppendLine();
-            sb.AppendFormat("    pseudo: {0}", Name);
+            sb.AppendFormat("pseudo: {0}", Name);
             sb.AppendLine();
-            sb.AppendFormat("    email: {0}", MailAddress.GetSafeRails(true));
+            sb.AppendFormat("email: {0}", MailAddress.GetSafeRails(true));
             sb.AppendLine();
-            sb.AppendFormat("    password: {0}", Password);
+            sb.AppendFormat("password: {0}", Password);
             sb.AppendLine();
-            sb.AppendFormat("    created_at: {0}", CreationDate);
+            sb.AppendFormat("created_at: {0}", CreationDate);
             sb.AppendLine();
-            sb.AppendFormat("    updated_at: {0}", LastUpdate);
+            sb.AppendFormat("updated_at: {0}", LastUpdate);
             sb.AppendLine();
-            sb.AppendFormat("    role: :staff");
+            sb.AppendFormat("role: :staff");
             sb.AppendLine();
             return sb.ToString();
         }

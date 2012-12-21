@@ -64,13 +64,11 @@ namespace MIProgram.Core.DAL.Writers
         {
             var sb = new StringBuilder();
 
-            sb.AppendFormat("{0}:", Reviewer.RailsPluralizedModelName);
-            sb.AppendLine();
-
             foreach (var reviewer in reviewers)
             {
                 try
                 {
+                    sb.AppendLine("---");
                     sb.AppendLine(reviewer.ToYAMLInsert());
                 }
                 catch (Exception e)
@@ -79,8 +77,6 @@ namespace MIProgram.Core.DAL.Writers
                 }
             }
 
-            //sb.Append(GetFooter(Reviewer.RailsPluralizedModelName));
-
             _fileWriter.WriteYAML(sb.ToString(), fileName, _outputDir);
         }
 
@@ -88,21 +84,18 @@ namespace MIProgram.Core.DAL.Writers
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine(GetHeader(Artist.RailsModelName));
-
             foreach (var artist in newArtists)
             {
                 try
                 {
-                    sb.AppendLine(artist.ToRailsInsert());
+                    sb.AppendLine("---");
+                    //sb.AppendLine(artist.ToYAMLInsert());
                 }
                 catch(Exception e)
                 {
                     Logging.Logging.Instance.LogError(string.Format("Artist {0}-{1} : {2}", artist.Id, artist.Name, e.Message), ErrorLevel.Warning);
                 }
             }
-
-            sb.Append(GetFooter(Artist.RailsModelName));
 
             _fileWriter.WriteRB(sb.ToString(), fileName, _outputDir);
         }

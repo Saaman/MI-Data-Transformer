@@ -27,14 +27,15 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
                 throw new InvalidCastException("ProductRepository cannot be cast to AlbumRepository");
             }
 
+            string fileName = string.Format("{0}-metal_impact", DateTime.Now.ToString("yyyyMMdd"));
             //Publication des reviewers
-            _yamlSerializer.SerializeReviewers(albumRepository.Reviewers, "0-reviewers");
+            _yamlSerializer.SerializeReviewers(albumRepository.Reviewers, fileName);
             
             //Publication des pays
             //_railsSerializer.SerializeCountries(CountriesRepository.CountriesLabelsAndCodesDictionnary, "countries");
 
             //Publication des artistes
-            //_yamlSerializer.SerializeArtists(albumRepository.Artists.OrderBy(x => x.SortWeight).ToList(), "1-artists");
+            //_yamlSerializer.SerializeArtists(albumRepository.Artists.OrderBy(x => x.SortWeight).ToList(), fileName);
 
             
             //Publication des types d'album

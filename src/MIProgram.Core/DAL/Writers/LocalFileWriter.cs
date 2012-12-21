@@ -71,7 +71,7 @@ namespace MIProgram.Core.DAL.Writers
         public void WriteYAML(string yamlString, string fileNameWithoutExtension, string rootDir)
         {
             var filePath = ComputeFilePath(rootDir, string.Format("{0}.yml", fileNameWithoutExtension));
-            using (var sw = new StreamWriter(filePath))
+            using (var sw = new StreamWriter(filePath, true))
             {
                 sw.Write(yamlString);
             }
