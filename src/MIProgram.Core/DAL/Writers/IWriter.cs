@@ -11,5 +11,6 @@ namespace MIProgram.Core.DAL.Writers
         void WriteSQL(string sqlString, string fileNameWithoutExtension, string rootDir);
         void WriteRB(string railsString, string fileNameWithoutExtension, string rootDir);
         void WriteYAML(string railsString, string fileNameWithoutExtension, string rootDir);
+        void CleanFile(string fileNameWithoutExtension, string rootDir);
     }
 }

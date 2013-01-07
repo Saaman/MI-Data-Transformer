@@ -75,7 +75,13 @@ namespace MIProgram.Core.DAL.Writers
             {
                 sw.Write(yamlString);
             }
+        }
 
+        public void CleanFile(string fileNameWithoutExtension, string rootDir)
+        {
+            var filePath = ComputeFilePath(rootDir, string.Format("{0}.yml", fileNameWithoutExtension));
+            if(File.Exists(filePath))
+                File.Delete(filePath);
         }
 
         public void WriteCSV<T>(IList<T> collection, string fileNameWithoutExtension, string rootDir)

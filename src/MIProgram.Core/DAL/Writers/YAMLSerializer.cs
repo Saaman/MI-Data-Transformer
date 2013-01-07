@@ -17,32 +17,9 @@ namespace MIProgram.Core.DAL.Writers
             _outputDir = outputDir;
         }
 
-        private static string GetHeader(string modelName, bool overrideTimeStamps = true)
+        public void CleanPreviousFile(string fileName)
         {
-            var sb = new StringBuilder();
-
-            sb.AppendLine("#!/bin/env ruby");
-            sb.AppendLine("# encoding: utf-8");
-            sb.AppendLine();
-
-            if (overrideTimeStamps)
-            {
-                sb.AppendLine("ActiveRecord::Base.record_timestamps = false");
-                sb.AppendLine();
-            }
-            sb.AppendFormat("{0}s = []", modelName);
-            sb.AppendLine();
-            return sb.ToString();
-        }
-
-        private static string GetFooter(string modelName, bool overrideTimeStamps = true)
-        {
-            var sb = new StringBuilder();
-            sb.AppendFormat("bulk_save({0}s)", modelName);
-            sb.AppendLine();
-            if (overrideTimeStamps)
-                sb.AppendLine("ActiveRecord::Base.record_timestamps = true");
-            return sb.ToString();
+            _fileWriter.CleanFile(fileName, _outputDir);
         }
 
         //public void SerializeCountries(IDictionary<string, string> countriesLabelsAndCodes, string fileName)
@@ -119,14 +96,10 @@ namespace MIProgram.Core.DAL.Writers
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine(GetHeader(LabelVendor.RailsModelName, false));
-
             foreach (var labelVendor in labelVendors)
             {
                 sb.AppendLine(labelVendor.ToRailsInsert());
             }
-
-            sb.Append(GetFooter(LabelVendor.RailsModelName, false));
 
             _fileWriter.WriteRB(sb.ToString(), fileName, _outputDir);
         }
@@ -149,8 +122,6 @@ namespace MIProgram.Core.DAL.Writers
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine(GetHeader(Album.RailsModelName));
-
             foreach (var album in albums)
             {
                 try
@@ -162,8 +133,6 @@ namespace MIProgram.Core.DAL.Writers
                     Logging.Logging.Instance.LogError(string.Format("Album {0}-{1} : {2}",album.Id, album.Title, e.Message), ErrorLevel.Warning);
                 }
             }
-
-            sb.Append(GetFooter(Album.RailsModelName));
 
             _fileWriter.WriteRB(sb.ToString(), fileName, _outputDir);
         }

@@ -33,7 +33,7 @@ namespace MIProgram.Core.Model
             {
                 Name += name;
             }
-            MailAddress = name + mailAddress;
+            MailAddress = BuildEMail(name, mailAddress);
             LastUpdate = lastUpdate;
             CreationDate = LastUpdate;
             Id = userId;
@@ -42,6 +42,12 @@ namespace MIProgram.Core.Model
             {
                 Password += Id;
             }
+        }
+
+        private static string BuildEMail(string name, string mailAddress)
+        {
+            var result = name.TrimEnd('.') + "." + mailAddress;
+            return result.Replace(" ", "_").ToLower();
         }
 
         public void UpdateInfos(string name, string mailAddress, DateTime? lastUpdate)
@@ -63,7 +69,7 @@ namespace MIProgram.Core.Model
 
             if (!string.IsNullOrEmpty(mailAddress))
             {
-                MailAddress = name + mailAddress;
+                MailAddress = BuildEMail(name, mailAddress);
             }
         }
 
@@ -78,6 +84,7 @@ namespace MIProgram.Core.Model
             var sb = new StringBuilder();
             sb.AppendFormat("id: {0}", Id);
             sb.AppendLine();
+            sb.AppendLine("model: user");
             sb.AppendFormat("pseudo: {0}", Name);
             sb.AppendLine();
             sb.AppendFormat("email: {0}", MailAddress.GetSafeRails(true));

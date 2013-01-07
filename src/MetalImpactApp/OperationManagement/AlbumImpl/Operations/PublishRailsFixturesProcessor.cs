@@ -28,6 +28,7 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
             }
 
             string fileName = string.Format("{0}-metal_impact", DateTime.Now.ToString("yyyyMMdd"));
+            _yamlSerializer.CleanPreviousFile(fileName);
             //Publication des reviewers
             _yamlSerializer.SerializeReviewers(albumRepository.Reviewers, fileName);
             

@@ -86,5 +86,10 @@ namespace MIProgram.Core.DAL.Writers
         {
             throw new NotImplementedException("You are not allowed to publish such information on FTP");
         }
+
+        public void CleanFile(string fileNameWithoutExtension, string rootDir)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
