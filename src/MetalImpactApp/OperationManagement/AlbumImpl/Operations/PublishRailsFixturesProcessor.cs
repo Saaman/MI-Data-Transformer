@@ -36,7 +36,7 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
             //_railsSerializer.SerializeCountries(CountriesRepository.CountriesLabelsAndCodesDictionnary, "countries");
 
             //Publication des artistes
-            //_yamlSerializer.SerializeArtists(albumRepository.Artists.OrderBy(x => x.SortWeight).ToList(), fileName);
+            _yamlSerializer.SerializeArtists(albumRepository.Artists.OrderBy(x => x.SortWeight).ToList(), fileName);
 
             
             //Publication des types d'album

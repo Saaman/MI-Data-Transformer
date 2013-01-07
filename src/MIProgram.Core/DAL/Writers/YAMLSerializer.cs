@@ -66,7 +66,7 @@ namespace MIProgram.Core.DAL.Writers
                 try
                 {
                     sb.AppendLine("---");
-                    //sb.AppendLine(artist.ToYAMLInsert());
+                    sb.AppendLine(artist.ToYAMLInsert());
                 }
                 catch(Exception e)
                 {
@@ -74,7 +74,7 @@ namespace MIProgram.Core.DAL.Writers
                 }
             }
 
-            _fileWriter.WriteRB(sb.ToString(), fileName, _outputDir);
+            _fileWriter.WriteYAML(sb.ToString(), fileName, _outputDir);
         }
 
         //public void SerializeAlbumTypes(List<string> albumTypes, string fileName)

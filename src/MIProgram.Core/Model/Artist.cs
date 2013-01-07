@@ -142,5 +142,25 @@ namespace MIProgram.Core.Model
         }
 
         #endregion
+
+        public string ToYAMLInsert()
+        {
+            var sb = new StringBuilder();
+            sb.AppendFormat("id: {0}", Id);
+            sb.AppendLine();
+            sb.AppendLine("model: artist");
+            sb.AppendFormat("name: {0}", Name);
+            sb.AppendLine();
+            sb.AppendFormat("published: {0}", true);
+            sb.AppendLine();
+            sb.AppendFormat("countries: [{0}]", Countries.Select(x => string.Format("'{0}'", x.CountryCode)).Aggregate((countriesString, nextCountry) => countriesString + ", " + nextCountry));
+            sb.AppendLine();
+            sb.AppendLine("practices: [0]");
+            sb.AppendFormat("created_at: {0}", CreationDate);
+            sb.AppendLine();
+            sb.AppendFormat("updated_at: {0}", LastUpdate);
+            sb.AppendLine();
+            return sb.ToString();
+        }
     }
 }
