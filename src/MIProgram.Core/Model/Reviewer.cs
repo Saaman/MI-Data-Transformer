@@ -37,7 +37,7 @@ namespace MIProgram.Core.Model
             LastUpdate = lastUpdate;
             CreationDate = LastUpdate;
             Id = userId;
-            Password = name + Id;
+            Password = name.Replace(" ", "") + Id;
             while(Password.Length < 7)
             {
                 Password += Id;
@@ -89,7 +89,7 @@ namespace MIProgram.Core.Model
             sb.AppendLine();
             sb.AppendFormat("email: {0}", MailAddress.GetSafeRails(true));
             sb.AppendLine();
-            sb.AppendFormat("password: {0}", Password);
+            sb.AppendFormat("password: {0}", Password.GetSafeRails(true));
             sb.AppendLine();
             sb.AppendFormat("created_at: {0}", CreationDate);
             sb.AppendLine();

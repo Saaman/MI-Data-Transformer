@@ -151,14 +151,13 @@ namespace MIProgram.Core.Model
             sb.AppendLine("model: artist");
             sb.AppendFormat("name: {0}", Name);
             sb.AppendLine();
-            sb.AppendFormat("published: {0}", true);
-            sb.AppendLine();
             sb.AppendFormat("countries: [{0}]", Countries.Select(x => string.Format("'{0}'", x.CountryCode)).Aggregate((countriesString, nextCountry) => countriesString + ", " + nextCountry));
             sb.AppendLine();
-            sb.AppendLine("practices: [0]");
             sb.AppendFormat("created_at: {0}", CreationDate);
             sb.AppendLine();
             sb.AppendFormat("updated_at: {0}", LastUpdate);
+            sb.AppendLine();
+            sb.AppendFormat("created_by: {0}", Reviewer.Id);
             sb.AppendLine();
             return sb.ToString();
         }
