@@ -134,15 +134,16 @@ namespace MIProgram.Core.DAL.Writers
             {
                 try
                 {
-                    sb.AppendLine(album.ToRailsInsert());
+                    sb.AppendLine("---");
+                    sb.AppendLine(album.ToYAMLInsert());
                 }
                 catch (Exception e)
                 {
-                    Logging.Logging.Instance.LogError(string.Format("Album {0}-{1} : {2}",album.Id, album.Title, e.Message), ErrorLevel.Warning);
+                    Logging.Logging.Instance.LogError(string.Format("LabelVendor {0}-{1} : {2}", album.Id, album.Title, e.Message), ErrorLevel.Warning);
                 }
             }
 
-            _fileWriter.WriteRB(sb.ToString(), fileName, _outputDir);
+            _fileWriter.WriteYAML(sb.ToString(), fileName, _outputDir);
         }
     }
 }

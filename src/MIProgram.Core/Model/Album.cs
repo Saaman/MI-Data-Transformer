@@ -89,5 +89,40 @@ namespace MIProgram.Core.Model
             sb.AppendLine();
             return sb.ToString();
         }
+
+        public string ToYAMLInsert()
+        {
+            var convertedAlbumType = string.IsNullOrEmpty(AlbumType) ? string.Empty : AlbumType.ToRailsSym();
+            var allowedAlbumTypes = new List<string> {":album", ":demo", ":mini_album", ":live"};
+            if (!allowedAlbumTypes.Contains(convertedAlbumType))
+            {
+                Logging.Logging.Instance.LogError(string.Format("'{0}' is not recognized as a valid album type for album {1}-{2}. value is fallbacked to ':album'", AlbumType, Id, Title), ErrorLevel.Warning);
+                convertedAlbumType = ":album";
+            }
+
+            var sb = new StringBuilder();
+            sb.AppendFormat("id: {0}", Id);
+            sb.AppendLine();
+            sb.AppendLine("model: album");
+            sb.AppendFormat("title: '{0}'", Title.GetSafeRails());
+            sb.AppendLine();
+            sb.AppendFormat("music_label_id: {0}", LabelVendor.Id);
+            sb.AppendLine();
+            sb.AppendFormat("artist_ids: [{0}]", Artist.Id);
+            sb.AppendLine();
+            sb.AppendFormat("cover: '{0}'", CoversRootUri + CoverName);
+            sb.AppendLine();
+            sb.AppendFormat("album_type: {0}", convertedAlbumType);
+            sb.AppendLine();
+            sb.AppendFormat("release_date: {0}", ReleaseDate);
+            sb.AppendLine();
+            sb.AppendFormat("created_at: {0}", CreationDate);
+            sb.AppendLine();
+            sb.AppendFormat("updated_at: {0}", CreationDate);
+            sb.AppendLine();
+            sb.AppendFormat("created_by: {0}", Reviewer.Id);
+            sb.AppendLine();
+            return sb.ToString();
+        }
     }
 }

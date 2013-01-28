@@ -49,7 +49,7 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
             _yamlSerializer.SerializeLabelVendors(AlbumLabelsRepository.Repo, fileName);
 
             //Publication des albums
-            //_yamlSerializer.SerializeAlbums(albumRepository.Products.OrderBy(x => x.SortWeight).ToList(), "3-albums");
+            _yamlSerializer.SerializeAlbums(albumRepository.Products.OrderBy(x => x.SortWeight).ToList(), fileName);
         }
 
         public string ProcessDescription
