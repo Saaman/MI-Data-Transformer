@@ -75,6 +75,23 @@ namespace MIProgram.Core.Model
             return sb.ToString();
         }
 
+        public string ToYAMLInsert()
+        {
+            var sb = new StringBuilder();
+            sb.AppendFormat("id: {0}", Id);
+            sb.AppendLine();
+            sb.AppendLine("model: music_label");
+            sb.AppendFormat("name: {0}", Label.GetSafeRails());
+            sb.AppendLine();
+            sb.AppendFormat("distributor: {0}", Vendor);
+            sb.AppendLine();
+            sb.AppendFormat("created_at: {0}", _lastUpdate);
+            sb.AppendLine();
+            sb.AppendFormat("updated_at: {0}", _lastUpdate);
+            sb.AppendLine();
+            return sb.ToString();
+        }
+
         #region IEquality members
 
         public override bool Equals(object obj)

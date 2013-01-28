@@ -98,10 +98,18 @@ namespace MIProgram.Core.DAL.Writers
 
             foreach (var labelVendor in labelVendors)
             {
-                sb.AppendLine(labelVendor.ToRailsInsert());
+                try
+                {
+                    sb.AppendLine("---");
+                    sb.AppendLine(labelVendor.ToYAMLInsert());
+                }
+                catch (Exception e)
+                {
+                    Logging.Logging.Instance.LogError(string.Format("LabelVendor {0}-{1} : {2}", labelVendor.Id, labelVendor.Label, e.Message), ErrorLevel.Warning);
+                }
             }
 
-            _fileWriter.WriteRB(sb.ToString(), fileName, _outputDir);
+            _fileWriter.WriteYAML(sb.ToString(), fileName, _outputDir);
         }
 
         //public void SerializeAlbumStyles(IList<StylesTreeItem> albumStyles, string fileName)

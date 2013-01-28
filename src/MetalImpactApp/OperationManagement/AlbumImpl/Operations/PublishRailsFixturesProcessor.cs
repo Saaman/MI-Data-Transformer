@@ -46,7 +46,7 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
             //_railsSerializer.SerializeAlbumStyles(albumRepository.StylesTree.OrderStylesItems, "album_styles");
 
             //Publication des labels
-            //_yamlSerializer.SerializeLabelVendors(AlbumLabelsRepository.Repo, "2-music_labels");
+            _yamlSerializer.SerializeLabelVendors(AlbumLabelsRepository.Repo, fileName);
 
             //Publication des albums
             //_yamlSerializer.SerializeAlbums(albumRepository.Products.OrderBy(x => x.SortWeight).ToList(), "3-albums");
