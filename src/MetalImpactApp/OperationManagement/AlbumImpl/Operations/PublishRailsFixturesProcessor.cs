@@ -15,7 +15,8 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
 
         public PublishRailsFixturesProcessor(IWriter writer)
         {
-            _yamlSerializer = new YAMLSerializer(writer, Constants.RailsPath);
+            string fileName = string.Format("{0}-metal_impact", DateTime.Now.ToString("yyyyMMdd"));
+            _yamlSerializer = new YAMLSerializer(writer, Constants.RailsPath, fileName);
         }
 
         public void Process(ProductRepository<Album> productRepository)
@@ -27,16 +28,15 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
                 throw new InvalidCastException("ProductRepository cannot be cast to AlbumRepository");
             }
 
-            string fileName = string.Format("{0}-metal_impact", DateTime.Now.ToString("yyyyMMdd"));
-            _yamlSerializer.CleanPreviousFile(fileName);
+            _yamlSerializer.CleanPreviousFile();
             //Publication des reviewers
-            _yamlSerializer.SerializeReviewers(albumRepository.Reviewers, fileName);
+            _yamlSerializer.SerializeReviewers(albumRepository.Reviewers);
             
             //Publication des pays
             //_railsSerializer.SerializeCountries(CountriesRepository.CountriesLabelsAndCodesDictionnary, "countries");
 
             //Publication des artistes
-            _yamlSerializer.SerializeArtists(albumRepository.Artists.OrderBy(x => x.SortWeight).ToList(), fileName);
+            _yamlSerializer.SerializeArtists(albumRepository.Artists.OrderBy(x => x.SortWeight).ToList());
 
             
             //Publication des types d'album
@@ -46,10 +46,12 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
             //_railsSerializer.SerializeAlbumStyles(albumRepository.StylesTree.OrderStylesItems, "album_styles");
 
             //Publication des labels
-            _yamlSerializer.SerializeLabelVendors(AlbumLabelsRepository.Repo, fileName);
+            _yamlSerializer.SerializeLabelVendors(AlbumLabelsRepository.Repo);
 
             //Publication des albums
-            _yamlSerializer.SerializeAlbums(albumRepository.Products.OrderBy(x => x.SortWeight).ToList(), fileName);
+            _yamlSerializer.SerializeAlbums(albumRepository.Products.OrderBy(x => x.SortWeight).ToList());
+
+            _yamlSerializer.CloseFile();
         }
 
         public string ProcessDescription

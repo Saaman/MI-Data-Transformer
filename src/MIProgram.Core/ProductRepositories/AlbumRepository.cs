@@ -38,7 +38,8 @@ namespace MIProgram.Core.ProductRepositories
                                           review.RecordLastUpdateDate, reviewer, review.ArtistSimilarArtists);
 
             var album = new Album(_albumIdGenerator.NewID(), review.AlbumName, review.AlbumReleaseDate, review.ReviewScore
-                , review.ProcessedLabelVendor, review.AlbumCoverFileName, review.RecordLastUpdateDate, artist, reviewer, review.AlbumSimilarAlbums, review.ProcessedAlbumType);
+                , review.ProcessedLabelVendor, review.AlbumCoverFileName, review.RecordLastUpdateDate, artist, reviewer, review.AlbumSimilarAlbums, review.ProcessedAlbumType
+                , review.AlbumMusicGenre, review.ProcessedAlbumStyle);
             _albums.Add(album);
         }
 

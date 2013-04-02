@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MIProgram.Core.AlbumImpl.DataParsers;
 using MIProgram.Core.Extensions;
 using MIProgram.Core.Logging;
 
@@ -19,6 +20,8 @@ namespace MIProgram.Core.Model
         public int Score { get; private set; }
         public string Label { get; private set; }
         public string AlbumType { get; private set; }
+        public string RawAlbumMusicGenre { get; private set; }
+        public StyleDefinition ProcessedAlbumMusicGenre { get; private set; }
         public string CoverName { get; private set; }
 
         public string DeezerAlbum { get; private set;}
@@ -42,7 +45,8 @@ namespace MIProgram.Core.Model
         public int SortWeight { get { return SimilarAlbums.Count; } }
 
         public Album(int id, string title, DateTime releaseDate, int score, LabelVendor labelVendor, string coverName
-            , DateTime creationDate, Artist artist, Reviewer reviewer, IEnumerable<string> albumSimilarAlbums, string albumType)
+            , DateTime creationDate, Artist artist, Reviewer reviewer, IEnumerable<string> albumSimilarAlbums, string albumType
+            , string rawAlbumMusicGenre, StyleDefinition processedAlbumMusicGenre)
         {
             Id = id;
             Title = title;
@@ -51,6 +55,8 @@ namespace MIProgram.Core.Model
             LabelVendor = labelVendor;
             CoverName = coverName;
             AlbumType = albumType;
+            RawAlbumMusicGenre = rawAlbumMusicGenre;
+            ProcessedAlbumMusicGenre = processedAlbumMusicGenre;
             Artist = artist;
             Reviewer = reviewer;
             var tmpSimilarAlbums = albumSimilarAlbums.Select(x => x.Replace("<i>", "").Replace("</i>", ""));
@@ -114,6 +120,26 @@ namespace MIProgram.Core.Model
             sb.AppendLine();
             sb.AppendFormat("album_type: {0}", convertedAlbumType);
             sb.AppendLine();
+            sb.AppendFormat("music_genre: \"{0}\"", RawAlbumMusicGenre);
+            sb.AppendLine();
+            if (ProcessedAlbumMusicGenre != null)
+            {
+                sb.AppendFormat("music_genre_music_types: [{0}]",
+                                (ProcessedAlbumMusicGenre.MusicTypes.Count() == 0)? ""
+                                    : ProcessedAlbumMusicGenre.MusicTypes.Select(val => string.Format("\"{0}\"", val)).
+                                          Aggregate((acc, next) => acc + ", " + next));
+                sb.AppendLine();
+                sb.AppendFormat("music_genre_main_styles: [{0}]",
+                                (ProcessedAlbumMusicGenre.MainStyles.Count() == 0)? ""
+                                    : ProcessedAlbumMusicGenre.MainStyles.Select(val => string.Format("\"{0}\"", val)).
+                                          Aggregate((acc, next) => acc + ", " + next));
+                sb.AppendLine();
+                sb.AppendFormat("music_genre_style_alterations: [{0}]",
+                                (ProcessedAlbumMusicGenre.StyleAlterations.Count() == 0)? ""
+                                    : ProcessedAlbumMusicGenre.StyleAlterations.Select(val => string.Format("\"{0}\"", val)).
+                                            Aggregate((acc, next) => acc + ", " + next));
+                sb.AppendLine();
+            }
             sb.AppendFormat("release_date: {0}", ReleaseDate);
             sb.AppendLine();
             sb.AppendFormat("created_at: {0}", CreationDate);

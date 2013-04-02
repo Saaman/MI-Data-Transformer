@@ -10,16 +10,18 @@ namespace MIProgram.Core.DAL.Writers
     {
         private readonly IWriter _fileWriter;
         private readonly string _outputDir;
+        private readonly string _fileName;
 
-        public YAMLSerializer(IWriter writer, string outputDir)
+        public YAMLSerializer(IWriter writer, string outputDir, string fileName)
         {
             _fileWriter = writer;
             _outputDir = outputDir;
+            _fileName = fileName;
         }
 
-        public void CleanPreviousFile(string fileName)
+        public void CleanPreviousFile()
         {
-            _fileWriter.CleanFile(fileName, _outputDir);
+            _fileWriter.CleanFile(_fileName, _outputDir);
         }
 
         //public void SerializeCountries(IDictionary<string, string> countriesLabelsAndCodes, string fileName)
@@ -37,7 +39,7 @@ namespace MIProgram.Core.DAL.Writers
         //    _fileWriter.WriteSQL(sb.ToString(), fileName, _outputDir);
         //}
 
-        public void SerializeReviewers(IList<Reviewer> reviewers, string fileName)
+        public void SerializeReviewers(IList<Reviewer> reviewers)
         {
             var sb = new StringBuilder();
 
@@ -54,10 +56,10 @@ namespace MIProgram.Core.DAL.Writers
                 }
             }
 
-            _fileWriter.WriteYAML(sb.ToString(), fileName, _outputDir);
+            _fileWriter.WriteYAML(sb.ToString(), _fileName, _outputDir);
         }
 
-        public void SerializeArtists(IList<Artist> newArtists, string fileName)
+        public void SerializeArtists(IList<Artist> newArtists)
         {
             var sb = new StringBuilder();
 
@@ -74,7 +76,7 @@ namespace MIProgram.Core.DAL.Writers
                 }
             }
 
-            _fileWriter.WriteYAML(sb.ToString(), fileName, _outputDir);
+            _fileWriter.WriteYAML(sb.ToString(), _fileName, _outputDir);
         }
 
         //public void SerializeAlbumTypes(List<string> albumTypes, string fileName)
@@ -92,7 +94,7 @@ namespace MIProgram.Core.DAL.Writers
         //    _fileWriter.WriteSQL(sb.ToString(), fileName, _outputDir);
         //}
 
-        public void SerializeLabelVendors(IList<LabelVendor> labelVendors, string fileName)
+        public void SerializeLabelVendors(IList<LabelVendor> labelVendors)
         {
             var sb = new StringBuilder();
 
@@ -109,7 +111,7 @@ namespace MIProgram.Core.DAL.Writers
                 }
             }
 
-            _fileWriter.WriteYAML(sb.ToString(), fileName, _outputDir);
+            _fileWriter.WriteYAML(sb.ToString(), _fileName, _outputDir);
         }
 
         //public void SerializeAlbumStyles(IList<StylesTreeItem> albumStyles, string fileName)
@@ -126,7 +128,7 @@ namespace MIProgram.Core.DAL.Writers
         //    _fileWriter.WriteSQL(sb.ToString(), fileName, _outputDir);
         //}
 
-        public void SerializeAlbums(List<Album> albums, string fileName)
+        public void SerializeAlbums(List<Album> albums)
         {
             var sb = new StringBuilder();
 
@@ -139,11 +141,16 @@ namespace MIProgram.Core.DAL.Writers
                 }
                 catch (Exception e)
                 {
-                    Logging.Logging.Instance.LogError(string.Format("LabelVendor {0}-{1} : {2}", album.Id, album.Title, e.Message), ErrorLevel.Warning);
+                    Logging.Logging.Instance.LogError(string.Format("Album {0}-{1} : {2}", album.Id, album.Title, e.Message), ErrorLevel.Warning);
                 }
             }
 
-            _fileWriter.WriteYAML(sb.ToString(), fileName, _outputDir);
+            _fileWriter.WriteYAML(sb.ToString(), _fileName, _outputDir);
+        }
+
+        public void CloseFile()
+        {
+            _fileWriter.WriteYAML("---", _fileName, _outputDir);
         }
     }
 }
