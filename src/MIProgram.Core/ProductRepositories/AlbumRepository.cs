@@ -37,9 +37,11 @@ namespace MIProgram.Core.ProductRepositories
             var artist = GetOrBuildArtist(review.ArtistName, review.ProcessedArtistCountries, review.ArtistOfficialUrl,
                                           review.RecordLastUpdateDate, reviewer, review.ArtistSimilarArtists);
 
+            var chronique = new Review(review.ReviewBody, review.ReviewHits, review.ReviewScore, reviewer);
+
             var album = new Album(_albumIdGenerator.NewID(), review.AlbumName, review.AlbumReleaseDate, review.ReviewScore
                 , review.ProcessedLabelVendor, review.AlbumCoverFileName, review.RecordLastUpdateDate, artist, reviewer, review.AlbumSimilarAlbums, review.ProcessedAlbumType
-                , review.AlbumMusicGenre, review.ProcessedAlbumStyle);
+                , review.AlbumMusicGenre, review.ProcessedAlbumStyle, chronique);
             _albums.Add(album);
         }
 

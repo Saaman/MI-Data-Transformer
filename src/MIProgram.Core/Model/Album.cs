@@ -15,7 +15,6 @@ namespace MIProgram.Core.Model
         private const string CoversRootUri = "http://www.metal-impact.com/modules/Reviews/images/";
 
         //Existing
-        public string Title { get; private set; }
         public DateTime ReleaseDate { get; private set; }
         public int Score { get; private set; }
         public string Label { get; private set; }
@@ -42,12 +41,15 @@ namespace MIProgram.Core.Model
         //Relations
         public IList<Disc> Discs { get; private set; }
 
+        public Review Review { get; private set; }
+
         public int SortWeight { get { return SimilarAlbums.Count; } }
 
-        public Album(int id, string title, DateTime releaseDate, int score, LabelVendor labelVendor, string coverName
-            , DateTime creationDate, Artist artist, Reviewer reviewer, IEnumerable<string> albumSimilarAlbums, string albumType
-            , string rawAlbumMusicGenre, StyleDefinition processedAlbumMusicGenre)
+        public Album(int id, string title, DateTime releaseDate, int score, LabelVendor labelVendor, string coverName, DateTime creationDate, Artist artist, Reviewer reviewer, IEnumerable<string> albumSimilarAlbums, string albumType, string rawAlbumMusicGenre, StyleDefinition processedAlbumMusicGenre, Review chronique)
         {
+            Review = chronique;
+            Review.Product = this;
+
             Id = id;
             Title = title;
             ReleaseDate = releaseDate;

@@ -152,5 +152,25 @@ namespace MIProgram.Core.DAL.Writers
         {
             _fileWriter.WriteYAML("---", _fileName, _outputDir);
         }
+
+        public void SerializeReviews(List<Review> reviews)
+        {
+            var sb = new StringBuilder();
+
+            foreach (var review in reviews)
+            {
+                try
+                {
+                    sb.AppendLine("---");
+                    sb.AppendLine(review.ToYAMLInsert());
+                }
+                catch (Exception e)
+                {
+                    Logging.Logging.Instance.LogError(string.Format("Review on album {0}-{1} : {2}", review.Product.Id, review.Product.Title, e.Message), ErrorLevel.Warning);
+                }
+            }
+
+            _fileWriter.WriteYAML(sb.ToString(), _fileName, _outputDir);
+        }
     }
 }

@@ -51,6 +51,9 @@ namespace MetalImpactApp.OperationManagement.AlbumImpl.Operations
             //Publication des albums
             _yamlSerializer.SerializeAlbums(albumRepository.Products.OrderBy(x => x.SortWeight).ToList());
 
+            //Publication des chroniques
+            _yamlSerializer.SerializeReviews(albumRepository.Products.Select(x => x.Review).ToList());
+
             _yamlSerializer.CloseFile();
         }
 
